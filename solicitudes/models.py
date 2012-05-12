@@ -5,15 +5,7 @@ class Solicitud(models.Model):
     idFlujo = models.ForeignKey(Flujo)
     solicitante = models.ForeignKey(Solicitante)
     fechaSolicitud = models.DateTimeField("Date published")
-
-class Solicita(models.Model):
-    usuarios = models.ManyToMany(Usuario)
-    idSolicitudes = models.ManyToMany(Solicitud)
-
-class Realiza(models.Model):    
-    estado = models.IntegerField()
-    idSolicitudes = models.ManyToMany(Solicitud,through='REGISTRO')
-    idPasos = models.ManyToMany(PASO,through='REGISTRO')
+    idPasos = models.ManyToMany(PASO,through='REGISTRO')    
 
 class Respuesta(models.Model):
     valor = models.CharField( max_length = 20)
