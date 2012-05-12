@@ -15,9 +15,6 @@ class Registro(models.Model):
     fechaSalida = models.CharField( max_length = 15)
     estado = models.CharField( max_length = 20)
  
-class Participa(models.Model)
-    solp = models.ForeignKey(Flujo)
-
 class Responde(models.Model):
     idSolicitudes = models.ManyToManyField(Solicitud)
     nombres = models.ManyToManyField(Campo)
