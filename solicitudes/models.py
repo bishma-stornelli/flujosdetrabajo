@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.auth.models import User 
+from flujos.models import Flujo, Paso, Campo
 
 class Solicitud(models.Model):
-    idSOLICITUD = models.IntegerField()
-    idFlujo = models.ForeignKey(Flujo)
-    solicitante = models.ForeignKey(Solicitante)
-    fechaSolicitud = models.DateTimeField("Date published")
-    idPasos = models.ManyToMany(PASO,through='REGISTRO')
+    flujo = models.ForeignKey(Flujo)
+    solicitantes = models.ForeignKey(User)
+    fecha_de_solicitud = models.DateTimeField("Date published")
+    pasos = models.ManyToMany(Paso,through='Registro')
+    campos = models.MantyToMany(Campo, through='Respuesta')
 
 class Respuesta(models.Model):
-    valor = models.CharField( max_length = 20)
+    valor = models.TextField() # En caso de ser archivo se guarda la ruta de este
 
 class Registro(models.Model):
-    fechaEntrada = models.DateField(_("Fecha de entrada"), default = datetime.date.today)
-    fechaSalida = models.CharField( max_length = 15)
+    fecha_de_entrada = models.DateTimeField("Fecha de entrada", auto_now_add=true)
+    fecha_de_salida = models.DateTimeField(null=True)
+    estado_choices = (('c','Completo'),('e','En proceso'))
     estado = models.CharField( max_length = 20)
-
-class Responde(models.Model):
-    idSolicitudes = models.ManyToManyField(Solicitud)
-    nombres = models.ManyToManyField(Campo)
-
-    
