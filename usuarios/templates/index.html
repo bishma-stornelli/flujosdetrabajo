@@ -1,0 +1,17 @@
+<h1> Pagina Inicial </h1>
+
+{% if usr.is_authenticated %}
+	<p>Bienvenido {{usr.username}}</p>
+	<ul>
+		<li><a href="logout">Logout</a></li>
+	</ul>
+{% else %}
+	{% if reg %}
+		<p> {{ reg }} </p>
+	{% endif %}
+
+	<ul>
+		<li><a href="login">Login</a></li>
+		<li><a href="registro">Registrarse</a></li>
+	</ul>
+{% endif %}

@@ -17,8 +17,13 @@ class PLANTILLA(models.Model):
 class PERFIL(User):
     dni = models.CharField(max_length=30)
     objects = UserManager() 
+
+class PerfilDeUsuario(models.Model):
+    user = models.OneToOneField(User)
+    dni =  models.IntegerField()
+
     
- class PRODUCEALERTA(models.Model):
+class PRODUCEALERTA(models.Model):
     idPaso = models.ForeignKey(PASO)
     idAlerta = models.ForeignKey(ALERTA)
 
