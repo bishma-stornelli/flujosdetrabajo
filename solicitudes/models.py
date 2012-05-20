@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
+from django.contrib.auth.models import User
 from django.db import models
-from django.contrib.auth.models import User 
+from flujos.models import Paso, Campo, Flujo
 
 class Solicitud(models.Model):
-    flujo = models.ForeignKey('flujos.models.Flujo')
+    flujo = models.ForeignKey(Flujo)
     solicitantes = models.ForeignKey(User)
     fecha_de_solicitud = models.DateTimeField("Date published")
-    pasos = models.ManyToManyField('flujos.models.Paso',through='Registro')
-    campos = models.ManyToManyField('flujos.models.Campo', through='Respuesta')
+    pasos = models.ManyToManyField(Paso,through='Registro')
+    campos = models.ManyToManyField(Campo, through='Respuesta')
 
 class Respuesta(models.Model):
+    solicitud = models.ForeignKey(Solicitud, related_name="respuestas")
+    campo = models.ForeignKey(Campo, related_name="respuestas")
     valor = models.TextField() # En caso de ser archivo se guarda la ruta de este
 
 class Registro(models.Model):
+    solicitud = models.ForeignKey(Solicitud, related_name="registros")
+    paso = models.ForeignKey(Paso, related_name="registros")
     fecha_de_entrada = models.DateTimeField("Fecha de entrada", auto_now_add=True)
     fecha_de_salida = models.DateTimeField(null=True)
     ESTADO_COMPLETO = 1;

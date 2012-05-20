@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from unidades.models import Unidad
 
 # Create your models here.
 class Alerta(models.Model):
@@ -30,40 +31,66 @@ class Informe(models.Model):
    
 class Plantilla(models.Model):
     formato = models.TextField()
-	
+
 class Campo(models.Model):
-    paso = models.ForeignKey(Paso)
-    criterio = models.ForeignKey(Criterio)
-    planilla = models.ForeignKey(Plantilla)
-    solicitud = models.ForeignKey('solicitudes.models.Solicitud')
-	nombre = models.CharField(max_length=30)
-    responsable = models.IntegerField()
-    tipo = models.IntegerField()
+    nombre = models.CharField(max_length=30)
+    llenado_por_miembro = models.BooleanField()
+    llenado_por_solicitante = models.BooleanField()
+    TIPO_TEXT = 1
+    TIPO_TEXTAREA = 2
+    TIPO_CHECKBOX = 3
+    TIPO_FILE = 4
+    TIPO_NUMBER = 5
+    TIPO_EMAIL = 6
+    TIPO_FECHA = 7
+    TIPO_CHOICES = (
+                    (TIPO_TEXT, "Campo de texto"),
+                    (TIPO_TEXTAREA, "Área de texto"),
+                    (TIPO_CHECKBOX, "Caja de verificación"),
+                    (TIPO_FILE, "Archivo"),
+                    (TIPO_NUMBER, "Número"),
+                    (TIPO_EMAIL, "Correo"),
+                    (TIPO_FECHA, "Fecha"))
+    tipo = models.IntegerField(choices=TIPO_CHOICES)
     esObligatorio = models.BooleanField()
+    paso = models.ForeignKey('Paso', related_name="campos")
 
 class Criterio(models.Model):
-    campo = models.ForeignKey(Campo)
+    paso_origen = models.ForeignKey('Paso', related_name='criterios_origen')
+    paso_destino = models.ForeignKey('Paso', related_name='criterios_destino')
     descripcion = models.TextField()
-    expresion = models.CharField(max_length=30)
-	
-class Paso(models.Model):	
-	flujo = models.ForeignKey()
-	solicitud = models.ForeignKey()
+    expresion = models.TextField()
+    campos = models.ManyToManyField(Campo)
+
+class Paso(models.Model):
     nombre = models.CharField(max_length=30)
-    tipo = models.IntegerField(
+    TIPO_INICIAL = 1
+    TIPO_FINAL = 2
+    TIPO_DIVISION = 3
+    TIPO_UNION = 4
+    TIPO_CHOICES = (
+                    (TIPO_INICIAL, "Inicial"),
+                    (TIPO_FINAL, "Final"),
+                    (TIPO_DIVISION, "División"),
+                    (TIPO_UNION, "Union"))    
+    tipo = models.IntegerField(choices=TIPO_CHOICES)
     descripcion = models.TextField()
-	alertas = models.ManyToManyField(Alerta)
-	informes = models.ManyToManyField(Informe)
-	campos = models.ManyToManyField(Campo)
+    flujo = models.ForeignKey('Flujo')
+    sucesores = models.ManyToManyField('Paso', 
+                                       related_name='predecesores', 
+                                       null=True, 
+                                       blank=True,
+                                       symmetrical=False,
+                                       through='Criterio')
 
 class Flujo(models.Model):
     nombre = models.CharField(max_length=30)
     descripcion = models.TextField()
-    estado = models.CharField(max_length=30)
-    unidad = models.ForeignKey('unidades.models.Unidad')
-	solicitud = models.ManyToManyField('solicitudes.models.Solicitud')
-	paso = models.ManyToManyField(Paso)
-	
-class Camino(models.Model):
-	paso_origen = models.ManyToManyField(Paso, through = 'Criterio')
-	paso_destino = models.ManyToManyField(Paso)
+    ESTADO_BORRADOR = 1
+    ESTADO_PUBLICO = 2
+    ESTADO_OBSOLETO = 3
+    ESTADO_CHOICES = ((ESTADO_BORRADOR, "Borrador"),
+                    (ESTADO_PUBLICO, "Publico"),
+                    (ESTADO_OBSOLETO, "Obsoleto"))
+    estado = models.IntegerField(choices=ESTADO_CHOICES, default=ESTADO_BORRADOR)
+    unidad = models.ForeignKey(Unidad,related_name='flujos')

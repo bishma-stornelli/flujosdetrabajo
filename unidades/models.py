@@ -18,5 +18,5 @@ class SolicitudPrivilegio(models.Model):
             (PRIVILEGIO_RESPONSABLE, 'Responsable de Unidad'))
     privilegio = models.IntegerField(choices=PRIVILEGIO_CHOICES)
     solicitante = models.ForeignKey(User,related_name="solicitudes_de_privilegio")
-    unidad = models.ForeignKey("Unidad", "solicitudes_de_privilegio")
+    unidad = models.ForeignKey("Unidad", related_name="solicitudes_de_privilegio")
 
