@@ -1,4 +1,5 @@
 # Django settings for flujosdetrabajo project.
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -155,3 +156,10 @@ LOGGING = {
         },
     }
 }
+
+TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + (
+# El siguiente es agregado para anadir la variable messages a cada RequestContext
+    'django.contrib.messages.context_processors.messages',
+)
+
+
