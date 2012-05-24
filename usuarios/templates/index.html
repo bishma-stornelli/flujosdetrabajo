@@ -3,6 +3,7 @@
 {% if usr.is_authenticated %}
 	<p>Bienvenido {{usr.username}}</p>
 	<ul>
+		<li><a href="/solicitudPrivilegio">Solicitar Privilegio</a></li>
 		<li><a href="logout">Logout</a></li>
 	</ul>
 {% else %}

@@ -1,0 +1,27 @@
+<h1 class="titulo1">Solicitud de Privilegio</h1>
+<br/>
+
+<form action="/solicitudPrivilegio" method="post">
+	{% csrf_token %}
+	{{ SolicitudPrivilegioForm.non_field_errors }}
+	<div>
+	<table>
+		<tr>
+			<th>Privilegio:</th>
+			<td>{{ SolicitudPrivilegioForm.privilegio }}</BR>{{ SolicitudPrivilegioForm.privilegio.errors }}</td>
+		</tr>
+		<tr>
+			<th>Unidad:</th>
+			<td>{{ SolicitudPrivilegioForm.unidad }}</BR>{{ SolicitudPrivilegioForm.unidad.errors }}</td>
+		</tr>
+		<tr>
+			<th colspan="2"><div align="center"><input type="submit" value="Solicitar" /></div></th>
+		</tr>
+	</table>
+	</div>
+</form>
+{% if msg %}
+<p style="color:red;font-size:250%">{{ msg }}</p>
+{% endif %}
+</br>
+<a href="index">Regresar</a>
