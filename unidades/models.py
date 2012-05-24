@@ -1,5 +1,5 @@
+from django.contrib.auth.models import User
 from django.db import models
-from django.contrib.auth.models import User 
 
 class Unidad(models.Model):
     nombre = models.CharField(max_length=50)
@@ -23,6 +23,7 @@ class SolicitudPrivilegio(models.Model):
                         )
     estado = models.CharField(max_length=30,choices = posibles_estados,default="En espera")
     privilegio = models.CharField(max_length=30,choices = posibles_privilegios)
+    mensaje= models.TextField()
     solicitante = models.ForeignKey(User)
     unidad = models.ForeignKey(Unidad)
     fecha = models.DateField(auto_now=True)
