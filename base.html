@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>
+            Control de Flujo - {% block title %}{% endblock %}
+        </title>
+    </head>
+    <body>
+        <div id="nav">
+            <a href="/">home</a> | 
+            {% if user.is_authenticated %}
+                <a href="/logout">Logout</a> |
+                <!-- OJO: Modificar la ruta segun la que este-->
+                <a href="/users/{{ user.username }}/">
+                    {{ user.username }}</a>
+                
+            {% else %}
+                <a href="/login/">Login</a>
+            {% endif %}
+        </div>
+        {% if user.is_staff %}
+        <div>
+            <a href="/admin/">Admin Site</a>
+        </div>
+        {% endif %}
+        <h1>{% block head %}{% endblock %}</h1>
+        {% block content %}{% endblock %}
+    </body>
+</html>
