@@ -51,6 +51,10 @@ def registro(request):
 					u.last_name = f.cleaned_data['apellido']
 					u.dni = f.cleaned_data['dni']
 					u.save()
+				   # p = PerfilDeUsuario.objects.create(user_id=1)
+                   # p.user=f.cleaned_data['username']
+                   # p.dni=f.cleaned_data['dni']
+                   # p.save()
 					l=LoginForm()
 					return render_to_response("index.html", {"reg":"Usuario registrado exitosamente"})
 						
