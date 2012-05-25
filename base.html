@@ -8,23 +8,30 @@
     </head>
     <body>
         <div id="nav">
-            <a href="/">home</a> | 
+            {% block menu %}
+            <ul><li><a href="/">home</a></li></ul>
             {% if user.is_authenticated %}
-                <a href="/logout">Logout</a> |
+                <ul><li><a href="/logout">Logout</a></li></ul>
                 <!-- OJO: Modificar la ruta segun la que este-->
-                <a href="/users/{{ user.username }}/">
-                    {{ user.username }}</a>
-                
+                <ul><li> <a href="/users/{{ user.username }}/">
+                    {{ user.username }}</a></li></ul>                
             {% else %}
-                <a href="/login/">Login</a>
+                <ul><li> <a href="/login/">Login</a></li></ul>
             {% endif %}
+            {% endblock %}
         </div>
         {% if user.is_staff %}
-        <div>
-            <a href="/admin/">Admin Site</a>
+        <div id="admin">
+            <ul><li> <a href="/admin/">Admin Site</a></li></ul>        
         </div>
         {% endif %}
-        <h1>{% block head %}{% endblock %}</h1>
-        {% block content %}{% endblock %}
+        <div id="wrap">
+            <div id="contenido">
+                {% block content %}{% endblock %}
+            </div>
+            <div id="submenu">
+                {% block submenu %}{% endblock %}
+            </div>
+        </div>
     </body>
 </html>
