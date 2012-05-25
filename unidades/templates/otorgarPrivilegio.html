@@ -1,0 +1,60 @@
+<h1 class="titulo1">Otorgar privilegios</h1>
+{% if msg %}
+<p style="color:red;font-size:250%">{{ msg }}</p>
+{% endif %}
+
+{% if listaPrivilegios %}
+	<h2>Lista de Solicitudes de Privilegios para ser Solicitante de la unidad</h2>
+	{% for priv in listaPrivilegios %}
+		<form action="/otorgarPrivilegio" method="post">
+		{% csrf_token %}
+		<table>
+		<input type="hidden" name="id" value={{priv.id}}/>
+        <tr>
+        	<td> <b>Unidad:</b>
+        	<td>{{ priv.unidad.nombre }}</td>
+        </tr>
+		<tr>
+			<td><b>Privilegio solicitado:</b></td>
+        	<td>{{ priv.privilegio }}</td>
+        </tr>
+        <tr>
+        	<td><b>	Mensaje</b></td>
+        	<td>{{ priv.mensaje }}</td>
+        </tr>
+        <tr>
+        <td></td>
+		<td><input type="submit" name="negar_privilegio" value="Cancelar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
+		</tr>
+		</table>   
+		</form>
+    {% endfor %}
+ {%endif%}   
+{% if listaMiembro %}
+	<h2>Lista de Solicitudes de Privilegios para ser Miembros de la unidad</h2>
+	{% for priv in listaMiembro %}
+		<form action="/otorgarPrivilegio" method="post">
+		{% csrf_token %}
+		<table>
+		<input type="hidden" name="id" value={{priv.id}}/>
+        <tr>
+        	<td> <b>Unidad:</b>
+        	<td>{{ priv.unidad.nombre }}</td>
+        </tr>
+		<tr>
+			<td><b>Privilegio solicitado:</b></td>
+        	<td>{{ priv.privilegio }}</td>
+        </tr>
+        <tr>
+        	<td><b>	Mensaje</b></td>
+        	<td>{{ priv.mensaje }}</td>
+        </tr>
+        <tr>
+        <td></td>
+		<td><input type="submit" name="negar_privilegio" value="Cancelar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
+		</tr>
+		</table>    
+		</form>
+    {% endfor %}
+
+{%endif%}    

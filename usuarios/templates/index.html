@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block head %}Index{% endblock %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<h1> Pagina Inicial </h1>
+
+{% if usr.is_authenticated %}
+	<p>Bienvenido {{usr.username}}</p>
+	<ul>
+		<li><a href="/ConsultarDatosUsuario">Consultar Perfil</a></li>
+        <li><a href="/solicitudPrivilegio">Solicitar Privilegio</a></li>
+		<li><a href="/otorgarPrivilegio">Otorgar Privilegio</a></li>
+		<li><a href="logout">Logout</a></li>
+	</ul>
+{% else %}
+	{% if reg %}
+		<p> {{ reg }} </p>
+	{% endif %}
+
+	<ul>
+		<li><a href="login">Login</a></li>
+		<li><a href="registro">Registrarse</a></li>
+	</ul>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>
+            Control de Flujo - {% block title %}{% endblock %}
+        </title>
+        <link rel="stylesheet" type="text/css" href="style.css"  />
+    </head>
+    <body>
+        <div id="header"><p>FLUJOS DE TRABAJO - PAGINA PRINCIPAL </p></div>
+        {% if user.is_staff %}
+        <div id="admin">
+            <ul><li> <a href="/admin/" class="medium button blue">Admin Site</a></li></ul>        
+        </div>
+        {% endif %}
+        <div id="leftcolumn">
+            {% block menu %}
+            <ul><li><a href="/" class="medium button blue">home</a></li></ul>
+            {% if user.is_authenticated %}
+                <ul><li><a href="/logout" class="medium button blue">Logout</a></li></ul>
+                <!-- OJO: Modificar la ruta segun la que este-->
+                <ul><li> <a href="/users/{{ user.username }}/" class="medium button blue">
+                    {{ user.username }}</a></li></ul>                
+            {% else %}
+                <ul><li> <a href="/login/" class="medium button blue">Login</a></li></ul>
+            {% endif %}
+            {% endblock %}
+        </div>
+       
+        <div id="wrap">
+            <div id="contenido">
+                {% block content %}{% endblock %}
+            </div>
+            <div id="submenu">
+                {% block submenu %}{% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
