@@ -93,5 +93,13 @@ def log_out(request):
 	logout(request)			
 	return render_to_response("index.html",{"reg":"Sesion cerrada con exito"}, context_instance = RequestContext(request))
 
+def ConsultarDatosUsuario(request):
+    if request.user.is_authenticated():
+        u= User.objects.get(username=request.user)
+        perfil= PerfilDeUsuario.objects.all()
+        return render_to_response("ConsultarDatosUsuario.html",{"usr":u, "perfil":perfil}, context_instance = RequestContext(request))
+    else:
+        f = LoginForm()
+        return render_to_response("log_in.html",{"loginform":f, "msj":""}, context_instance = RequestContext(request))
 
 
