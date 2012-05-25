@@ -37,7 +37,10 @@ class SolicitudPrivilegio(models.Model):
     #privilegio = models.IntegerField(choices=PRIVILEGIO_CHOICES)
     class Meta:
         permissions = (
-            ("aceptar_solicitud", "Puede aceptar las solicitudes"),
+            ("aceptar_privilegio_solicitante", "Puede aceptar los privilegios para ser solicitante"),
+            ("aceptar_privilegio_miembro", "Puede aceptar los privilegios para ser miembros de unidad"),
+            ("aceptar_privilegio_responsable", "Puede aceptar los privilegios para ser responsables de unidad"),
             ("realizar_solicitud", "Puede realizar una solicitud de privilegio"),
+            
         )
 

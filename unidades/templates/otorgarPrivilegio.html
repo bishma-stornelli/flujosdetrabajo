@@ -1,0 +1,17 @@
+<h1 class="titulo1">Otorgar privilegios</h1>
+{% if msg %}
+<p style="color:red;font-size:250%">{{ msg }}</p>
+{% endif %}
+
+{% if listaPrivilegios %}
+	{% for priv in listaPrivilegios %}
+		<form action="/otorgarPrivilegio" method="post">
+		{% csrf_token %}
+        <tr>
+        	<td>{{ priv.mensaje }}</td>
+        </tr>
+        <input type="submit" name="aceptar_privilegio" value="Aceptar" />
+		<input type="submit" name="negar_privilegio" value="Cancelar" />    
+		</form>
+    {% endfor %}
+{%endif%}    

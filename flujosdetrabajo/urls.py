@@ -22,5 +22,7 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('unidades.views',
     url(r'^solicitudPrivilegio$', 'solicitudPrivilegio'),
+    url(r'^otorgarPrivilegio$', 'otorgarPrivilegio'),
+    
 )
 
