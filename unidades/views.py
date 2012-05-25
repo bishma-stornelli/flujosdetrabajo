@@ -6,6 +6,7 @@ from django.template import Context, loader, RequestContext
 from django.views.generic import ListView
 from unidades.forms import SolicitudPrivilegioForm
 from unidades.models import SolicitudPrivilegio
+from unidades.models import Unidad
 
 @login_required(redirect_field_name='/')
 def solicitudPrivilegio(request):
@@ -30,11 +31,22 @@ def solicitudPrivilegio(request):
                 
 @login_required(redirect_field_name='/')
 def otorgarPrivilegio(request):
-    listaPrivilegios= SolicitudPrivilegio.objects.filter(estado='En espera')
+    
     if request.method == "GET":
-        return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios}, context_instance=RequestContext(request))
+        unidadesMiembro= Unidad.objects.filter(miembros=request.user)
+        unidadesResponsable = Unidad.objects.filter(responsable=request.user)
+        #lista de los privilegios que qieren ser miembros
+        listaMiembro=[]
+        #lista de los privilegios que quieren ser solicitantes
+        listaPrivilegios=[]
+        for b in unidadesResponsable:
+            listaMiembro = listaMiembro.extend(list(SolicitudPrivilegio.objects.filter(unidad=b, privilegio='Miembro de unidad', estado='En espera')))
+        for a in unidadesMiembro:
+            listaPrivilegios=listaPrivilegios.extend(list(SolicitudPrivilegio.objects.filter(unidad=a, privilegio='Solicitante', estado='En espera')))
+        
+        return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, context_instance=RequestContext(request))
     elif request.method =="POST":
-        form = SolicitudPrivilegioForm(request.POST)
+        form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
                 priv= SolicitudPrivilegio.objects.get(id= 1)# Este id lo puse porque no se como obtener el de la solicitud por probar
                 priv.estado= 'Aceptado'
