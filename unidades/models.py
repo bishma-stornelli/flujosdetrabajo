@@ -10,7 +10,8 @@ class Unidad(models.Model):
 
     def __unicode__(self):
         return self.nombre
-    
+
+#haaa
 class SolicitudPrivilegio(models.Model):
     posibles_privilegios = (
 			      ("Miembro de Unidad","Miembro de Unidad"),
