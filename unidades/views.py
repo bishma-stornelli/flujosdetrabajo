@@ -46,9 +46,15 @@ def otorgarPrivilegio(request):
     elif request.method =="POST":
         form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
-                priv= SolicitudPrivilegio.objects.get(id= 1)# Este id lo puse porque no se como obtener el de la solicitud por probar
+                priv= SolicitudPrivilegio.objects.get(id= request.POST['id'])# Este id lo puse porque no se como obtener el de la solicitud por probar
                 priv.estado= 'Aceptado'
                 priv.save()
+                unidad= Unidad.objects.get(id=priv.unidad.id)
+                if priv.privilegio == "Miembro de Unidad":
+                    unidad.miembros.add(priv.solicitante)
+                elif priv.privilegio == "Solicitante":
+                    pass #Aqui habria que asignar el user como solicitante de una unidad pero como unidad no tiene solicitante ahorita :s
+                
                 listaMiembro=SolicitudPrivilegio.objects.none()
         #lista de los privilegios que quieren ser solicitantes
                 listaPrivilegios=SolicitudPrivilegio.objects.none()

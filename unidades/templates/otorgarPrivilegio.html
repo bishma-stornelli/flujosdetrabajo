@@ -8,23 +8,52 @@
 	{% for priv in listaPrivilegios %}
 		<form action="/otorgarPrivilegio" method="post">
 		{% csrf_token %}
+		<table>
+		<input type="hidden" name="id" value={{priv.id}}/>
         <tr>
-        	<td>{{ priv.nombre }}</td>
+        	<td> <b>Unidad:</b>
+        	<td>{{ priv.unidad.nombre }}</td>
         </tr>
-        <input type="submit" name="aceptar_privilegio" value="Aceptar" />
-		<input type="submit" name="negar_privilegio" value="Cancelar" />    
+		<tr>
+			<td><b>Privilegio solicitado:</b></td>
+        	<td>{{ priv.privilegio }}</td>
+        </tr>
+        <tr>
+        	<td><b>	Mensaje</b></td>
+        	<td>{{ priv.mensaje }}</td>
+        </tr>
+        <tr>
+        <td></td>
+		<td><input type="submit" name="negar_privilegio" value="Cancelar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
+		</tr>
+		</table>   
 		</form>
     {% endfor %}
-{% elif listaMiembro %}
+ {%endif%}   
+{% if listaMiembro %}
 	<h2>Lista de Solicitudes de Privilegios para ser Miembros de la unidad</h2>
 	{% for priv in listaMiembro %}
 		<form action="/otorgarPrivilegio" method="post">
 		{% csrf_token %}
+		<table>
+		<input type="hidden" name="id" value={{priv.id}}/>
         <tr>
+        	<td> <b>Unidad:</b>
+        	<td>{{ priv.unidad.nombre }}</td>
+        </tr>
+		<tr>
+			<td><b>Privilegio solicitado:</b></td>
+        	<td>{{ priv.privilegio }}</td>
+        </tr>
+        <tr>
+        	<td><b>	Mensaje</b></td>
         	<td>{{ priv.mensaje }}</td>
         </tr>
-        <input type="submit" name="aceptar_privilegio" value="Aceptar" />
-		<input type="submit" name="negar_privilegio" value="Cancelar" />    
+        <tr>
+        <td></td>
+		<td><input type="submit" name="negar_privilegio" value="Cancelar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
+		</tr>
+		</table>    
 		</form>
     {% endfor %}
 
