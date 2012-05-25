@@ -4,6 +4,7 @@
 {% endif %}
 
 {% if listaPrivilegios %}
+	<h2>Lista de Solicitudes de Privilegios para ser Solicitante de la unidad</h2>
 	{% for priv in listaPrivilegios %}
 		<form action="/otorgarPrivilegio" method="post">
 		{% csrf_token %}
@@ -15,7 +16,7 @@
 		</form>
     {% endfor %}
 {% elif listaMiembro %}
-	<h2>Miembro</h2>
+	<h2>Lista de Solicitudes de Privilegios para ser Miembros de la unidad</h2>
 	{% for priv in listaMiembro %}
 		<form action="/otorgarPrivilegio" method="post">
 		{% csrf_token %}
