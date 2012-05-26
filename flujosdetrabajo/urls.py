@@ -1,7 +1,9 @@
 from django.conf.urls import patterns, include, url
+from django.contrib import admin
+import flujos.urls
+
 
 # Uncomment the next two lines to enable the admin:
-from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -18,6 +20,13 @@ urlpatterns = patterns('',
     url(r'^ConsultarDatosUsuario', 'usuarios.views.ConsultarDatosUsuario'),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    
+    # Asi se importan urls de otros modulos
+    url(r'^flujos/', include('flujos.urls')),
+    url(r'^usuarios/', include('usuarios.urls')),
+    url(r'^unidades/', include('unidades.urls')),
+    url(r'^solicitudes/', include('solicitudes.urls')),
+    
 )
 
 urlpatterns += patterns('unidades.views',
