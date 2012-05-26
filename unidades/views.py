@@ -7,6 +7,7 @@ from django.views.generic import ListView
 from unidades.forms import SolicitudPrivilegioForm
 from unidades.models import SolicitudPrivilegio
 from unidades.models import Unidad
+from unidades.forms import RegistroUnidadForm
 
 @login_required(redirect_field_name='/')
 def solicitudPrivilegio(request):
@@ -81,3 +82,23 @@ def otorgarPrivilegio(request):
                     listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio='Solicitante', estado='En espera')
                 return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud cancelada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
                                               context_instance=RequestContext(request))
+
+											  
+@login_required(redirect_field_name='/')
+def registroUnidad(request):
+  if request.method == "GET":
+    return render_to_response("registroUnidad.html", {'RegistroUnidadForm': RegistroUnidadForm()},
+		      context_instance=RequestContext(request))
+  elif request.method == "POST":
+			form = RegistroUnidadForm(request.POST)
+			if form.is_valid():
+				e = Unidad(nombre = form.cleaned_data['nombre'],
+                        miembros = form.cleaned_data['miembros'],
+                        responsable = form.cleaned_data['responsable'],
+                        descripcion= form.cleaned_data['descripcion'])
+				e.save()
+				return render_to_response("registroUnidad.html", {'msg': "Registro realizado con exito",'RegistroUnidadForm':RegistroUnidadForm()}, 
+                                              context_instance=RequestContext(request))
+			else:
+				return render_to_response("registroUnidad.html", {'RegistroUnidadForm': form},
+		      context_instance=RequestContext(request))
