@@ -1,3 +1,19 @@
+<!-- Esta vista se encarga de mostrarle a los miembros de unidad o responsables
+	de unidad, las solicitudes de privilegios que se le han pedido, para que
+	estos puedan aceptar o cancelar la solicitud.
+	-Objetos que requiere:
+	@listaPrivilegios: QuerySet que tiene la lista de solicitudes de privilegios
+					   para ser solicitante de una unidad en la que el usuario
+					   autenticado es miembro de esa unidad.
+	@listaMiembro: QuerySet que tiene la lista de solicitudes de privilegios
+				   para ser miembro de una unidad en la que el usuario
+				   autenticado es responsable de esa unidad.
+	@msg: String que muestra si el privilegio fue aceptado o cancelado con exito.  -->
+<html>
+<head>
+    <title>Otorgar Privilegios</title>
+</head>
+<body>
 <h1 class="titulo1">Otorgar privilegios</h1>
 {% if msg %}
 <p style="color:red;font-size:250%">{{ msg }}</p>
@@ -57,4 +73,8 @@
 		</form>
     {% endfor %}
 
-{%endif%}    
+{%endif%}
+</br>
+<a href="index">Regresar</a>
+</body> 
+</html>   

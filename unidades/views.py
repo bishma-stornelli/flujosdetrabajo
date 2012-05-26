@@ -53,7 +53,9 @@ def otorgarPrivilegio(request):
                 if priv.privilegio == "Miembro de Unidad":
                     unidad.miembros.add(priv.solicitante)
                 elif priv.privilegio == "Solicitante":
-                    pass #Aqui habria que asignar el user como solicitante de una unidad pero como unidad no tiene solicitante ahorita :s
+                    pass
+                    #Falta agregar los solicitantes de una unidad en el modelo
+                    #unidad.solicitantes.add(priv.solicitante)
                 
                 listaMiembro=SolicitudPrivilegio.objects.none()
         #lista de los privilegios que quieren ser solicitantes
