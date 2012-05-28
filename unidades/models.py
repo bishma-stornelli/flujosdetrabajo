@@ -42,7 +42,7 @@ class SolicitudPrivilegio(models.Model):
                       (ESTADO_ESPERA,'En espera'),
                       (ESTADO_ACEPTADO,'Aceptado'),
                       )
-    estado = models.IntegerField(choices=ESTADO_CHOICES)
+    estado = models.IntegerField(choices=ESTADO_CHOICES,default=ESTADO_ESPERA)
     class Meta:
         permissions = (
             ("aceptar_privilegio_solicitante", "Puede aceptar los privilegios para ser solicitante"),
