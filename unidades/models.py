@@ -13,29 +13,36 @@ class Unidad(models.Model):
 
 #haaa
 class SolicitudPrivilegio(models.Model):
-    posibles_privilegios = (
-			      ("Miembro de Unidad","Miembro de Unidad"),
-			      ("Responsable de Unidad","Responsable de Unidad"),
-			      ("Solicitante","Solicitante"),
-			    )
-    posibles_estados = (
-                            ("En espera","En espera"),
-                            ("Aceptado","Aceptado"),
-                        )
-    estado = models.CharField(max_length=30,choices = posibles_estados,default="En espera")
-    privilegio = models.CharField(max_length=30,choices = posibles_privilegios)
+    #posibles_privilegios = (
+	#		      ("Miembro de Unidad","Miembro de Unidad"),
+	#		      ("Responsable de Unidad","Responsable de Unidad"),
+	#		      ("Solicitante","Solicitante"),
+	#		    )
+    #posibles_estados = (
+    #                        ("En espera","En espera"),
+    #                        ("Aceptado","Aceptado"),
+    #                    )
+    #estado = models.CharField(max_length=30,choices = posibles_estados,default="En espera")
+    #privilegio = models.CharField(max_length=30,choices = posibles_privilegios)
     mensaje= models.TextField()
     solicitante = models.ForeignKey(User)
     unidad = models.ForeignKey(Unidad)
     fecha = models.DateField(auto_now=True)
-    #PRIVILEGIO_SOLICITANTE = 1
-    #PRIVILEGIO_MIEMBRO = 2
-    #PRIVILEGIO_RESPONSABLE = 3
-    #PRIVILEGIO_CHOICES = (
-    #        (PRIVILEGIO_SOLICITANTE, 'Solicitante'),
-    #        (PRIVILEGIO_MIEMBRO, 'Miembro de Unidad'),
-    #        (PRIVILEGIO_RESPONSABLE, 'Responsable de Unidad'))
-    #privilegio = models.IntegerField(choices=PRIVILEGIO_CHOICES)
+    PRIVILEGIO_SOLICITANTE = 1
+    PRIVILEGIO_MIEMBRO = 2
+    PRIVILEGIO_RESPONSABLE = 3
+    PRIVILEGIO_CHOICES = (
+            (PRIVILEGIO_SOLICITANTE, 'Solicitante'),
+            (PRIVILEGIO_MIEMBRO, 'Miembro de Unidad'),
+            (PRIVILEGIO_RESPONSABLE, 'Responsable de Unidad'))
+    privilegio = models.IntegerField(choices=PRIVILEGIO_CHOICES)
+    ESTADO_ESPERA = 1
+    ESTADO_ACEPTADO = 2
+    ESTADO_CHOICES = (
+                      (ESTADO_ESPERA,'En espera'),
+                      (ESTADO_ACEPTADO,'Aceptado'),
+                      )
+    estado = models.IntegerField(choices=ESTADO_CHOICES)
     class Meta:
         permissions = (
             ("aceptar_privilegio_solicitante", "Puede aceptar los privilegios para ser solicitante"),
