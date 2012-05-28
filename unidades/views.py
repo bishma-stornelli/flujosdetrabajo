@@ -1,13 +1,10 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import Context, loader, RequestContext
-from django.views.generic import ListView
-from unidades.forms import SolicitudPrivilegioForm
-from unidades.models import SolicitudPrivilegio
-from unidades.models import Unidad
-from unidades.forms import RegistroUnidadForm
+from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm
+from unidades.models import SolicitudPrivilegio, Unidad
 
 @login_required(redirect_field_name='/')
 def solicitudPrivilegio(request):
@@ -86,19 +83,25 @@ def otorgarPrivilegio(request):
 											  
 @login_required(redirect_field_name='/')
 def registroUnidad(request):
-  if request.method == "GET":
-    return render_to_response("registroUnidad.html", {'RegistroUnidadForm': RegistroUnidadForm()},
-		      context_instance=RequestContext(request))
-  elif request.method == "POST":
-			form = RegistroUnidadForm(request.POST)
-			if form.is_valid():
-				e = Unidad(nombre = form.cleaned_data['nombre'],
-                        miembros = form.cleaned_data['miembros'],
-                        responsable = form.cleaned_data['responsable'],
-                        descripcion= form.cleaned_data['descripcion'])
-				e.save()
-				return render_to_response("registroUnidad.html", {'msg': "Registro realizado con exito",'RegistroUnidadForm':RegistroUnidadForm()}, 
-                                              context_instance=RequestContext(request))
-			else:
-				return render_to_response("registroUnidad.html", {'RegistroUnidadForm': form},
-		      context_instance=RequestContext(request))
+    if request.method == "GET":
+        return render_to_response("registroUnidad.html", {'RegistroUnidadForm': RegistroUnidadForm()},
+                                        context_instance=RequestContext(request))
+    elif request.method == "POST":
+        form = RegistroUnidadForm(request.POST)
+        if form.is_valid():
+            # Crear RegistroUnidadForm pasandole request.POST hace esto por ti
+            # AQUI ESTABA EL ERROR NO SE POR QUE
+            #e = Unidad(nombre = form.cleaned_data['nombre'],
+            #        miembros = form.cleaned_data['miembros'],
+            #        responsable = form.cleaned_data['responsable'],
+            #        descripcion= form.cleaned_data['descripcion'])
+            #e.save()
+            form.save()
+            ## AQUI TIENES QUE USAR HtmlResponseRedirect en vez de render_to_response
+            # HtmlResponseRedirect(URL)
+            return render_to_response("registroUnidad.html", {'msg': "Registro realizado con exito",'RegistroUnidadForm':RegistroUnidadForm()}, 
+                                      context_instance=RequestContext(request))
+        else:
+            return render_to_response("registroUnidad.html", {'RegistroUnidadForm': form},
+                                  context_instance=RequestContext(request))
+

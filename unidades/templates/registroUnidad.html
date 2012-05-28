@@ -20,7 +20,7 @@
 		</tr>
 		<tr>
 			<th>Descripcion:</th>
-			<td>{{ RegistroUnidadForm.descripcion }}</BR>{{ RegistroUnidad.descripcion.errors }}</td>
+			<td>{{ RegistroUnidadForm.descripcion }}</BR>{{ RegistroUnidadForm.descripcion.errors }}</td>
 		</tr>
 		<tr>
 			<th colspan="2"><div align="center"><input type="submit" value="Registrar" /></div></th>
@@ -33,3 +33,13 @@
 {% endif %}
 </br>
 <a href="index">Regresar</a>
+
+<h1>Todo esto puedes resumirlo en:</h2>
+<form action="/registroUnidad" method="post">
+    {% csrf_token %}
+    <table>
+        {{ RegistroUnidadForm.as_table }}
+    <th colspan="2"><div align="center"><input type="submit" value="Registrar" /></div></th>
+        </tr>
+    </table>
+</form>

@@ -6,7 +6,7 @@ class Unidad(models.Model):
     descripcion = models.TextField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     miembros = models.ManyToManyField(User, related_name="unidades_miembro")
-    responsable = models.ForeignKey(User, related_name="unidades_responsable")
+    responsable = models.ForeignKey(User, related_name="unidades_responsable", null=True, blank=True)
 
     def __unicode__(self):
         return self.nombre
