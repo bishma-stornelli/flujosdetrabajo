@@ -5,4 +5,5 @@ from unidades.forms import RegistroUnidadForm
 urlpatterns = patterns('unidades.views',
     # Examples:
     # url(r'^crear_paso/$', 'crear_paso'),
+	url(r'^registroUnidad$', 'registroUnidad'),
 )

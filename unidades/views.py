@@ -1,6 +1,7 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import Context, loader, RequestContext
 from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm
