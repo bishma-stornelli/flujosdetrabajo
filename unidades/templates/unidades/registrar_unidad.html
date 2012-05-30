@@ -1,6 +1,5 @@
 
-
-<form action="/unidades/registrar_unidad" >
+<form action="/unidades/registrar_unidad" >{% csrf_token %}
     <table>
         {{ form.as_table }}
         <td><input type="submit" value="Registar" /></td>

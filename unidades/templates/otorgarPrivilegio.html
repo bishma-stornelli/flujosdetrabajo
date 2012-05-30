@@ -8,6 +8,7 @@
 	@listaMiembro: QuerySet que tiene la lista de solicitudes de privilegios
 				   para ser miembro de una unidad en la que el usuario
 				   autenticado es responsable de esa unidad.
+	@listaResponsable: 
 	@msg: String que muestra si el privilegio fue aceptado o cancelado con exito.  -->
 <html>
 <head>
@@ -25,7 +26,11 @@
 		<form action="/otorgarPrivilegio" method="post">
 		{% csrf_token %}
 		<table>
-		<input type="hidden" name="id" value={{priv.id}}/>
+		<input type="hidden" name="id" value="{{priv.id}}" />
+        <tr>
+        	<td> <b>Solicitante:</b>
+        	<td>{{ priv.solicitante }}</td>
+        </tr>
         <tr>
         	<td> <b>Unidad:</b>
         	<td>{{ priv.unidad.nombre }}</td>
@@ -52,7 +57,12 @@
 		<form action="/otorgarPrivilegio" method="post">
 		{% csrf_token %}
 		<table>
-		<input type="hidden" name="id" value={{priv.id}}/>
+		<input type="hidden" name="id" value="{{priv.id}}" />
+		
+        <tr>
+        	<td> <b>Solicitante:</b>
+        	<td>{{ priv.solicitante }}</td>
+        </tr>
         <tr>
         	<td> <b>Unidad:</b>
         	<td>{{ priv.unidad.nombre }}</td>
@@ -75,6 +85,39 @@
 
 {%endif%}
 </br>
+{% if listaResponsable %}
+	<h2>Lista de Solicitudes de Privilegios para ser Responsable de la unidad</h2>
+	{% for priv in listaResponsable %}
+		<form action="/otorgarPrivilegio" method="post">
+		{% csrf_token %}
+		<table>
+		<input type="hidden" name="id" value="{{priv.id}}" />
+		
+        <tr>
+        	<td> <b>Solicitante:</b>
+        	<td>{{ priv.solicitante }}</td>
+        </tr>
+        <tr>
+        	<td> <b>Unidad:</b>
+        	<td>{{ priv.unidad.nombre }}</td>
+        </tr>
+		<tr>
+			<td><b>Privilegio solicitado:</b></td>
+        	<td>{{ priv.privilegio }}</td>
+        </tr>
+        <tr>
+        	<td><b>	Mensaje</b></td>
+        	<td>{{ priv.mensaje }}</td>
+        </tr>
+        <tr>
+        <td></td>
+		<td><input type="submit" name="negar_privilegio" value="Cancelar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
+		</tr>
+		</table>    
+		</form>
+    {% endfor %}
+
+{%endif%}
 <a href="index">Regresar</a>
 </body> 
 </html>   
