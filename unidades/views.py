@@ -37,47 +37,45 @@ def otorgarPrivilegio(request):
         #lista de los privilegios que quieren ser solicitantes
     listaPrivilegios=SolicitudPrivilegio.objects.none()
     for b in unidadesResponsable:
-            listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio='Miembro de Unidad', estado='En espera')
+            listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
     for a in unidadesMiembro:
-            listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio='Solicitante', estado='En espera')
+            listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
     if request.method == "GET":
         return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, context_instance=RequestContext(request))
     elif request.method =="POST":
         form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
                 priv= SolicitudPrivilegio.objects.get(id= request.POST['id'])# Este id lo puse porque no se como obtener el de la solicitud por probar
-                priv.estado= 'Aceptado'
+                priv.estado= 2
                 priv.save()
                 unidad= Unidad.objects.get(id=priv.unidad.id)
-                if priv.privilegio == "Miembro de Unidad":
+                if priv.privilegio == 2:
                     unidad.miembros.add(priv.solicitante)
-                elif priv.privilegio == "Solicitante":
-                    pass
-                    #Falta agregar los solicitantes de una unidad en el modelo
-                    #unidad.solicitantes.add(priv.solicitante)
+                elif priv.privilegio == 1:
+                    unidad.solicitantes.add(priv.solicitante)
                 
                 listaMiembro=SolicitudPrivilegio.objects.none()
         #lista de los privilegios que quieren ser solicitantes
                 listaPrivilegios=SolicitudPrivilegio.objects.none()
                 for b in unidadesResponsable:
-                    listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio='Miembro de Unidad', estado='En espera')
+                    listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
                 for a in unidadesMiembro:
-                    listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio='Solicitante', estado='En espera')
+                    listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
                 
                 return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud aceptada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
                                               context_instance=RequestContext(request))
                 
         elif 'negar_privilegio' in request.POST:
                 priv= SolicitudPrivilegio.objects.get(id=1)# Este id lo puse porque no se como obtener el de la solicitud
-                priv.estado= 'Aceptado'
+                priv.estado= 2
                 priv.save()
                 listaMiembro=SolicitudPrivilegio.objects.none()
         #lista de los privilegios que quieren ser solicitantes
                 listaPrivilegios=SolicitudPrivilegio.objects.none()
                 for b in unidadesResponsable:
-                    listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio='Miembro de Unidad', estado='En espera')
+                    listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
                 for a in unidadesMiembro:
-                    listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio='Solicitante', estado='En espera')
+                    listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
                 return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud cancelada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
                                               context_instance=RequestContext(request))
 
