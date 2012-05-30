@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import Context, loader, RequestContext
 from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm
 from unidades.models import SolicitudPrivilegio, Unidad
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import Group, Permission
 
 @login_required(redirect_field_name='/')
 def solicitudPrivilegio(request):
@@ -30,18 +32,25 @@ def solicitudPrivilegio(request):
                 
 @login_required(redirect_field_name='/')
 def otorgarPrivilegio(request):
+    miembro = get_object_or_404(Group, name='Miembro de Unidad')
+    solicitante = get_object_or_404(Group, name='Solicitante')
+    responsable = get_object_or_404(Group, name='Responsable de Unidad')
     unidadesMiembro= Unidad.objects.filter(miembros=request.user)
     unidadesResponsable = Unidad.objects.filter(responsable=request.user)
         #lista de los privilegios que qieren ser miembros
     listaMiembro=SolicitudPrivilegio.objects.none()
         #lista de los privilegios que quieren ser solicitantes
     listaPrivilegios=SolicitudPrivilegio.objects.none()
+    #lista de los privilegios que quieren ser responsable
+    listaResponsable=SolicitudPrivilegio.objects.none()
     for b in unidadesResponsable:
             listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
     for a in unidadesMiembro:
             listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
+    if request.user.is_superuser:
+            listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
     if request.method == "GET":
-        return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, context_instance=RequestContext(request))
+        return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
     elif request.method =="POST":
         form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
@@ -51,18 +60,26 @@ def otorgarPrivilegio(request):
                 unidad= Unidad.objects.get(id=priv.unidad.id)
                 if priv.privilegio == 2:
                     unidad.miembros.add(priv.solicitante)
+                    priv.solicitante.groups.add(miembro)
                 elif priv.privilegio == 1:
                     unidad.solicitantes.add(priv.solicitante)
-                
+                    priv.solicitante.groups.add(solicitante)
+                elif priv.privilegio == 3:
+                    priv.solicitante.groups.add(responsable)
+                    unidad.responsable = priv.solicitante
+                    unidad.save()
                 listaMiembro=SolicitudPrivilegio.objects.none()
         #lista de los privilegios que quieren ser solicitantes
                 listaPrivilegios=SolicitudPrivilegio.objects.none()
+                listaResponsable=SolicitudPrivilegio.objects.none()
                 for b in unidadesResponsable:
                     listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
                 for a in unidadesMiembro:
                     listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
-                
-                return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud aceptada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
+                if request.user.is_superuser:
+                    listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
+            
+                return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud aceptada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
                                               context_instance=RequestContext(request))
                 
         elif 'negar_privilegio' in request.POST:
@@ -72,11 +89,14 @@ def otorgarPrivilegio(request):
                 listaMiembro=SolicitudPrivilegio.objects.none()
         #lista de los privilegios que quieren ser solicitantes
                 listaPrivilegios=SolicitudPrivilegio.objects.none()
+                listaResponsable=SolicitudPrivilegio.objects.none()
                 for b in unidadesResponsable:
                     listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
                 for a in unidadesMiembro:
                     listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
-                return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud cancelada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
+                if request.user.is_superuser:
+                    listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
+                return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud cancelada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
                                               context_instance=RequestContext(request))
 
 											  
