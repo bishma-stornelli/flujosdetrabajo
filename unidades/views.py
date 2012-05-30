@@ -106,3 +106,5 @@ def registroUnidad(request):
             return render_to_response("registroUnidad.html", {'RegistroUnidadForm': form},
                                   context_instance=RequestContext(request))
 
+def configurar_unidad(request):
+    pass

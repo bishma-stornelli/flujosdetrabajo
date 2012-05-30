@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 <h1> Pagina Inicial </h1>
 
 {% if usr.is_authenticated %}
@@ -18,3 +22,5 @@
 		<li><a href="registro">Registrarse</a></li>
 	</ul>
 {% endif %}
+
+{% endblock %}

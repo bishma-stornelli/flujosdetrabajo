@@ -6,7 +6,7 @@
             Control de Flujo - {% block title %}{% endblock %}
         </title>   
         {% load staticfiles %}
-        <link rel="stylesheet" href="{% static flujo %}" type="text/css" media="screen" />
+        <link rel="stylesheet" href="{% static "flujo.css" %}" type="text/css" media="screen" />
     </head>
     <body>
         {% if messages %}
@@ -18,16 +18,21 @@
         {% endif %}
 	<div id="header"> </div>    
         <div id="nav">
+            <ul>
             {% block menu %}
-            <ul><li><a href="/" class="medium button blue">home</a></li></ul>
+                <li>
+             <a href="/" class="medium button blue">home</a>
+             </li>
             {% if user.is_authenticated %}
-                <ul><li><a href="/logout">Logout</a></li></ul>
+                <li><a href="/logout">Logout</a></li>
                 <!-- OJO: Modificar la ruta segun la que este-->
-                <ul><li> <a href="/users/{{ user.username }}/" class="medium button blue">
-                    {{ user.username }}</a></li></ul>                
+                <li> <a href="/users/{{ user.username }}/" class="medium button blue">
+                    {{ user.username }}</a>
+                 </li>
             {% else %}
-                <ul><li> <a href="/login/" class="medium button blue">Login</a></li></ul>
+                <li> <a href="/login/" class="medium button blue">Login</a></li>
             {% endif %}
+            </ul>
             {% endblock %}
         </div>
         {% if user.is_staff %}

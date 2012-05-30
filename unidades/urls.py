@@ -6,4 +6,5 @@ urlpatterns = patterns('unidades.views',
     # Examples:
     # url(r'^crear_paso/$', 'crear_paso'),
 	url(r'^registroUnidad$', 'registroUnidad'),
+    url(r'^configurar_unidad/$', 'configurar_unidad')
 )
