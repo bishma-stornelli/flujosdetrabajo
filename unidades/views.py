@@ -12,7 +12,7 @@ from django.contrib.auth.models import Group, Permission
 @login_required(redirect_field_name='/')
 def solicitudPrivilegio(request):
   if request.method == "GET":
-    return render_to_response("solicitudPrivilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
+    return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
 		      context_instance=RequestContext(request))
   elif request.method == "POST":
             form = SolicitudPrivilegioForm(request.POST)
@@ -23,10 +23,12 @@ def solicitudPrivilegio(request):
                         unidad = form.cleaned_data['unidad'],
                         mensaje= form.cleaned_data['mensaje'])
                 e.save()
-                return render_to_response("solicitudPrivilegio.html", {'msg': "Solicitud realizada con exito",'SolicitudPrivilegioForm':SolicitudPrivilegioForm()}, 
+                messages.success(request, "Solicitud aceptada.")
+                return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm':SolicitudPrivilegioForm()}, 
                                               context_instance=RequestContext(request))
             else:
-                return render_to_response("solicitudPrivilegio.html", {'SolicitudPrivilegioForm': form},
+                messages.error(request, 'Error: Campos invalidos.')
+                return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm': form},
 		      context_instance=RequestContext(request))
      #dasdas          
                 
@@ -50,7 +52,7 @@ def otorgarPrivilegio(request):
     if request.user.is_superuser:
             listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
     if request.method == "GET":
-        return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
+        return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
     elif request.method =="POST":
         form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
@@ -78,8 +80,8 @@ def otorgarPrivilegio(request):
                     listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
                 if request.user.is_superuser:
                     listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
-            
-                return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud aceptada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
+                messages.success(request, "Solicitud aceptada.")
+                return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
                                               context_instance=RequestContext(request))
                 
         elif 'negar_privilegio' in request.POST:
@@ -96,10 +98,10 @@ def otorgarPrivilegio(request):
                     listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
                 if request.user.is_superuser:
                     listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
-                return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud cancelada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
+                messages.success(request, "Solicitud cancelada.")
+                return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
                                               context_instance=RequestContext(request))
-
-											  
+								  
 @login_required(redirect_field_name='/')
 def registroUnidad(request):
     if request.method == "GET":

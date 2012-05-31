@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from unidades.groups import responsable
 
 class Unidad(models.Model):
     nombre = models.CharField(max_length=50)
@@ -18,7 +19,22 @@ class Unidad(models.Model):
     #     SolicitudPrivilegio.PRIVILEGIO_MIEMBRO
     #     SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE
     def permite(self, usuario, permiso):
-        return True
+        if permiso == SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE:
+            if usuario in self.solicitantes:
+                return True
+            else:
+                return False
+        elif permiso == SolicitudPrivilegio.PRIVILEGIO_MIEMBRO:
+            if usuario in self.miembros:
+                return True
+            else:
+                return False
+        elif permiso == SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE:
+            if usuario == responsable:
+                return True
+            else:
+                return False
+                
 
 #haaa
 class SolicitudPrivilegio(models.Model):
