@@ -28,7 +28,7 @@ def solicitudPrivilegio(request):
             else:
                 return render_to_response("solicitudPrivilegio.html", {'SolicitudPrivilegioForm': form},
 		      context_instance=RequestContext(request))
-                
+     #dasdas          
                 
 @login_required(redirect_field_name='/')
 def otorgarPrivilegio(request):
