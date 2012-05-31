@@ -1,6 +1,5 @@
-from unidades.models import Unidad
-from unidades.models import SolicitudPrivilegio
+from usuarios.models import *
 from django.contrib import admin
 
-admin.site.register(Unidad)
-admin.site.register(SolicitudPrivilegio)
+
+admin.site.register(PerfilDeUsuario)
