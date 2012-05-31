@@ -11,6 +11,14 @@ class Unidad(models.Model):
 
     def __unicode__(self):
         return self.nombre
+    
+    # usuario es de tipo django.contrib.auth.models.User
+    # permiso es uno de los siguientes:
+    #     SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE
+    #     SolicitudPrivilegio.PRIVILEGIO_MIEMBRO
+    #     SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE
+    def permite(self, usuario, permiso):
+        return True
 
 #haaa
 class SolicitudPrivilegio(models.Model):

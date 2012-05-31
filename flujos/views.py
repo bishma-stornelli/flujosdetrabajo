@@ -5,12 +5,16 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from flujos.forms import CrearFlujoForm
-from unidades.models import Unidad
+from unidades.models import Unidad, SolicitudPrivilegio
 
 @login_required
 def crear_flujo(request, unidad_id):
     if request.method == 'POST':
-        # FALTA VERIFICAR QUE EL QUE CREA EL FLUJO ES EL RESPONSABLE DE LA UNIDAD CON ID unidad_id  
+        # Si no existe unidad con id unidad_id envio error 404
+        unidad = get_object_or_404(Unidad, pk=unidad_id)
+        # Verifico que el usuario que crea el flujo es responsable de la unidad a la que se asociara
+        unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE)
+        # Creo el form con los datos que llegaron del cliente
         form = CrearFlujoForm(request.POST)
         if form.is_valid():   
             # Aqui puedo ejecutar directamente en el form:
@@ -18,8 +22,7 @@ def crear_flujo(request, unidad_id):
             # y eso lo guarda en la base de datos, pero como unidad_id no puede ser null entonces
             # tengo que modificarlo antes de guardarlo
             flujo = form.save(commit=False) # Regresa un objeto de tipo Flujo con los datos del formulario
-            # Si no existe unidad con id unidad_id envio error 404
-            unidad = get_object_or_404(Unidad, pk=unidad_id)
+            
             flujo.unidad = unidad 
             flujo.save()
             # SI ES EXITOSO REGRESO CON HttpResponseRedirect
