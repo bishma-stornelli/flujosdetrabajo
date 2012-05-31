@@ -50,7 +50,7 @@ def otorgarPrivilegio(request):
     if request.user.is_superuser:
             listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
     if request.method == "GET":
-        return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
+        return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':lis taResponsable}, context_instance=RequestContext(request))
     elif request.method =="POST":
         form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
@@ -58,13 +58,13 @@ def otorgarPrivilegio(request):
                 priv.estado= 2
                 priv.save()
                 unidad= Unidad.objects.get(id=priv.unidad.id)
-                if priv.privilegio == 2:
+                if priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_MIEMBRO:
                     unidad.miembros.add(priv.solicitante)
                     priv.solicitante.groups.add(miembro)
-                elif priv.privilegio == 1:
+                elif priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE:
                     unidad.solicitantes.add(priv.solicitante)
                     priv.solicitante.groups.add(solicitante)
-                elif priv.privilegio == 3:
+                elif priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE:
                     priv.solicitante.groups.add(responsable)
                     unidad.responsable = priv.solicitante
                     unidad.save()
