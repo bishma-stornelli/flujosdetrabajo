@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+# Template que muestra un formulario para crear el flujo
+# Requiere dos variables:
+# unidad_id que contiene el id de la unidad a la que se va a agregar el flujo
+# form el formulario de tipo CrearFlujoForm para mostrar al usuario
+
+{% block content %}
+    {% comment %} NO OLVIDEN COLOCAR method="POST" {% endcomment %}
+    <form action="/flujos/crear_flujo/{{ unidad_id }}/" method="POST">{% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            <td><input type="submit" value="Crear" /></td>
+        </table>
+    </form>
+
+{% endblock %}

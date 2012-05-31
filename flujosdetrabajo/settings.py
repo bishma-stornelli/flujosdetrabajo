@@ -125,7 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
-    'usuarios', 'flujos', 'unidades', 'solicitudes',
+    'usuarios', 'flujos', 'unidades', 'solicitudes', 'static_and_base',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -157,9 +157,5 @@ LOGGING = {
     }
 }
 
-TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + (
-# El siguiente es agregado para anadir la variable messages a cada RequestContext
-    'django.contrib.messages.context_processors.messages',
-)
 
 

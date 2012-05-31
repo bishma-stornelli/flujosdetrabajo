@@ -1,24 +1,20 @@
-body {margin: 0;padding: 0;font-family: sans-serif;line-height: 1.4em;font-size: small; }div#header {padding: 7%;
-text-align: center;
-background-color: #d0d0d0;
-color: #ffffff;
-border-bottom: double #ababab medium;
-background-position: left;
-background: url(image.jpg) left no-repeat, 
-url(logobg.jpg) right no-repeat; 
-
-
-            }
-
-div#admin {padding: 2%;text-align: justify;margin-left: 24%;background-color: #ffffff;border-right: groove thin;border-left: groove thin;
-
-
- }
- 
-div#nav {padding: 2%;float: left;text-align: right;background-color: #ffffff;width: 20%;
+body {    margin: 0;    padding: 0;    font-family: sans-serif;    line-height: 1.4em;    font-size: small; }div#header {padding: 7%;
+    text-align: center;
+    background-color: #d0d0d0;
+    color: #ffffff;
+    border-bottom: double #ababab medium;
+    background-position: left;
+    background: url(image.jpg) left no-repeat, 
+    url(logobg.jpg) right no-repeat; 
 }
 
-ul#messages  {
+div#admin {    padding: 2%;    text-align: justify;    margin-left: 24%;    background-color: #ffffff;    border-right: groove thin;    border-left: groove thin;
+ }
+ 
+div#nav {    padding: 2%;    float: left;    text-align: right;    background-color: #ffffff;    width: 20%;
+}
+
+ul.messages  {
     padding: 2%;
     text-align: justify;
     margin-left: 24%;
