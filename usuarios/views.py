@@ -102,4 +102,35 @@ def ConsultarDatosUsuario(request):
         f = LoginForm()
         return render_to_response("log_in.html",{"loginform":f, "msj":""}, context_instance = RequestContext(request))
 
+def cambiar_clave(request):
+
+    if request.user.is_authenticated():
+        if request.method == 'POST': # If the form has been submitted...
+            #form =
+            user = request.user
+            #Verificamos que sea el usuario con la clave antigua
+            if user.check_password(request.POST['claveAntigua']):
+                password = request.POST ['claveNueva']
+                passwordConfirm = request.POST['claveConfirmacion']
+                #Verificamos confirmacion de clave
+                if password == passwordConfirm:
+                    user.set_password(password)
+                    user.save()
+                    messages.success(request, "Cambio de clave exitosa")
+                    return render_to_response("index.html",{"usr":user}, context_instance = RequestContext(request))
+                else:
+                    messages.error(request,"Las claves no coinciden")
+                    return render_to_response("cambiar_clave.html", context_instance = RequestContext(request))
+
+            else:
+                messages.error(request,"Cambio de clave fallida")
+                return render_to_response("cambiar_clave.html", context_instance = RequestContext(request))
+        else:
+            return render_to_response('cambiar_clave.html',
+                context_instance = RequestContext(request))
+
+    else:
+        f = LoginForm()
+        return render_to_response("log_in.html",{"loginform":f, "msj":""}, context_instance = RequestContext(request))
+
 

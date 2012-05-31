@@ -5,3 +5,8 @@ urlpatterns = patterns('usuarios.views',
     # url(r'^crear_paso/$', 'crear_paso'),
     
 )
+
+urlpatterns += patterns('flujos.views',
+    url(r'^cambiar_clave', 'cambiar_clave'),
+    url(r'^ConsultarDatosUsuario', 'ConsultarDatosUsuario'),
+)
