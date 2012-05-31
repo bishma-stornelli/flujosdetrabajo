@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from unidades.groups import responsable
+#from unidades.groups import responsable
 
 class Unidad(models.Model):
     nombre = models.CharField(max_length=50)
@@ -30,7 +30,7 @@ class Unidad(models.Model):
             else:
                 return False
         elif permiso == SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE:
-            if usuario == responsable:
+            if usuario == self.responsable:
                 return True
             else:
                 return False
@@ -73,6 +73,7 @@ class SolicitudPrivilegio(models.Model):
             ("aceptar_privilegio_solicitante", "Puede aceptar los privilegios para ser solicitante"),
             ("aceptar_privilegio_miembro", "Puede aceptar los privilegios para ser miembros de unidad"),
             ("aceptar_privilegio_responsable", "Puede aceptar los privilegios para ser responsables de unidad"),
+            # TODOS puedenn realizar solicitud de privilegio
             ("realizar_solicitud", "Puede realizar una solicitud de privilegio"),
             
         )
