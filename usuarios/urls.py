@@ -9,4 +9,5 @@ urlpatterns = patterns('usuarios.views',
 urlpatterns += patterns('flujos.views',
     url(r'^cambiar_clave', 'cambiar_clave'),
     url(r'^ConsultarDatosUsuario', 'ConsultarDatosUsuario'),
+    url(r'^modificarDatosUsuario', 'modificarDatosUsuario'),     
 )
