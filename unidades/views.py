@@ -13,7 +13,7 @@ from django.contrib.auth.models import Group, Permission
 def solicitud_privilegio(request):
   if request.method == "GET":
 
-    return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
+    return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
 		      context_instance=RequestContext(request))
   elif request.method == "POST":
             form = SolicitudPrivilegioForm(request.POST)
@@ -26,15 +26,15 @@ def solicitud_privilegio(request):
                 e.save()
                 
                 messages.success(request, "Solicitud aceptada.")
-                return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm':SolicitudPrivilegioForm()},context_instance=RequestContext(request)) 
+                return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm':SolicitudPrivilegioForm()},context_instance=RequestContext(request)) 
             else:
                 messages.error(request, 'Error: Campos invalidos.')
-                return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm': form},
+                return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': form},
 		      context_instance=RequestContext(request))
      #dasdas          
                 
 @login_required(redirect_field_name='/')
-def otorgarPrivilegio(request):
+def otorgar_privilegio(request):
     miembro = get_object_or_404(Group, name='Miembro de Unidad')
     solicitante = get_object_or_404(Group, name='Solicitante')
     responsable = get_object_or_404(Group, name='Responsable de Unidad')
@@ -54,7 +54,7 @@ def otorgarPrivilegio(request):
             listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
     if request.method == "GET":
 
-        return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
+        return render_to_response("unidades/otorgar_privilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
     elif request.method =="POST":
         form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
@@ -83,7 +83,7 @@ def otorgarPrivilegio(request):
                 if request.user.is_superuser:
                     listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
                 messages.success(request, "Solicitud aceptada.")
-                return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
+                return render_to_response("unidades/otorgar_privilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
                                               context_instance=RequestContext(request))
                 
         elif 'negar_privilegio' in request.POST:
@@ -101,7 +101,7 @@ def otorgarPrivilegio(request):
                 if request.user.is_superuser:
                     listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
                 messages.success(request, "Solicitud cancelada.")
-                return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
+                return render_to_response("unidades/otorgar_privilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
                                               context_instance=RequestContext(request))
 
 
