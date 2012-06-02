@@ -1,11 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 <h1> Pagina Inicial </h1>
 
 {% if usr.is_authenticated %}
 	<p>Bienvenido {{usr.username}}</p>
 	<ul>
 		<li><a href="/ConsultarDatosUsuario">Consultar Perfil</a></li>
-        <li><a href="/solicitudPrivilegio">Solicitar Privilegio</a></li>
-		<li><a href="/otorgarPrivilegio">Otorgar Privilegio</a></li>
+		<li><a href="/modificarDatosUsuario">Modificar Perfil</a></li>			
+        <li><a href="/solicitud_privilegio">Solicitar Privilegio</a></li>
+		<li><a href="/otorgar_privilegio">Otorgar Privilegio</a></li>
 		<li><a href="logout">Logout</a></li>
 	</ul>
 {% else %}
@@ -18,3 +23,5 @@
 		<li><a href="registro">Registrarse</a></li>
 	</ul>
 {% endif %}
+
+{% endblock %}
