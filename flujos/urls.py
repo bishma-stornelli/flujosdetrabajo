@@ -13,7 +13,7 @@ urlpatterns += patterns('flujos.views',
     # SI NECESITAN MAS O MENOS PARAMETROS PARA HACERLO FUNCIONAR LOS ANADEN
     url(r'^listar_flujos/$', 'listar_flujos'),
     url(r'^copiar_flujo/(?P<flujo_id>\d+)$', 'copiar_flujo'),
-    url(r'^consultar_flujo/(?P<flujo_id>\d+)/$', 'copiar_flujo'),
+    url(r'^consultar_flujo/(?P<flujo_id>\d+)/$', 'consultar_flujo'),
     url(r'^modificar_flujo/(?P<flujo_id>\d+)/$', 'copiar_flujo'),
     url(r'^publicar_flujo/(?P<flujo_id>\d+)/$', 'copiar_flujo'),
     url(r'^marcar_obsoleto/(?P<flujo_id>\d+)/$', 'copiar_flujo'),

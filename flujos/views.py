@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from flujos.forms import CrearFlujoForm
+from flujos.models import Flujo
 from unidades.models import Unidad, SolicitudPrivilegio
 
 @login_required
@@ -45,3 +46,9 @@ def listar_flujos(request):
 
 def copiar_flujo(request, flujo_id):
     pass
+
+def consultar_flujo(request, flujo_id):
+    flujo = get_object_or_404(Flujo, pk=flujo_id)
+    # Checkear permisos
+    return render_to_response('flujos/consultar_flujo.html',
+                              {'flujo': flujo})
