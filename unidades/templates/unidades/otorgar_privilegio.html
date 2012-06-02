@@ -20,7 +20,7 @@
 {% if listaPrivilegios %}
 	<h2>Lista de Solicitudes de Privilegios para ser Solicitante de la unidad</h2>
 	{% for priv in listaPrivilegios %}
-		<form action="/otorgarPrivilegio" method="post">
+		<form action="/otorgar_privilegio" method="post">
 		{% csrf_token %}
 		<table>
 		<input type="hidden" name="id" value={{priv.id}}/>
@@ -47,7 +47,7 @@
 {% if listaMiembro %}
 	<h2>Lista de Solicitudes de Privilegios para ser Miembros de la unidad</h2>
 	{% for priv in listaMiembro %}
-		<form action="/otorgarPrivilegio" method="post">
+		<form action="/otorgar_privilegio" method="post">
 		{% csrf_token %}
 		<table>
 		<input type="hidden" name="id" value={{priv.id}}/>
