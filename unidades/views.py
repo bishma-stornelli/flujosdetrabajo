@@ -23,6 +23,7 @@ def solicitudPrivilegio(request):
                         unidad = form.cleaned_data['unidad'],
                         mensaje= form.cleaned_data['mensaje'])
                 e.save()
+                
                 messages.success(request, "Solicitud aceptada.")
                 return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm':SolicitudPrivilegioForm()}, 
                                               context_instance=RequestContext(request))
