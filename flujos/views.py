@@ -58,3 +58,25 @@ def consultar_flujo(request, flujo_id):
     # Checkear permisos
     return render_to_response('flujos/consultar_flujo.html',
                               {'flujo': flujo})
+
+def agregar_paso_flujo(request, flujo_id):
+  #  if request.method == 'POST':
+   #     form = ErrorSaveForm(request)
+    #    if form.is_valid():
+            
+
+
+     #       return HttResponseRedirect('')
+    #else:
+     #   form = ErrorSaveForm()
+
+    #return render_to_response('agregar_paso.html', {'form': form})
+    pass
+ 
+
+
+def listar_flujos(request):
+    pass
+
+def copiar_flujo(request, flujo_id):
+    pass
