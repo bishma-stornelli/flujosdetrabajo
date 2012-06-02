@@ -1,6 +1,7 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect 
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import Context, loader, RequestContext
@@ -126,22 +127,16 @@ def registroUnidad(request):
             return render_to_response("registroUnidad.html", {'RegistroUnidadForm': form},
                                   context_instance=RequestContext(request))
 
-def configurar_unidad(request):
-    if request.method == "GET":
-        return render_to_response("configurar_unidad.html", {'ConfigurarUnidadForm': ConfigurarUnidadForm()},
-                                        context_instance=RequestContext(request))
-    elif request.method == "POST":
-        form = ConfigurarUnidadForm(request.POST)
-        if form.is_valid():
-            # Crear RegistroUnidadForm pasandole request.POST hace esto por ti
-            # AQUI ESTABA EL ERROR NO SE POR QUE
-            #e = Unidad(nombre = form.cleaned_data['nombre'],
-            #        miembros = form.cleaned_data['miembros'],
-            #        responsable = form.cleaned_data['responsable'],
-            #        descripcion= form.cleaned_data['descripcion'])
-            #e.save()
-            form.save()
-            ## AQUI TIENES QUE USAR HtmlResponseRedirect en vez de render_to_response
-            # HtmlResponseRedirect(URL)
-            return render_to_response("configurar_unidad.html", {'msg': "Configuracion Exitosa",'ConfigurarUnidadForm':ConfigurarUnidadForm()}, 
-                                      context_instance=RequestContext(request))
+def configurar_unidad(request, unidad_id):
+  unidad = get_object_or_404( Unidad, pk = unidad_id)
+  if request.method == "POST":
+    form = ConfigurarUnidadForm(request.POST, instance=unidad)
+    if form.is_valid():
+      form.save()     
+      messages.success( request , "Configuracion exitosa.")
+      return HttpResponseRedirect(reverse("unidades_index"))
+    else:
+      messages.error(request, "Verifique los campos e intente de nuevo")
+  else:
+    form = ConfigurarUnidadForm(instance = unidad)
+    return render_to_response("unidades/configurar_unidad.html", {'form':form}, context_instance=RequestContext(request))
