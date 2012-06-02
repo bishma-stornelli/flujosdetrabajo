@@ -1,0 +1,23 @@
+<h1 class="titulo1">Registro de Usuario</h1>
+<br/>
+
+{% if msj %}
+<p class="msj">
+	{{msj}}
+</p>
+{% endif %}
+
+<form action="/usuarios/registro/" method="post">
+	{% csrf_token %}
+	{{ f.non_field_errors }}
+	{% for campo in registroform %}
+	<div class="registro">
+		{{ campo.label_tag  }} {{ campo }}
+		{{ campo.errors }}
+	</div>
+	{% endfor  %}
+
+	<input type="submit" value="Registrar" />
+</form>
+</br>
+<a href="/index">Regresar</a>

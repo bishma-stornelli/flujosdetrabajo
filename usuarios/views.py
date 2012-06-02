@@ -7,10 +7,7 @@ from django.shortcuts import render_to_response
 from usuarios.forms import RegistroForm, LoginForm,UserForm
 from usuarios.models import PerfilDeUsuario
 from django.contrib import messages
-<<<<<<< HEAD
-=======
 
->>>>>>> cesar_arreglarurl
 def index(request):
 #Esta vista permite generar una pantalla sencilla de index, es necesario que se retorne el usuario para identificar
 #si el usuario esta autenticado o no. 
@@ -99,19 +96,13 @@ def log_out(request):
 	logout(request)			
 	return render_to_response("usuarios/index.html",{"reg":"Sesion cerrada con exito"}, context_instance = RequestContext(request))
 
-<<<<<<< HEAD
-def consultar_datos_de_usuario(request):
-    if request.user.is_authenticated():
-        u= User.objects.get(username=request.user)
-        perfil= PerfilDeUsuario.objects.all()
-        return render_to_response("consultar_datos_de_usuario.html",{"usr":u, "perfil":perfil}, context_instance = RequestContext(request))
-=======
+
 def consultar_datos_usuario(request):
     if request.user.is_authenticated():
         u= User.objects.get(username=request.user)
         perfil= PerfilDeUsuario.objects.all()
-        return render_to_response("usuarios/ConsultarDatosUsuario.html",{"usr":u, "perfil":perfil}, context_instance = RequestContext(request))
->>>>>>> cesar_arreglarurl
+        return render_to_response("usuarios/consultar_datos_usuario.html",{"usr":u, "perfil":perfil}, context_instance = RequestContext(request))
+
     else:
         f = LoginForm()
         return render_to_response("usuarios/log_in.html",{"loginform":f}, context_instance = RequestContext(request))
@@ -147,19 +138,13 @@ def cambiar_clave(request):
         f = LoginForm()
         return render_to_response("usuarios/log_in.html",{"loginform":f}, context_instance = RequestContext(request))
 
-<<<<<<< HEAD
-def modificar_datos_de_usuario(request):
-	
-	if request.method == "GET":
-		user_form = UserForm(instance=request.user)
-		return render_to_response('modificar_datos_de_usuario.html', { 'user_form': user_form }, context_instance=RequestContext(request))
-=======
+
 def modificar_datos_usuario(request):
 	
 	if request.method == "GET":
 		user_form = UserForm(instance=request.user)
-		return render_to_response('usuarios/modificarDatosUsuario.html', { 'user_form': user_form }, context_instance=RequestContext(request))	
->>>>>>> cesar_arreglarurl
+		return render_to_response('usuarios/modificar_datos_usuario.html', { 'user_form': user_form }, context_instance=RequestContext(request))	
+
 	else:
 		u= User.objects.get(username=request.user)
 		user_form = UserForm(request.POST, instance=request.user)
@@ -168,19 +153,13 @@ def modificar_datos_usuario(request):
 			u.last_name=user_form.cleaned_data['last_name']
 			u.email=user_form.cleaned_data['email']
 			u.save()
-<<<<<<< HEAD
-			return render_to_response('modificar_datos_de_usuario.html', { 'user_form': user_form,"reg":"Perfil Actualizado Exitosamente"}, context_instance=RequestContext(request))
 
-		else:
-			user_form = UserForm(instance=request.user)
-			return render_to_response('modificar_datos_de_usuario.html', { 'user_form': user_form}, context_instance=RequestContext(request))
-=======
 			messages.success(request,"Perfil Actualizado Exitosamente")
-			return render_to_response('usuarios/modificarDatosUsuario.html', { 'user_form': user_form}, context_instance=RequestContext(request))
+			return render_to_response('usuarios/modificar_datos_usuario.html', { 'user_form': user_form}, context_instance=RequestContext(request))
 
 		else:
 			user_form = UserForm(instance=request.user)
-			return render_to_response('usuarios/modificarDatosUsuario.html', { 'user_form': user_form}, context_instance=RequestContext(request))
->>>>>>> cesar_arreglarurl
+			return render_to_response('usuarios/modificar_datos_usuario.html', { 'user_form': user_form}, context_instance=RequestContext(request))
+
 
 

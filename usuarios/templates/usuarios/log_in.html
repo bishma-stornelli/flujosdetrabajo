@@ -1,0 +1,28 @@
+<h1 class="titulo1">Login</h1>
+<br/>
+
+
+<form action="/usuarios/login/" method="post">
+	{% csrf_token %}
+	{% if form.errors %}
+		<p>Error: Username o Password incorrectos<p>
+	{% endif %}
+
+	
+	<div class="login">
+		<div>
+			{{ form.username.label_tag  }} {{ form.username }}
+		</div>
+		<div>
+			{{ form.password.label_tag  }} {{ form.password }}
+		</div>
+	</div>
+	
+	
+
+	<input type="submit" value="login" />
+	<input type="hidden" name="next" value="{{next}}" />
+</form>
+</br>
+<a href="/index/">Regresar</a>
+
