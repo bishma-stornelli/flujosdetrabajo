@@ -14,6 +14,16 @@ class Alerta(models.Model):
     solicitante_es_receptor = models.BooleanField()
     tipos = models.ManyToManyField('TipoAlerta', related_name='alertas')
 
+def clone(self):
+    a.descripcion = self.descripcion
+    a.mostar_al_llegar = self.mostar_al_llegar
+    a.paso = self.paso
+    a.plantilla = self.plantilla
+    a.miembro_es_receptor = self.miembro_es_receptor
+    a.solicitante_es_receptor = self.solicitante_es_receptor
+    a.tipos = self.tipos
+    return a
+
 class TipoAlerta(models.Model):
     nombre = models.CharField(max_length=30)
     descripcion = models.CharField(max_length=256)
@@ -21,6 +31,11 @@ class TipoAlerta(models.Model):
     # Recibe una plantilla renderizada y la envia
     def enviar_alerta(self, plantilla):
         pass
+
+    def clone(self):
+        a.nombre = self.nombre
+        a.descripcion = self.descripcion
+        return a
     
 class Informe(models.Model):
     descripcion = models.TextField()
@@ -28,6 +43,8 @@ class Informe(models.Model):
     plantilla = models.ForeignKey("Plantilla")
     miembro_es_receptor = models.BooleanField()
     solicitante_es_receptor = models.BooleanField()
+
+    
    
 class Plantilla(models.Model):
     formato = models.TextField()
@@ -55,12 +72,37 @@ class Campo(models.Model):
     esObligatorio = models.BooleanField()
     paso = models.ForeignKey('Paso', related_name="campos")
 
+    def clone(self):
+        a.nombre = self.nombre
+        a.llenado_por_miembro = self.llenado_por_miembro
+        a.llenado_por_solicitante = self.llenado_por_solicitante
+        a.TIPO_TEXT = self.TIPO_TEXT
+        a.TIPO_TEXTAREA = self.TIPO_TEXTAREA
+        a.TIPO_CHECKBOX = self.TIPO_CHECKBOX
+        a.TIPO_FILE = self.TIPO_FILE
+        a.TIPO_NUMBER = self.TIPO_NUMBER
+        a.TIPO_EMAIL = self.TIPO_EMAIL
+        a.TIPO_FECHA = self.TIPO_FECHA
+        a.TIPO_CHOICES = self.TIPO_CHOICES
+        a.tipo = self.tipo
+        a.esObligatorio = self.esObligatorio
+        a.paso = self.paso
+        return a
+
 class Criterio(models.Model):
     paso_origen = models.ForeignKey('Paso', related_name='criterios_origen')
     paso_destino = models.ForeignKey('Paso', related_name='criterios_destino')
     descripcion = models.TextField()
     expresion = models.TextField()
     campos = models.ManyToManyField(Campo)
+    
+    def clone(self):
+        a.paso_origen = self.nombre
+        a.paso_destino = self.paso_destino
+        a.descripcion = self.descripcion
+        a.expresion = self.expresion
+        a.campos = self.campos
+        return a
 
 class Paso(models.Model):
     nombre = models.CharField(max_length=30)
@@ -85,6 +127,20 @@ class Paso(models.Model):
                                        symmetrical=False,
                                        through='Criterio')
     fecha_de_creacion = models.DateTimeField(auto_now = True)
+   
+    def clone(self):
+        a.nombre = self.nombre
+        a.TIPO_INICIAL = self.TIPO_INICIAL
+        a.TIPO_FINAL = self.TIPO_FINAL
+        a.TIPO_DIVISION = self.TIPO_DIVISION
+        a.TIPO_UNION = self.TIPO_UNION
+        a.TIPO_CHOICES = self.TIPO_CHOICES
+        a.tipo = self.tipo
+        a.descripcion = self.descripcion
+        a.flujo = self.flujo
+        a.sucesores = self.sucesores
+        a.fecha_de_creacion = self.fecha_de_creacion
+        return a
 
 class Flujo(models.Model):
     nombre = models.CharField(max_length=30)
@@ -97,3 +153,14 @@ class Flujo(models.Model):
                     (ESTADO_OBSOLETO, "Obsoleto"))
     estado = models.IntegerField(choices=ESTADO_CHOICES, default=ESTADO_BORRADOR)
     unidad = models.ForeignKey(Unidad,related_name='flujos')
+
+    def clone(self):
+        a.nombre = self.nombre
+        a.descripcion = self.descripcion
+        a.ESTADO_BORRADOR = self.ESTADO_BORRADOR
+        a.ESTADO_PUBLICO = self.ESTADO_PUBLICO
+        a.ESTADO_OBSOLETO = self.ESTADO_OBSOLETO
+        a.ESTADO_CHOICES = self.ESTADO_CHOICES
+        a.estado = self.estado
+        a.unidad = self.unidad
+        return a

@@ -49,6 +49,8 @@ def listar_flujos(request, unidad_id):
 
 
 def copiar_flujo(request, flujo_id):
+    #flujo = get_object_or_404(Flujo, pk=flujo_id)
+    #form = CopiarFlujoForm()
     pass
 
 def consultar_flujo(request, flujo_id):
