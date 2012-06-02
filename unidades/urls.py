@@ -7,6 +7,6 @@ urlpatterns = patterns('unidades.views',
     # url(r'^crear_paso/$', 'crear_paso'),
     url(r'^registroUnidad$', 'registroUnidad'),
     url(r'^configurar_unidad/$', 'configurar_unidad'),
-    url(r'^solicitudPrivilegio','solicitudPrivilegio'),
-    url(r'^otorgarPrivilegio','otorgarPrivilegio'),
+    url(r'^solicitud_privilegio','solicitud_privilegio'),
+    url(r'^otorgar_privilegio','otorgar_privilegio'),
 )
