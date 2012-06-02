@@ -9,9 +9,9 @@ from unidades.models import SolicitudPrivilegio
 from unidades.models import Unidad
 
 @login_required(redirect_field_name='/')
-def solicitudPrivilegio(request):
+def solicitud_privilegio(request):
   if request.method == "GET":
-    return render_to_response("solicitudPrivilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
+    return render_to_response("/unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
 		      context_instance=RequestContext(request))
   elif request.method == "POST":
             form = SolicitudPrivilegioForm(request.POST)
@@ -22,15 +22,15 @@ def solicitudPrivilegio(request):
                         unidad = form.cleaned_data['unidad'],
                         mensaje= form.cleaned_data['mensaje'])
                 e.save()
-                return render_to_response("solicitudPrivilegio.html", {'msg': "Solicitud realizada con exito",'SolicitudPrivilegioForm':SolicitudPrivilegioForm()}, 
+                return render_to_response("/unidades/solicitud_privilegio.html", {'msg': "Solicitud realizada con exito",'SolicitudPrivilegioForm':SolicitudPrivilegioForm()}, 
                                               context_instance=RequestContext(request))
             else:
-                return render_to_response("solicitudPrivilegio.html", {'SolicitudPrivilegioForm': form},
+                return render_to_response("/unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': form},
 		      context_instance=RequestContext(request))
                 
                 
 @login_required(redirect_field_name='/')
-def otorgarPrivilegio(request):
+def otorgar_privilegio(request):
     unidadesMiembro= Unidad.objects.filter(miembros=request.user)
     unidadesResponsable = Unidad.objects.filter(responsable=request.user)
         #lista de los privilegios que qieren ser miembros
@@ -42,7 +42,7 @@ def otorgarPrivilegio(request):
     for a in unidadesMiembro:
             listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio='Solicitante', estado='En espera')
     if request.method == "GET":
-        return render_to_response("otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, context_instance=RequestContext(request))
+        return render_to_response("/unidades/otorgar_privilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, context_instance=RequestContext(request))
     elif request.method =="POST":
         form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
@@ -65,7 +65,7 @@ def otorgarPrivilegio(request):
                 for a in unidadesMiembro:
                     listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio='Solicitante', estado='En espera')
                 
-                return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud aceptada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
+                return render_to_response("/unidades/otorgar_privilegio.html", {'msg': "Solicitud aceptada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
                                               context_instance=RequestContext(request))
                 
         elif 'negar_privilegio' in request.POST:
@@ -79,5 +79,5 @@ def otorgarPrivilegio(request):
                     listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio='Miembro de Unidad', estado='En espera')
                 for a in unidadesMiembro:
                     listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio='Solicitante', estado='En espera')
-                return render_to_response("otorgarPrivilegio.html", {'msg': "Solicitud cancelada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
+                return render_to_response("/unidades/otorgar_privilegio.html", {'msg': "Solicitud cancelada",'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro}, 
                                               context_instance=RequestContext(request))

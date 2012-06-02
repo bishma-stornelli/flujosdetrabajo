@@ -13,12 +13,10 @@
 <head>
     <title>Otorgar Privilegios</title>
 </head>
-<body>
 <h1 class="titulo1">Otorgar privilegios</h1>
 {% if msg %}
 <p style="color:red;font-size:250%">{{ msg }}</p>
 {% endif %}
-
 {% if listaPrivilegios %}
 	<h2>Lista de Solicitudes de Privilegios para ser Solicitante de la unidad</h2>
 	{% for priv in listaPrivilegios %}
@@ -76,5 +74,4 @@
 {%endif%}
 </br>
 <a href="index">Regresar</a>
-</body> 
 </html>   
