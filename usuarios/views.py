@@ -6,6 +6,7 @@ from django.template import  RequestContext
 from django.shortcuts import render_to_response
 from usuarios.forms import RegistroForm, LoginForm,UserForm
 from usuarios.models import PerfilDeUsuario
+from django.contrib import messages
 def index(request):
 #Esta vista permite generar una pantalla sencilla de index, es necesario que se retorne el usuario para identificar
 #si el usuario esta autenticado o no. 
