@@ -19,8 +19,8 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^cambiar_clave', 'usuarios.views.cambiar_clave'),
-    url(r'^ConsultarDatosUsuario', 'usuarios.views.ConsultarDatosUsuario'),
-    url(r'^modificarDatosUsuario', 'usuarios.views.modificarDatosUsuario'),     
+    url(r'^modificarDatosUsuario', 'usuarios.views.modificar_datos_de_usuario'),
+    url(r'^consultarPerfil', 'usuarios.views.consultar_datos_de_usuario'),
     # Uncomment the next line to enable the admin:
     
     

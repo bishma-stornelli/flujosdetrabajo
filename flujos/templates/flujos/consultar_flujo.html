@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h1>{{ flujo.nombre }}</h1>
+
+<h2>{{ "Descripción" }}</h2>
+
+<p>{{ flujo.descripcion }}</p>
+
+<p><span class=".negrita">Estado:</span> {{ flujo.get_estado_display }}</h2>
+
+<h2><span class=".negrita">Unidad:</span> {{ flujo.unidad.nombre }}</h2>
+
+<h2>Pasos</h2>
+
+{% if flujo.pasos.all %}
+    <table>
+        <thead>
+            <tr>
+                <th>Paso</th>
+                <th>Sucesores</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paso in flujo.pasos.all %}
+                <tr>
+                    <td>
+                        <p><a href="/flujos/consultar_paso/{{ paso.id }}/">{{ paso.nombre }}</a></p>
+                        <p style="font-size: 0.7em">Tipo: {{ paso.get_tipo_display }}</p>
+                    </td>
+                    <td>
+                        {% if paso.sucesores.all %}
+                            <ul>
+                                {% for sucesor in paso.sucesores.all %}
+                                    <li><a href="/flujos/consultar_paso/{{ sucesor.id }}/">{{ sucesor.nombre }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>{{ "No tiene sucesores" }} </p>
+                        {% endif %}
+                    </td>
+                <tr>
+            {% endfor %}
+        
+        </tbody>
+    </table>
+{% else %}
+    <p>{{ "No se ha creado ningún paso todavía" }}</p>
+{% endif %}
+
+{% endblock %}
+
+{% block submenu %}
+    <ul>
+        <li>Modificar</li>
+        <li>Publicar</li>
+        <li>Marcar como obsoleto</li>
+    </ul>
+{% endblock %}

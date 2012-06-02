@@ -68,20 +68,23 @@ class Paso(models.Model):
     TIPO_FINAL = 2
     TIPO_DIVISION = 3
     TIPO_UNION = 4
+    TIPO_NORMAL = 5
     TIPO_CHOICES = (
+                    (TIPO_NORMAL, "Normal"),
                     (TIPO_INICIAL, "Inicial"),
                     (TIPO_FINAL, "Final"),
                     (TIPO_DIVISION, "División"),
                     (TIPO_UNION, "Union"))    
-    tipo = models.IntegerField(choices=TIPO_CHOICES)
+    tipo = models.IntegerField(choices=TIPO_CHOICES, default=TIPO_NORMAL)
     descripcion = models.TextField()
-    flujo = models.ForeignKey('Flujo')
+    flujo = models.ForeignKey('Flujo', related_name='pasos')
     sucesores = models.ManyToManyField('Paso', 
                                        related_name='predecesores', 
                                        null=True, 
                                        blank=True,
                                        symmetrical=False,
                                        through='Criterio')
+    fecha_de_creacion = models.DateTimeField(auto_now = True)
 
 class Flujo(models.Model):
     nombre = models.CharField(max_length=30)

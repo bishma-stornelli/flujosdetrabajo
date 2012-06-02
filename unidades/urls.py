@@ -11,4 +11,4 @@ urlpatterns = patterns('unidades.views',
     url(r'^solicitudPrivilegio','solicitudPrivilegio'),
     url(r'^otorgarPrivilegio','otorgarPrivilegio'),
     url(r'^index/$', TemplateView.as_view(template_name = 'unidades/index.html') , name= "unidades_index"),
-)
+    )

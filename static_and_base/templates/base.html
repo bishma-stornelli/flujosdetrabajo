@@ -18,30 +18,30 @@
         {% endif %}
 	<div id="header"> </div>    
         <div id="nav">
-            <ul>
             {% block menu %}
-                <li>
-             <a href="/" class="medium button blue">home</a>
-             </li>
-            {% if user.is_authenticated %}
-                <li><a href="/logout">Logout</a></li>
-                <!-- OJO: Modificar la ruta segun la que este-->
-                <li> <a href="/users/{{ user.username }}/" class="medium button blue">
-                    {{ user.username }}</a>
-                 </li>
-            {% else %}
-                <li> <a href="/login/" class="medium button blue">Login</a></li>
-            {% endif %}
-            </ul>
+                <ul>
+                <li><a href="/" class="medium button blue">home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="/logout/" class="medium button blue">Logout</a></li>
+                {% else %}
+                    <li> <a href="/login/" class="medium button blue">Login</a></li>
+                    <li> <a href="/registro/" class="medium button blue">Registro</a></li>
+                {% endif %}
+                <li><a href="/flujos/index/" class="medium button blue">Flujos</a></li>
+                <li><a href="/solicitudes/index/" class="medium button blue">Solicitudes</a></li>
+                <li><a href="/unidades/index/" class="medium button blue">Unidades</a></li>
+                <li><a href="/usuarios/index/" class="medium button blue">Usuarios</a></li>
+             </ul>
             {% endblock %}
         </div>
         {% if user.is_staff %}
         <div id="admin">
-            <ul><li> <a href="/admin/" class="medium button blue">Admin Site</a></li></ul>        
+            <ul><li> <a href="admin/" class="medium button blue">Admin Site</a></li></ul>        
         </div>
         {% endif %}
         <div id="wrap">
             <div id="contenido">
+                <h1>{% block head %}{% endblock %}</h1>
                 {% block content %}{% endblock %}
             </div>
             <div id="submenu">
