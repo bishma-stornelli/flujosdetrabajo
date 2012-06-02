@@ -6,7 +6,7 @@ urlpatterns = patterns('usuarios.views',
     
 )
 
-urlpatterns += patterns('flujos.views',
+urlpatterns += patterns('usuarios.views',
     url(r'^cambiar_clave', 'cambiar_clave'),
     url(r'^ConsultarDatosUsuario', 'ConsultarDatosUsuario'),
     url(r'^modificarDatosUsuario', 'modificarDatosUsuario'),     
