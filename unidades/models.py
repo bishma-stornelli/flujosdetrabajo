@@ -9,6 +9,7 @@ class Unidad(models.Model):
     miembros = models.ManyToManyField(User, related_name="unidades_miembros")
     solicitantes = models.ManyToManyField(User, related_name="unidades_solicitantes")
     responsable = models.ForeignKey(User, related_name="unidades_responsable", null=True, blank=True)
+    auto_aceptar = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.nombre

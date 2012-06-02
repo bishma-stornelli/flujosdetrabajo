@@ -1,18 +1,20 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect 
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import Context, loader, RequestContext
-from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm
+from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm, ConfigurarUnidadForm
 from unidades.models import SolicitudPrivilegio, Unidad
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group, Permission
 
 @login_required(redirect_field_name='/')
-def solicitudPrivilegio(request):
+def solicitud_privilegio(request):
   if request.method == "GET":
-    return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
+
+    return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
 		      context_instance=RequestContext(request))
   elif request.method == "POST":
             form = SolicitudPrivilegioForm(request.POST)
@@ -23,17 +25,17 @@ def solicitudPrivilegio(request):
                         unidad = form.cleaned_data['unidad'],
                         mensaje= form.cleaned_data['mensaje'])
                 e.save()
+                
                 messages.success(request, "Solicitud aceptada.")
-                return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm':SolicitudPrivilegioForm()}, 
-                                              context_instance=RequestContext(request))
+                return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm':SolicitudPrivilegioForm()},context_instance=RequestContext(request)) 
             else:
                 messages.error(request, 'Error: Campos invalidos.')
-                return render_to_response("solicitudesPrivilegios/solicitudPrivilegio.html", {'SolicitudPrivilegioForm': form},
+                return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': form},
 		      context_instance=RequestContext(request))
      #dasdas          
                 
 @login_required(redirect_field_name='/')
-def otorgarPrivilegio(request):
+def otorgar_privilegio(request):
     miembro = get_object_or_404(Group, name='Miembro de Unidad')
     solicitante = get_object_or_404(Group, name='Solicitante')
     responsable = get_object_or_404(Group, name='Responsable de Unidad')
@@ -52,7 +54,8 @@ def otorgarPrivilegio(request):
     if request.user.is_superuser:
             listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
     if request.method == "GET":
-        return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
+
+        return render_to_response("unidades/otorgar_privilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
     elif request.method =="POST":
         form = SolicitudPrivilegioForm()
         if 'aceptar_privilegio' in request.POST:
@@ -81,7 +84,7 @@ def otorgarPrivilegio(request):
                 if request.user.is_superuser:
                     listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
                 messages.success(request, "Solicitud aceptada.")
-                return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
+                return render_to_response("unidades/otorgar_privilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
                                               context_instance=RequestContext(request))
                 
         elif 'negar_privilegio' in request.POST:
@@ -99,9 +102,10 @@ def otorgarPrivilegio(request):
                 if request.user.is_superuser:
                     listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
                 messages.success(request, "Solicitud cancelada.")
-                return render_to_response("solicitudesPrivilegios/otorgarPrivilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
+                return render_to_response("unidades/otorgar_privilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
                                               context_instance=RequestContext(request))
-								  
+
+
 @login_required(redirect_field_name='/')
 def registroUnidad(request):
     if request.method == "GET":
@@ -126,5 +130,16 @@ def registroUnidad(request):
             return render_to_response("registroUnidad.html", {'RegistroUnidadForm': form},
                                   context_instance=RequestContext(request))
 
-def configurar_unidad(request):
-    pass
+def configurar_unidad(request, unidad_id):
+  unidad = get_object_or_404( Unidad, pk = unidad_id)
+  if request.method == "POST":
+    form = ConfigurarUnidadForm(request.POST, instance=unidad)
+    if form.is_valid():
+      form.save()     
+      messages.success( request , "Configuracion exitosa.")
+      return HttpResponseRedirect(reverse("unidades_index"))
+    else:
+      messages.error(request, "Verifique los campos e intente de nuevo")
+  else:
+    form = ConfigurarUnidadForm(instance = unidad)
+    return render_to_response("unidades/configurar_unidad.html", {'form':form}, context_instance=RequestContext(request))
