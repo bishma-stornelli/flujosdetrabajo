@@ -41,8 +41,11 @@ def crear_flujo(request, unidad_id):
                                                           'unidad_id': unidad_id },
                                         context_instance=RequestContext(request))
 
-def listar_flujos(request):
-    pass
+def listar_flujos(request, unidad_id):
+  unidad = get_object_or_404(Unidad , pk=unidad_id)
+  flujos = Flujo.objects.filter(unidad=unidad)
+  return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
+
 
 def copiar_flujo(request, flujo_id):
     pass

@@ -11,7 +11,7 @@ urlpatterns += patterns('flujos.views',
     # ESTA ES LA LISTA DE URLS QUE NECESITAMOS PARA LA TERCERA ITERACION
     # SIRVEN A MANERA DE GUIA, NO SON DEFINITIVOS
     # SI NECESITAN MAS O MENOS PARAMETROS PARA HACERLO FUNCIONAR LOS ANADEN
-    url(r'^listar_flujos/$', 'listar_flujos'),
+    url(r'^listar_flujos/(?P<unidad_id>\d+)/$', 'listar_flujos'),
     url(r'^copiar_flujo/(?P<flujo_id>\d+)$', 'copiar_flujo'),
     url(r'^consultar_flujo/(?P<flujo_id>\d+)/$', 'consultar_flujo'),
     url(r'^modificar_flujo/(?P<flujo_id>\d+)/$', 'copiar_flujo'),
