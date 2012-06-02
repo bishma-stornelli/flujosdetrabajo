@@ -7,6 +7,7 @@ from django.template.context import RequestContext
 from flujos.forms import CrearFlujoForm
 from unidades.models import Unidad, SolicitudPrivilegio
 
+
 @login_required
 def crear_flujo(request, unidad_id):
     if request.method == 'POST':
