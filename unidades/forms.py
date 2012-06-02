@@ -14,4 +14,12 @@ class RegistroUnidadForm(ModelForm):
     
     class Meta:
         model = Unidad
-        exclude = ('fecha','miembros','responsable')
+        exclude = ('fecha','miembros','responsable','auto_aceptar')
+        
+class ConfigurarUnidadForm(ModelForm):
+  
+    class Meta:
+        model = Unidad
+        fields = ('nombre','descripcion','auto_aceptar')
+       
+    

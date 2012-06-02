@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import Context, loader, RequestContext
-from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm
+from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm, ConfigurarUnidadForm
 from unidades.models import SolicitudPrivilegio, Unidad
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group, Permission
@@ -127,4 +127,21 @@ def registroUnidad(request):
                                   context_instance=RequestContext(request))
 
 def configurar_unidad(request):
-    pass
+    if request.method == "GET":
+        return render_to_response("configurar_unidad.html", {'ConfigurarUnidadForm': ConfigurarUnidadForm()},
+                                        context_instance=RequestContext(request))
+    elif request.method == "POST":
+        form = ConfigurarUnidadForm(request.POST)
+        if form.is_valid():
+            # Crear RegistroUnidadForm pasandole request.POST hace esto por ti
+            # AQUI ESTABA EL ERROR NO SE POR QUE
+            #e = Unidad(nombre = form.cleaned_data['nombre'],
+            #        miembros = form.cleaned_data['miembros'],
+            #        responsable = form.cleaned_data['responsable'],
+            #        descripcion= form.cleaned_data['descripcion'])
+            #e.save()
+            form.save()
+            ## AQUI TIENES QUE USAR HtmlResponseRedirect en vez de render_to_response
+            # HtmlResponseRedirect(URL)
+            return render_to_response("configurar_unidad.html", {'msg': "Configuracion Exitosa",'ConfigurarUnidadForm':ConfigurarUnidadForm()}, 
+                                      context_instance=RequestContext(request))
