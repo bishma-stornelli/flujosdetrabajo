@@ -4,9 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import redirect_to_login
 from django.template import  RequestContext
 from django.shortcuts import render_to_response
-from usuarios.forms import RegistroForm, LoginForm
+from usuarios.forms import RegistroForm, LoginForm,UserForm
 from usuarios.models import PerfilDeUsuario
-
 def index(request):
 #Esta vista permite generar una pantalla sencilla de index, es necesario que se retorne el usuario para identificar
 #si el usuario esta autenticado o no. 
@@ -93,11 +92,11 @@ def log_out(request):
 	logout(request)			
 	return render_to_response("index.html",{"reg":"Sesion cerrada con exito"}, context_instance = RequestContext(request))
 
-def ConsultarDatosUsuario(request):
+def consultar_datos_de_usuario(request):
     if request.user.is_authenticated():
         u= User.objects.get(username=request.user)
         perfil= PerfilDeUsuario.objects.all()
-        return render_to_response("ConsultarDatosUsuario.html",{"usr":u, "perfil":perfil}, context_instance = RequestContext(request))
+        return render_to_response("consultar_datos_de_usuario.html",{"usr":u, "perfil":perfil}, context_instance = RequestContext(request))
     else:
         f = LoginForm()
         return render_to_response("log_in.html",{"loginform":f, "msj":""}, context_instance = RequestContext(request))
@@ -132,5 +131,24 @@ def cambiar_clave(request):
     else:
         f = LoginForm()
         return render_to_response("log_in.html",{"loginform":f, "msj":""}, context_instance = RequestContext(request))
+
+def modificar_datos_de_usuario(request):
+	
+	if request.method == "GET":
+		user_form = UserForm(instance=request.user)
+		return render_to_response('modificar_datos_de_usuario.html', { 'user_form': user_form }, context_instance=RequestContext(request))
+	else:
+		u= User.objects.get(username=request.user)
+		user_form = UserForm(request.POST, instance=request.user)
+		if user_form.is_valid():
+			u.first_name=user_form.cleaned_data['first_name']
+			u.last_name=user_form.cleaned_data['last_name']
+			u.email=user_form.cleaned_data['email']
+			u.save()
+			return render_to_response('modificar_datos_de_usuario.html', { 'user_form': user_form,"reg":"Perfil Actualizado Exitosamente"}, context_instance=RequestContext(request))
+
+		else:
+			user_form = UserForm(instance=request.user)
+			return render_to_response('modificar_datos_de_usuario.html', { 'user_form': user_form}, context_instance=RequestContext(request))
 
 
