@@ -17,11 +17,7 @@
         <div id="submenu">
             {% block submenu %}{% endblock %}
         </div>
-        {% if user.is_staff %}
-        <div id="admin">
-            <ul><li> <a href="admin/" class="medium button blue">Admin Site</a></li></ul>        
-        </div>
-        {% endif %}
+        
         <div id="wrap">
 	  {% if messages %}
             <ul class="messages">
@@ -30,27 +26,30 @@
                 {% endfor %}
             </ul>
         {% endif %}
-	  {% block menu %}
-                <ul>
-                <li><a href="/" class="medium button blue">home</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="/usuarios/logout/" class="medium button blue">Logout</a></li>
-                {% else %}
-                    <li> <a href="/usuarios/login/" class="medium button blue">Login</a></li>
-                    <li> <a href="/usuarios/registro/" class="medium button blue">Registro</a></li>
-                {% endif %}
-                <li><a href="/flujos/index/" class="medium button blue">Flujos</a></li>
-                <li><a href="/solicitudes/index/" class="medium button blue">Solicitudes</a></li>
-                <li><a href="/unidades/index/" class="medium button blue">Unidades</a></li>
-                <li><a href="/usuarios/index/" class="medium button blue">Usuarios</a></li>
-             </ul>
-            {% endblock %}
-
+	       
+                {% block menu %}
+                    <ul id="top_menu">
+                    <li><a href="/" class="medium button blue">home</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="/usuarios/logout/" class="medium button blue">Logout</a></li>
+                    {% else %}
+                        <li> <a href="/usuarios/login/" class="medium button blue">Login</a></li>
+                        <li> <a href="/usuarios/registro/" class="medium button blue">Registro</a></li>
+                    {% endif %}
+                    <li><a href="/flujos/index/" class="medium button blue">Flujos</a></li>
+                    <li><a href="/solicitudes/index/" class="medium button blue">Solicitudes</a></li>
+                    <li><a href="/unidades/index/" class="medium button blue">Unidades</a></li>
+                    <li><a href="/usuarios/index/" class="medium button blue">Usuarios</a></li>
+                    {% if user.is_staff %}
+                        <li> <a href="admin/" class="medium button blue">Admin Site</a></li>
+                    {% endif %}
+                    </ul>
+                {% endblock %}
 
 
 	     
             <div id="contenido">
-	        
+                
 	        
                 <h1>{% block head %}{% endblock %}</h1>
                 {% block content %}{% endblock %}
