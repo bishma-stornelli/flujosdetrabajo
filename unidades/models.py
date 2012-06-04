@@ -64,9 +64,11 @@ class SolicitudPrivilegio(models.Model):
     privilegio = models.IntegerField(choices=PRIVILEGIO_CHOICES)
     ESTADO_ESPERA = 1
     ESTADO_ACEPTADO = 2
+    ESTADO_NEGADO = 3
     ESTADO_CHOICES = (
                       (ESTADO_ESPERA,'En espera'),
                       (ESTADO_ACEPTADO,'Aceptado'),
+                      (ESTADO_NEGADO, 'Negado'),
                       )
     estado = models.IntegerField(choices=ESTADO_CHOICES,default=ESTADO_ESPERA)
     class Meta:

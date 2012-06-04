@@ -1,7 +1,7 @@
 # Create your views here.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from flujos.forms import CrearFlujoForm
@@ -53,11 +53,14 @@ def copiar_flujo(request, flujo_id):
     #form = CopiarFlujoForm()
     pass
 
+@login_required
 def consultar_flujo(request, flujo_id):
     flujo = get_object_or_404(Flujo, pk=flujo_id)
-    # Checkear permisos
-    return render_to_response('flujos/consultar_flujo.html',
-                              {'flujo': flujo})
+    if flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        return render_to_response('flujos/consultar_flujo.html',
+                                  {'flujo': flujo}, context_instance=RequestContext(request))
+    else:
+        raise Http404()
 
 def agregar_paso_flujo(request, flujo_id):
   #  if request.method == 'POST':

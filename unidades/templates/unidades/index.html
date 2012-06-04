@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block submenu %}
 
-<h1> Unidades </h1>
+<h1> Unidades y Privilegios</h1>
 
-	<p>Bienvenido {{usr.username}}</p>
+	<p>Bienvenido {{user.username}}</p>
 	<ul>
 		<li><a href="/unidades/registrar_unidad/">Registrar Unidad</a></li>
+		<li><a href="/unidades/solicitar_privilegio/">Solicitar privilegios</a></li>
+		<li><a href="/unidades/otorgar_privilegio/">Otorgar privilegios</a></li>
 	</ul>
 
 {% endblock %}
-
-Configurar unidad: dropdown
