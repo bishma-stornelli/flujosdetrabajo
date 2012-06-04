@@ -107,28 +107,18 @@ def otorgar_privilegio(request):
 
 
 @login_required(redirect_field_name='/')
-def registroUnidad(request):
-    if request.method == "GET":
-        return render_to_response("registroUnidad.html", {'RegistroUnidadForm': RegistroUnidadForm()},
-                                        context_instance=RequestContext(request))
-    elif request.method == "POST":
-        form = RegistroUnidadForm(request.POST)
-        if form.is_valid():
-            # Crear RegistroUnidadForm pasandole request.POST hace esto por ti
-            # AQUI ESTABA EL ERROR NO SE POR QUE
-            #e = Unidad(nombre = form.cleaned_data['nombre'],
-            #        miembros = form.cleaned_data['miembros'],
-            #        responsable = form.cleaned_data['responsable'],
-            #        descripcion= form.cleaned_data['descripcion'])
-            #e.save()
-            form.save()
-            ## AQUI TIENES QUE USAR HtmlResponseRedirect en vez de render_to_response
-            # HtmlResponseRedirect(URL)
-            return render_to_response("registroUnidad.html", {'msg': "Registro realizado con exito",'RegistroUnidadForm':RegistroUnidadForm()}, 
-                                      context_instance=RequestContext(request))
-        else:
-            return render_to_response("registroUnidad.html", {'RegistroUnidadForm': form},
-                                  context_instance=RequestContext(request))
+def registrar_unidad(request):
+	if request.method == "POST":
+		form = RegistroUnidadForm(request.POST)
+		if form.is_valid():
+			form.save()
+			messages.success( request , "Registro de unidad exitoso.")
+			return HttpResponseRedirect(reverse("unidades_index"))
+		else:
+			messages.error(request, "Verifique los datos e intente de nuevo.")
+	else:
+		form = RegistroUnidadForm()
+	return render_to_response("unidades/registrar_unidad.html", {'form':form}, context_instance=RequestContext(request))
 
 def configurar_unidad(request, unidad_id):
   unidad = get_object_or_404( Unidad, pk = unidad_id)

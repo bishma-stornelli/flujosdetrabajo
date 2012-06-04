@@ -12,9 +12,15 @@ urlpatterns = patterns('',
     # url(r'^flujosdetrabajo/', include('flujosdetrabajo.foo.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'usuarios.views.index'),
+
+    url(r'^login/', 'django.contrib.auth.views.login', {'template_name':'usuarios/log_in.html'}),
+    url(r'^logout/', 'usuarios.views.log_out'),
+    url(r'^registro/$', 'usuarios.views.registro'),
+
     url(r'^index/$', 'usuarios.views.index'),
    
     
+
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

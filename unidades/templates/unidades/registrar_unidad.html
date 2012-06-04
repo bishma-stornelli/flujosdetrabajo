@@ -1,6 +1,10 @@
-<form action="/unidades/registrar_unidad" >{% csrf_token %}
+{% extends "base.html" %}
+{% block content %}
+<form action="/unidades/registrar_unidad/" method="post">
+	{% csrf_token %}
     <table>
         {{ form.as_table }}
-        <td><input type="submit" value="Registar" /></td>
+		<td><input type="submit" value="Registrar" /></td>
     </table>
 </form>
+{% endblock %}

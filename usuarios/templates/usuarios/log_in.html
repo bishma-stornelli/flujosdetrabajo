@@ -1,7 +1,11 @@
+{% extends "base.html" %}
+
+{% block submenu %}
 <h1 class="titulo1">Login</h1>
 <br/>
+{% endblock %}
 
-
+{% block content %}
 <form action="/usuarios/login/" method="post">
 	{% csrf_token %}
 	{% if form.errors %}
@@ -26,3 +30,4 @@
 </br>
 <a href="/index/">Regresar</a>
 
+{% endblock %}
