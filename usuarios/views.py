@@ -58,13 +58,12 @@ def registro(request):
                    # p.save()
 					l=LoginForm()
 					messages.success(request,"La clave y la confirmacion no concuerdan")
-					return render_to_response("usuarios/index.html")
+					return render_to_response("usuarios/index.html", context_instance = RequestContext(request))
 						
 		else:	
 			messages.error(request,"Alguno de los datos provistos tienen un formato equivocado")
 			return render_to_response("usuarios/registro.html",
-						   {"registroform":f }, 
-					            context_instance = RequestContext(request))
+						   {"registroform":f }, context_instance = RequestContext(request))
 			
 #IMPORTANTE: Deberiamos mantener esta vista a pesar de que estemos usando la vista de login generica, 
 # es posible que mas adelante nos demos cuenta que necesitamos hacer algo en el login que no se pueda

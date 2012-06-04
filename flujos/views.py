@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm
-from flujos.models import Flujo
+from flujos.forms import CrearFlujoForm, AgregarCampoForm
+from flujos.models import Flujo, Paso
 from unidades.models import Unidad, SolicitudPrivilegio
 
 
@@ -41,6 +41,43 @@ def crear_flujo(request, unidad_id):
     return render_to_response("flujos/crear_flujo.html", {'form': form,
                                                           'unidad_id': unidad_id },
                                         context_instance=RequestContext(request))
+
+@login_required
+def agregar_campo(request, paso_id):
+
+    p = get_object_or_404(Paso, pk=paso_id)
+    
+    if (p.flujo.unidad).permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+      
+        if request.method == 'GET':
+            
+            f = AgregarCampoForm()
+            return render_to_response("flujos/agregar_campo.html", {'form':f}, 
+                                        context_instance=RequestContext(request))
+        else:
+        
+            f=AgregarCampoForm(request.POST)
+            
+            if f.is_valid():
+                
+                campo = Campo(nombre = f.cleaned_data['nombre'],llenado_por_miembro=True, llenado_por_solicitante=False, tipo = f.cleaned_data['tipo'], esObligatorio = f.cleaned_data['esObligatorio'], paso=p)
+                campo.paso = p    
+                campo.save()
+                messages.success(request, "Campo creado exitosamente.")
+                
+                return render_to_response("flujos/index.html", context_instance=RequestContext(request))
+                
+            else:
+                 messages.error(request, "Verifique los campos introducidos e intente de nuevo.")
+                 return render_to_response("flujos/agregar_campo.html", {'form':f}, 
+                                        context_instance=RequestContext(request))
+    else:
+        messages.error("Esta funcionalidad requiere permisos de Responsable de Unidad.")
+        return render_to_response("usuarios/log_in.html", context_instance=RequestContext(request))
+                
+            
+        
+    
 
 def listar_flujos(request, unidad_id):
   unidad = get_object_or_404(Unidad , pk=unidad_id)

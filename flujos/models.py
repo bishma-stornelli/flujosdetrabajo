@@ -119,6 +119,8 @@ class Paso(models.Model):
                     (TIPO_UNION, "Union"))    
     tipo = models.IntegerField(choices=TIPO_CHOICES, default=TIPO_NORMAL)
     descripcion = models.TextField()
+
+
     flujo = models.ForeignKey('Flujo', related_name='pasos')
     sucesores = models.ManyToManyField('Paso', 
                                        related_name='predecesores', 
