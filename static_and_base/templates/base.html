@@ -16,9 +16,20 @@
                 {% endfor %}
             </ul>
         {% endif %}
-	<div id="header"> </div>    
-        <div id="nav">
-            {% block menu %}
+	<div id="header">
+	   <h1 class="titulo1">       SISTEMA INTEGRADO DE CONTROL DE FLUJO </h1>
+	 
+	</div>    
+        <div id="submenu">
+            {% block submenu %}{% endblock %}
+        </div>
+        {% if user.is_staff %}
+        <div id="admin">
+            <ul><li> <a href="admin/" class="medium button blue">Admin Site</a></li></ul>        
+        </div>
+        {% endif %}
+        <div id="wrap">
+	  {% block menu %}
                 <ul>
                 <li><a href="/" class="medium button blue">home</a></li>
                 {% if user.is_authenticated %}
@@ -33,20 +44,17 @@
                 <li><a href="/usuarios/index/" class="medium button blue">Usuarios</a></li>
              </ul>
             {% endblock %}
-        </div>
-        {% if user.is_staff %}
-        <div id="admin">
-            <ul><li> <a href="admin/" class="medium button blue">Admin Site</a></li></ul>        
-        </div>
-        {% endif %}
-        <div id="wrap">
+
+
+
+	     
             <div id="contenido">
+	        
+	      
                 <h1>{% block head %}{% endblock %}</h1>
                 {% block content %}{% endblock %}
             </div>
-            <div id="submenu">
-                {% block submenu %}{% endblock %}
-            </div>
+     
         </div>
     </body>
 </html>
