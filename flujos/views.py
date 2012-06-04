@@ -72,11 +72,6 @@ def agregar_paso_flujo(request, flujo_id):
 
     #return render_to_response('agregar_paso.html', {'form': form})
     pass
- 
-
-
-def listar_flujos(request):
-    pass
 
 def copiar_flujo(request, flujo_id):
     pass
