@@ -9,13 +9,7 @@
         <link rel="stylesheet" href="{% static "flujo.css" %}" type="text/css" media="screen" />
     </head>
     <body>
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+     
 	<div id="header">
 	   <h1 class="titulo1">       SISTEMA INTEGRADO DE CONTROL DE FLUJO </h1>
 	 
@@ -29,6 +23,13 @@
         </div>
         {% endif %}
         <div id="wrap">
+	  {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 	  {% block menu %}
                 <ul>
                 <li><a href="/" class="medium button blue">home</a></li>
@@ -50,7 +51,7 @@
 	     
             <div id="contenido">
 	        
-	      
+	        
                 <h1>{% block head %}{% endblock %}</h1>
                 {% block content %}{% endblock %}
             </div>

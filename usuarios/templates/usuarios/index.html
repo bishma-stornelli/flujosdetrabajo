@@ -1,27 +1,9 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block submenu %}
 
 <h1> Pagina Inicial </h1>
 
-{% if usr.is_authenticated %}
-	<p>Bienvenido {{usr.username}}</p>
-	<ul>
-		<li><a href="/usuarios/ConsultarDatosUsuario/">Consultar Perfil</a></li>
-		<li><a href="/usuarios/modificarDatosUsuario/">Modificar Perfil</a></li>			
-        	<li><a href="/unidades/solicitud_privilegio/">Solicitar Privilegio</a></li>
-		<li><a href="/unidades/otorgar_privilegio/">Otorgar Privilegio</a></li>
-		<li><a href="/usuarios/logout/">Logout</a></li>
-	</ul>
-{% else %}
-	{% if reg %}
-		<p> {{ reg }} </p>
-	{% endif %}
-
-	<ul>
-		<li><a href="/usuarios/login/">Login</a></li>
-		<li><a href="/usuarios/registro/">Registrarse</a></li>
-	</ul>
-{% endif %}
-
 {% endblock %}
+
+
