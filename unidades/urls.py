@@ -10,6 +10,5 @@ urlpatterns = patterns('unidades.views',
     url(r'^configurar_unidad/(?P<unidad_id>\d+)/$', 'configurar_unidad'),
     url(r'^otorgar_privilegio/$','otorgar_privilegio'),
     url(r'^solicitud_privilegio/$','solicitud_privilegio'),
-
     url(r'^index/$', TemplateView.as_view(template_name = 'unidades/index.html') , name= "unidades_index"),
     )
