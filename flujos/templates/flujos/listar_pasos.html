@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if pasos %}
+<table>
+  <thead> Nombre </thead> 
+  <thead> Tipo </thead> 
+  <thead> Descripción </thead>
+  <thead> Fecha de Creación </thead> 
+  <thead> Consultar </thead>
+  <thead> Modificar </thead>
+  {% for paso in pasos %}
+  
+  <tr>
+    
+   <td>
+    {{ paso.nombre }}
+   </td>
+   <td>
+    {{ paso.descripcion }}
+   </td>
+   <td>
+    {{ paso.fecha_de_creacion }}
+   </td>
+   <td>
+    Consultar
+   </td>
+   <td>
+    Modificar 
+   </td>
+
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+{% endif %}
+
+{% endblock %}
+
+{% block submenu %}
+{% endblock %}

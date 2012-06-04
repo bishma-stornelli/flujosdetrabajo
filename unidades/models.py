@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import encoding
 #from unidades.groups import responsable
 
 class Unidad(models.Model):
@@ -12,7 +13,7 @@ class Unidad(models.Model):
     auto_aceptar = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.nombre
+        return (self.nombre, self.id)
     
     # usuario es de tipo django.contrib.auth.models.User
     # permiso es uno de los siguientes:

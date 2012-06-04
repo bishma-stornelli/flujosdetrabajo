@@ -4,9 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm
-from flujos.models import Flujo
+from flujos.forms import CrearFlujoForm, ModificarPasoForm, ModificarFlujoForm
+from flujos.models import Flujo, Paso
 from unidades.models import Unidad, SolicitudPrivilegio
+from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 
 @login_required
@@ -41,6 +43,8 @@ def crear_flujo(request, unidad_id):
     return render_to_response("flujos/crear_flujo.html", {'form': form,
                                                           'unidad_id': unidad_id },
                                         context_instance=RequestContext(request))
+                                        
+
 
 def listar_flujos(request, unidad_id):
   unidad = get_object_or_404(Unidad , pk=unidad_id)
@@ -72,11 +76,37 @@ def agregar_paso_flujo(request, flujo_id):
 
     #return render_to_response('agregar_paso.html', {'form': form})
     pass
- 
+    
+def listar_pasos(request, flujo_id):
+  flujo = get_object_or_404(Flujo , pk = flujo_id)
+  pasos = Paso.objects.filter(flujo = flujo)
+  return render_to_response('flujos/listar_pasos.html', {'pasos': pasos})
+    
+def modificar_paso(request, paso_id):
+	paso = get_object_or_404( Paso, pk = paso_id)
+	if request.method == "POST":
+		form = ModificarPasoForm(request.POST, instance=paso)
+		if form.is_valid():
+			form.save()     
+			messages.success( request , "Modificacion exitosa.")
+			return HttpResponseRedirect(reverse("flujo_index"))
+		else:
+			messages.error(request, "Verifique los campos e intente de nuevo")
+	else:
+		form = ModificarPasoForm(instance = paso)
+		return render_to_response("flujos/modificar_paso.html", {'form':form}, context_instance=RequestContext(request))
 
 
-def listar_flujos(request):
-    pass
-
-def copiar_flujo(request, flujo_id):
-    pass
+def modificar_flujo(request, flujo_id):
+	flujo = get_object_or_404( Flujo, pk = flujo_id)
+	if request.method == "POST":
+		form = ModificarFlujoForm(request.POST, instance=flujo)
+		if form.is_valid():
+			form.save()     
+			messages.success( request , "Modificacion exitosa.")
+			return HttpResponseRedirect(reverse("flujo_index"))
+		else:
+			messages.error(request, "Verifique los campos e intente de nuevo")
+	else:
+		form = ModificarFlujoForm(instance = flujo)
+		return render_to_response("flujos/modificar_flujo.html", {'form':form}, context_instance=RequestContext(request))
