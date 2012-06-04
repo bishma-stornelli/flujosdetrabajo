@@ -76,14 +76,6 @@ class Campo(models.Model):
         a.nombre = self.nombre
         a.llenado_por_miembro = self.llenado_por_miembro
         a.llenado_por_solicitante = self.llenado_por_solicitante
-        a.TIPO_TEXT = self.TIPO_TEXT
-        a.TIPO_TEXTAREA = self.TIPO_TEXTAREA
-        a.TIPO_CHECKBOX = self.TIPO_CHECKBOX
-        a.TIPO_FILE = self.TIPO_FILE
-        a.TIPO_NUMBER = self.TIPO_NUMBER
-        a.TIPO_EMAIL = self.TIPO_EMAIL
-        a.TIPO_FECHA = self.TIPO_FECHA
-        a.TIPO_CHOICES = self.TIPO_CHOICES
         a.tipo = self.tipo
         a.esObligatorio = self.esObligatorio
         a.paso = self.paso
@@ -130,11 +122,6 @@ class Paso(models.Model):
    
     def clone(self):
         a.nombre = self.nombre
-        a.TIPO_INICIAL = self.TIPO_INICIAL
-        a.TIPO_FINAL = self.TIPO_FINAL
-        a.TIPO_DIVISION = self.TIPO_DIVISION
-        a.TIPO_UNION = self.TIPO_UNION
-        a.TIPO_CHOICES = self.TIPO_CHOICES
         a.tipo = self.tipo
         a.descripcion = self.descripcion
         a.flujo = self.flujo

@@ -49,9 +49,20 @@ def listar_flujos(request, unidad_id):
 
 
 def copiar_flujo(request, flujo_id):
-    #flujo = get_object_or_404(Flujo, pk=flujo_id)
-    #form = CopiarFlujoForm()
-    pass
+    flujo = get_object_or_404(Flujo, pk=flujo_id)
+    flujo_nuevo = flujo.clone(flujo)
+    pasos = flujo.flujos.all()
+    for i in range(0,pasos.length):
+        pasos_nuevos[i]=Paso.clone(pasos[i])
+    criterios_origen = pasos.criterios_origen.all()
+    criterios_destino = pasos.criterios_destino.all()
+    for i in range(0,criterios_origen.length):
+        criterios_origen_nuevo[i]=Criterio.clone(criterios_origen[i])
+    for i in range(0,criterios_destino.length):
+        criterios_destino_nuevo[i]=Criterio.clone(criterios_origen[i])
+    pasos_nuevos.
+    form = CopiarFlujoForm()
+    
 
 def consultar_flujo(request, flujo_id):
     flujo = get_object_or_404(Flujo, pk=flujo_id)
@@ -71,6 +82,11 @@ def agregar_paso_flujo(request, flujo_id):
      #   form = ErrorSaveForm()
 
     #return render_to_response('agregar_paso.html', {'form': form})
+    pass
+ 
+
+
+def listar_flujos(request):
     pass
 
 def copiar_flujo(request, flujo_id):

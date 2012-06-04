@@ -1,12 +1,18 @@
+{% extends "base.html" %}
+{% block submenu %}
 <h1 class="titulo1">Registro de Usuario</h1>
+{% endblock %}
 <br/>
 
 {% if msj %}
+{% block messages %}
 <p class="msj">
 	{{msj}}
 </p>
+{% endblock %}
 {% endif %}
 
+{% block content %}
 <form action="/usuarios/registro/" method="post">
 	{% csrf_token %}
 	{{ f.non_field_errors }}
@@ -21,3 +27,4 @@
 </form>
 </br>
 <a href="/index">Regresar</a>
+{% endblock %}
