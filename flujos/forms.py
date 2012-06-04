@@ -7,6 +7,20 @@ class CrearFlujoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
         exclude = ('unidad', 'estado')
 
 
+
+class ModificarPasoForm(ModelForm):
+	class Meta:
+		model = Paso
+		fields= ('nombre', 'tipo', 'descripcion') 
+		
+    
+class ModificarFlujoForm(ModelForm):
+	class Meta:
+		model = Paso
+		fields= ('nombre', 'tipo', 'descripcion')
+		 
+		
+
 #class CopiarFlujoForm()
 #class AgregarPasoForm(ModelForm):
 #    class Meta:
