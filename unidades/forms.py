@@ -7,14 +7,13 @@ class SolicitudPrivilegioForm(ModelForm):
     
     class Meta:
         model = SolicitudPrivilegio
-
-	exclude = ('estado','fecha','solicitante',)
+        exclude = ('estado','fecha','solicitante',)
 
 class RegistroUnidadForm(ModelForm):
     
     class Meta:
         model = Unidad
-        exclude = ('fecha','miembros','responsable','auto_aceptar')
+        fields = ('nombre','descripcion',)
         
 class ConfigurarUnidadForm(ModelForm):
   

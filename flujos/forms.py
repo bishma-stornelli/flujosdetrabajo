@@ -6,6 +6,7 @@ class CrearFlujoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:
         model = Flujo
         exclude = ('unidad', 'estado')
+
         
 class AgregarCampoForm(forms.Form):
     nombre= forms.CharField(max_length=20, label="Nombre")
@@ -24,3 +25,4 @@ class AgregarCampoForm(forms.Form):
 # 
 #    
 #>>>>>>> 27032f4d98f0d01a76cb0f3046b40806a2eb017e
+
