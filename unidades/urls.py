@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 urlpatterns = patterns('unidades.views',
     # Examples:
     # url(r'^crear_paso/$', 'crear_paso'),
-    url(r'^registroUnidad$', 'registroUnidad'),
+    url(r'^registrar_unidad/$', 'registrar_unidad'),
     url(r'^configurar_unidad/(?P<unidad_id>\d+)/$', 'configurar_unidad'),
     url(r'^otorgar_privilegio/$','otorgar_privilegio'),
     url(r'^solicitud_privilegio/$','solicitud_privilegio'),
