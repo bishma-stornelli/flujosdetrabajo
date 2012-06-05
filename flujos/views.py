@@ -158,3 +158,88 @@ def modificar_flujo(request, flujo_id):
 	else:
 		form = ModificarFlujoForm(instance = flujo)
 		return render_to_response("flujos/modificar_flujo.html", {'form':form}, context_instance=RequestContext(request))
+        
+@login_required(redirect_field_name='/')
+def listar_flujos_publico(request):
+    unidades = Unidad.objects.filter(responsable=request.user)
+    listaFlujo = Flujo.objects.none()
+    for u in unidades:
+         listaFlujo = listaFlujo|Flujo.objects.filter(unidad=u,estado=Flujo.ESTADO_PUBLICO)
+    return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':listaFlujo}, context_instance=RequestContext(request))
+
+@login_required(redirect_field_name='/')
+def marcar_obsoleto(request, flujo_id):
+    unidades = Unidad.objects.filter(responsable=request.user)
+    flujo = get_object_or_404( Flujo, pk = flujo_id)
+    if (flujo.unidad in unidades and flujo.estado!=Flujo.ESTADO_OBSOLETO):
+        flujo.estado = Flujo.ESTADO_OBSOLETO
+        flujo.save()
+        messages.success(request, "Flujo (" + flujo.nombre + ") marcado como obsoleto.")
+    else :
+        messages.error(request, "Error: el flujo seleccionado no se pudo marcar como obsoleto.")
+    return listar_flujos_publico(request)
+
+def eliminar_paso(request, paso_id):
+	paso = get_object_or_404(Paso, pk = paso_id)
+	flujo = paso.flujo
+	if request.method == "GET":
+		if(paso):	
+			paso.delete()
+	return HttpResponseRedirect(reverse("flujo_index"))
+
+
+@login_required(redirect_field_name='/')
+def listar_flujos_por_publicar(request):
+    unidades = Unidad.objects.filter(responsable=request.user)
+    listaFlujo = Flujo.objects.none()
+    for u in unidades:
+         listaFlujo = listaFlujo|Flujo.objects.filter(unidad=u,estado=Flujo.ESTADO_BORRADOR)
+    return render_to_response("flujos/publicar_flujo.html", {'listaFlujo':listaFlujo}, context_instance=RequestContext(request))
+
+@login_required(redirect_field_name='/')
+def publicar_flujo(request, flujo_id):
+    unidades = Unidad.objects.filter(responsable=request.user)
+    flujo = get_object_or_404( Flujo, pk = flujo_id)
+    if (flujo.unidad in unidades):
+        
+        flujo.estado = Flujo.ESTADO_PUBLICO
+        flujo.save()
+        messages.success(request, "Flujo (" + flujo + ") publicado.")
+    else :
+        messages.error(request, "Error: el flujo seleccionado no se pudo publicar.")
+    return listar_flujos_por_publicar(request)  
+
+    # @alcanzables son todos los nodos alcanzables
+    # @recorrido son los nodos por el cual se ha pasado
+    # @pasos son todos los nodos presentes en el flujo
+    # @pas representa el nodo inicial y se le aplicara un dfs para saber si los nodos alcanzables
+    # Devuelve True si es un grafo conexo de lo contrario devuelve False
+    def es_grafo_conexo(flujo):
+        pasos = Paso.objects.filter(flujo=flujo)
+        for pas in pasos:
+            alcanzables = [pas]
+            recorrido = []
+            if not dfs(alcanzables,recorrido) == list(pasos):
+                return False
+        return True
+    
+    # @alcanzables son todos los nodos alcanzables a partir de un nodo inicial contenido en alcanzable
+    # @recorrido son los nodos por el cual se ha pasado
+    # return alcanzables
+    def dfs(alcanzables,recorrido):
+        while not recorrido == alcanzables:
+            temporal = []
+            for al in alcanzables:
+                if al not in recorrido:
+                    recorrido.append(al)
+                    temporal.extend(list(Paso.objects.get(paso=al).sucesores.all()))
+                    temporal.extend(list(Paso.objects.filter(sucesores=al)))
+            alcanzables = mezclar(alcanzables,temporal)
+        return alcanzables
+    
+    # Para todos los elementos de temporal, se evalua si ya se encuentra en alcanzables, sino, se agrega
+    def mezclar(alcanzables,temporal):
+        for t in temporal:
+            if t not in alcanzables:
+                alcanzables.append(t)
+        return alcanzables

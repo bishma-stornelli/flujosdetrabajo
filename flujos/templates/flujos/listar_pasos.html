@@ -9,7 +9,8 @@
   <thead> Fecha de Creación </thead> 
   <thead> Consultar </thead>
   <thead> Modificar </thead>
-  {% for paso in pasos %}
+  <thead> Eliminar Paso </thead>
+	{% for paso in pasos %}
   
   <tr>
     
@@ -28,6 +29,9 @@
    <td>
     Modificar 
    </td>
+	<td>
+	<a href= "/flujos/eliminar_paso/{{ paso.id }}/">Eliminar</a>
+	</td>
 
   </tr>
   {% endfor %}
