@@ -171,15 +171,14 @@ def listar_flujos_publico(request):
 def marcar_obsoleto(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404( Flujo, pk = flujo_id)
-    if (flujo.unidad in unidades):
+    if (flujo.unidad in unidades and flujo.estado!=Flujo.ESTADO_OBSOLETO):
         flujo.estado = Flujo.ESTADO_OBSOLETO
         flujo.save()
-        messages.success(request, "Flujo (" + flujo + ") marcado como obsoleto.")
+        messages.success(request, "Flujo (" + flujo.nombre + ") marcado como obsoleto.")
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo marcar como obsoleto.")
     return listar_flujos_publico(request)
     
-
 
 def eliminar_paso(request, paso_id):
 	paso = get_object_or_404(Paso, pk = paso_id)
@@ -188,9 +187,25 @@ def eliminar_paso(request, paso_id):
 		if(paso):	
 			paso.delete()
 	return HttpResponseRedirect(reverse("flujo_index"))
-			
 
 
+@login_required(redirect_field_name='/')
+def listar_flujos_por_publicar(request):
+    unidades = Unidad.objects.filter(responsable=request.user)
+    listaFlujo = Flujo.objects.none()
+    for u in unidades:
+         listaFlujo = listaFlujo|Flujo.objects.filter(unidad=u,estado=Flujo.ESTADO_BORRADOR)
+    return render_to_response("flujos/publicar_flujo.html", {'listaFlujo':listaFlujo}, context_instance=RequestContext(request))
 
-
-
+@login_required(redirect_field_name='/')
+def publicar_flujo(request, flujo_id):
+    unidades = Unidad.objects.filter(responsable=request.user)
+    flujo = get_object_or_404( Flujo, pk = flujo_id)
+    if (flujo.unidad in unidades):
+        
+        flujo.estado = Flujo.ESTADO_PUBLICO
+        flujo.save()
+        messages.success(request, "Flujo (" + flujo + ") publicado.")
+    else :
+        messages.error(request, "Error: el flujo seleccionado no se pudo publicar.")
+    return listar_flujos_por_publicar(request)    

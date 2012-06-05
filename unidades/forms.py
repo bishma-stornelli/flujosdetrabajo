@@ -9,6 +9,7 @@ class SolicitudPrivilegioForm(ModelForm):
         model = SolicitudPrivilegio
         fields = ('mensaje', 'unidad', 'privilegio',)
 
+	exclude = ('estado','fecha','solicitante')
 
 class RegistroUnidadForm(ModelForm):
     

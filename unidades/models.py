@@ -12,8 +12,8 @@ class Unidad(models.Model):
     responsable = models.ForeignKey(User, related_name="unidades_responsable", null=True, blank=True)
     auto_aceptar = models.BooleanField(default=False)
 
-    def __unicode__(self):
-        return (self.nombre, self.id)
+    def __unicode__ (self):
+        return self.nombre
     
     # usuario es de tipo django.contrib.auth.models.User
     # permiso es uno de los siguientes:
