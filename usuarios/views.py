@@ -1,12 +1,12 @@
 # Create your views here.
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import redirect_to_login
-from django.template import  RequestContext
-from django.shortcuts import render_to_response
-from usuarios.forms import RegistroForm, LoginForm,UserForm
-from usuarios.models import PerfilDeUsuario
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from usuarios.forms import RegistroForm, LoginForm, UserForm
+from usuarios.models import PerfilDeUsuario
+
 
 def index(request):
 #Esta vista permite generar una pantalla sencilla de index, es necesario que se retorne el usuario para identificar
@@ -58,13 +58,12 @@ def registro(request):
                    # p.save()
 					l=LoginForm()
 					messages.success(request,"La clave y la confirmacion no concuerdan")
-					return render_to_response("usuarios/index.html")
+					return render_to_response("usuarios/index.html", context_instance = RequestContext(request))
 						
 		else:	
 			messages.error(request,"Alguno de los datos provistos tienen un formato equivocado")
 			return render_to_response("usuarios/registro.html",
-						   {"registroform":f }, 
-					            context_instance = RequestContext(request))
+						   {"registroform":f }, context_instance = RequestContext(request))
 			
 #IMPORTANTE: Deberiamos mantener esta vista a pesar de que estemos usando la vista de login generica, 
 # es posible que mas adelante nos demos cuenta que necesitamos hacer algo en el login que no se pueda

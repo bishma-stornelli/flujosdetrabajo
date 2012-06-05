@@ -1,6 +1,6 @@
 from django import forms
-from models import PerfilDeUsuario
 from django.contrib.auth.models import User
+from models import PerfilDeUsuario
 
 class RegistroForm(forms.Form):
 	username = forms.CharField(max_length=20)

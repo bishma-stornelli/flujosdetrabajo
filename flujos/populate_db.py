@@ -4,10 +4,14 @@ from unidades.models import Unidad
 
 
 u1 = User.objects.create(username='u1', password='u1')
+u1.save()
 u2 = User.objects.create(username='u2', password='u2')
-unidad1 = Unidad.objects.create(nombre="unidad1", descripcion="descripcion1")
+unidad1 = Unidad.objects.create(nombre="unidad1", descripcion="descripcion1", responsable=u1, miembros=(u1))
+u2.save()
 flujo1 = Flujo.objects.create(nombre="flujo1", descripcion="flujo1",unidad=unidad1)
+flujo1.save()
 p1 = Paso.objects.create(nombre="p1", descripcion="p1",flujo=flujo1, tipo=Paso.TIPO_NORMAL)
+p1.save()
 p2 = Paso.objects.create(nombre="p2", descripcion="p2",flujo=flujo1, tipo=Paso.TIPO_NORMAL)
 p3 = Paso.objects.create(nombre="p3", descripcion="p3",flujo=flujo1, tipo=Paso.TIPO_NORMAL)
 p4 = Paso.objects.create(nombre="p4", descripcion="p4",flujo=flujo1, tipo=Paso.TIPO_NORMAL)

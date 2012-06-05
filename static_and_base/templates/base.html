@@ -11,11 +11,18 @@
     <body>
      
 	<div id="header">
-	   <h1 class="titulo1">       SISTEMA INTEGRADO DE CONTROL DE FLUJO </h1>
-	 
+	   <h1 class="titulo1">SISTEMA INTEGRADO DE CONTROL DE FLUJO </h1>	 
 	</div>    
         <div id="submenu">
+                  <ul>
+                    {% if user.is_authenticated %}
+                        <li><a href="/usuarios/logout/">Cerrar sesi&oacute;n</a></li>
+                    {% else %}
+                        <li> <a href="/usuarios/login/">Iniciar sesi&oacute;n</a></li>
+                        <li> <a href="/usuarios/registro/">{{ "¿Usuario nuevo?" }}</a></li>
+                    {% endif %}
             {% block submenu %}{% endblock %}
+                  </ul>
         </div>
         
         <div id="wrap">
@@ -29,19 +36,14 @@
 	       
                 {% block menu %}
                     <ul id="top_menu">
-                    <li><a href="/" class="medium button blue">home</a></li>
-                    {% if user.is_authenticated %}
-                        <li><a href="/usuarios/logout/" class="medium button blue">Logout</a></li>
-                    {% else %}
-                        <li> <a href="/usuarios/login/" class="medium button blue">Login</a></li>
-                        <li> <a href="/usuarios/registro/" class="medium button blue">Registro</a></li>
-                    {% endif %}
+                    <li><a href="/" class="medium button blue">Inicio</a></li>
+                    
                     <li><a href="/flujos/index/" class="medium button blue">Flujos</a></li>
                     <li><a href="/solicitudes/index/" class="medium button blue">Solicitudes</a></li>
-                    <li><a href="/unidades/index/" class="medium button blue">Unidades</a></li>
+                    <li><a href="/unidades/index/" class="medium button blue">Unidades y privilegios</a></li>
                     <li><a href="/usuarios/index/" class="medium button blue">Usuarios</a></li>
                     {% if user.is_staff %}
-                        <li> <a href="admin/" class="medium button blue">Admin Site</a></li>
+                        <li> <a href="/admin/" class="medium button blue">Sitio del administrador</a></li>
                     {% endif %}
                     </ul>
                 {% endblock %}
@@ -52,7 +54,9 @@
                 
 	        
                 <h1>{% block head %}{% endblock %}</h1>
-                {% block content %}{% endblock %}
+                {% block content %}
+                    <h1>P&aacute;gina inicial de flujos</h1>
+                {% endblock %}
             </div>
      
         </div>
