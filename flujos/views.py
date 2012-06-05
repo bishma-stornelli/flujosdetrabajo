@@ -1,14 +1,14 @@
 # Create your views here.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
+from django.utils import timezone
 from flujos.forms import CrearFlujoForm, ModificarPasoForm, ModificarFlujoForm
 from flujos.models import Flujo, Paso
 from unidades.models import Unidad, SolicitudPrivilegio
-from django.utils import timezone
-from django.core.urlresolvers import reverse
 
 
 @login_required

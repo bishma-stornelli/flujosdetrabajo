@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from unidades.models import Unidad
 from django.utils import encoding
+from unidades.models import Unidad
 
 # Create your models here.
 class Alerta(models.Model):
@@ -16,6 +16,7 @@ class Alerta(models.Model):
     tipos = models.ManyToManyField('TipoAlerta', related_name='alertas')
 
 def clone(self):
+    a = Alerta()
     a.descripcion = self.descripcion
     a.mostar_al_llegar = self.mostar_al_llegar
     a.paso = self.paso
@@ -34,6 +35,7 @@ class TipoAlerta(models.Model):
         pass
 
     def clone(self):
+        a = TipoAlerta()
         a.nombre = self.nombre
         a.descripcion = self.descripcion
         return a
@@ -74,6 +76,7 @@ class Campo(models.Model):
     paso = models.ForeignKey('Paso', related_name="campos")
 
     def clone(self):
+        a = Campo()
         a.nombre = self.nombre
         a.llenado_por_miembro = self.llenado_por_miembro
         a.llenado_por_solicitante = self.llenado_por_solicitante
@@ -90,6 +93,7 @@ class Criterio(models.Model):
     campos = models.ManyToManyField(Campo)
     
     def clone(self):
+        a = Criterio()
         a.paso_origen = self.nombre
         a.paso_destino = self.paso_destino
         a.descripcion = self.descripcion
@@ -136,6 +140,7 @@ class Flujo(models.Model):
     unidad = models.ForeignKey(Unidad,related_name='flujos')
     
     def clone(self):
+        a = Flujo()
         a.nombre = self.nombre
         a.descripcion = self.descripcion
         a.estado = self.estado
