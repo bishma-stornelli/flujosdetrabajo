@@ -233,7 +233,7 @@ def publicar_flujo(request, flujo_id):
                 if al not in recorrido:
                     recorrido.append(al)
                     temporal.extend(list(Paso.objects.get(paso=al).sucesores.all()))
-                    temporal.extend((Paso.objects.filter(sucesores=al)))
+                    temporal.extend(list(Paso.objects.filter(sucesores=al)))
             alcanzables = mezclar(alcanzables,temporal)
         return alcanzables
     

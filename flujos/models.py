@@ -171,5 +171,7 @@ class Flujo(models.Model):
             valido=False
         return valido
     
+    
+    
 
 
