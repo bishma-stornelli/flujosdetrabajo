@@ -1,0 +1,28 @@
+{% extends "flujos/index.html" %}
+
+# Template que muestra una lista de flujos que pueden ser publicados
+# Requiere dos variables:
+# listaFlujo que contiene la lista de flujos que estan asociados a las unidades a las cuales el actual usuario es responsable
+
+{% block content %}
+	{% if listaFlujo %}
+		<table>
+			<tr>
+				<th>Unidad</th>
+				<th>Nombre</th> 
+				<th>Descripcion</th> 
+				<th>Marcar</th>
+			</tr>
+			{% for flujo in listaFlujo %}
+			<tr>
+				<td>{{ flujo.unidad }}</td>
+				<td>{{ flujo.nombre }}</td>
+				<td>{{ flujo.descripcion }}</td>\
+				<td><a href="/flujos/publicar_flujo/{{ flujo.id }}/</td>
+			</tr>
+			{% endfor %}
+		</table>
+	{% else %}
+	No hay flujos que publicar.
+	{% endif %}
+{% endblock %}

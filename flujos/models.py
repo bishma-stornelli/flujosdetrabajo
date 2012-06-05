@@ -156,4 +156,17 @@ class Flujo(models.Model):
         a.estado = self.estado
         a.unidad = self.unidad
         return a
-
+    
+    def inicial_final(self):
+        valido=False
+        pasos_final = Paso.objects.filter(flujo=self, tipo = 2)
+        if pasos_final != Paso.objects.none():
+            valido=True
+        elif pasos_final == Paso.objects.none():
+            valido=False
+        pasos_inicial= Paso.objects.filter(flujo=self, tipo = 1)
+        if pasos_inicial != Paso.objects.none():
+            valido=True
+        elif pasos_inicial == Paso.objects.none():
+            valido=False
+        return valido         
