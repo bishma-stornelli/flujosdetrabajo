@@ -193,10 +193,13 @@ def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404( Flujo, pk = flujo_id)
     if (flujo.unidad in unidades):
-        
-        flujo.estado = Flujo.ESTADO_PUBLICO
-        flujo.save()
-        messages.success(request, "Flujo (" + flujo + ") publicado.")
+        inicial_final= flujo.inicial_final()
+        if inicial_final == True :
+            flujo.estado = Flujo.ESTADO_PUBLICO
+            flujo.save()
+            messages.success(request, "Flujo (" + flujo + ") publicado.")
+        else :
+            messages.success(request, "Flujo (" + flujo + ") no pudo ser publicado.")
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo publicar.")
     return listar_flujos_por_publicar(request)    
