@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+# Template index de unidades
+# Requiere la variable unidades
+
+{% block title %}
+ Pagina de Modificación de Pasos
+{% endblock %}
+
+{% block content %}
+    {% comment %} 
+    NO OLVIDEN COLOCAR method="POST"
+    Coloquen aqui sus enlaces de  Unidades
+    {% endcomment %}
+    Contenido del Index de Unidades
+    <form action="." method= "POST" >{% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <td><input type="submit" value="Modificar" /></td>
+    </table>
+</form>
+{% endblock %}
+
+
+{% block submenu %}
+    {% comment %} NO OLVIDEN COLOCAR method="POST" {% endcomment %}
+    Menu de Pasos
+    
+{% endblock %}

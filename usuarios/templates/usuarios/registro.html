@@ -1,13 +1,19 @@
+{% extends "base.html" %}
+{% block submenu %}
 <h1 class="titulo1">Registro de Usuario</h1>
+{% endblock %}
 <br/>
 
 {% if msj %}
+{% block messages %}
 <p class="msj">
 	{{msj}}
 </p>
+{% endblock %}
 {% endif %}
 
-<form action="registro" method="post">
+{% block content %}
+<form action="/usuarios/registro/" method="post">
 	{% csrf_token %}
 	{{ f.non_field_errors }}
 	{% for campo in registroform %}
@@ -20,4 +26,5 @@
 	<input type="submit" value="Registrar" />
 </form>
 </br>
-<a href="index">Regresar</a>
+<a href="/index">Regresar</a>
+{% endblock %}

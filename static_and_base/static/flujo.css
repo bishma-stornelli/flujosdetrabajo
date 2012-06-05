@@ -1,5 +1,15 @@
-body {    margin: 0;    padding: 0;    font-family: sans-serif;    line-height: 1.4em;    font-size: small; }div#header {padding: 7%;
-    text-align: center;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    line-height: 1.4em;
+    font-size: small; 
+}
+
+
+div#header {padding: 7%;
+    text-align: left;
+    text-indent: 20em;
     background-color: #d0d0d0;
     color: #ffffff;
     border-bottom: double #ababab medium;
@@ -8,11 +18,56 @@ body {    margin: 0;    padding: 0;    font-family: sans-serif;    line-heig
     url(logobg.jpg) right no-repeat; 
 }
 
-div#admin {    padding: 2%;    text-align: justify;    margin-left: 24%;    background-color: #ffffff;    border-right: groove thin;    border-left: groove thin;
+h1.titulo1 {
+    color: #000000;
+}
+
+
+
+div#admin {
+    padding: 2%;
+    text-align: justify;
+    margin-left: 24%;
+    background-color: #ffffff;
+    border-right: groove thin;
+    border-left: groove thin;
  }
  
-div#nav {    padding: 2%;    float: left;    text-align: right;    background-color: #ffffff;    width: 20%;
+
+
+div#submenu {
+    float: left;
+    text-align: left;
+    background-color: #e0e0e0;
+    width: 15.1%;
+    height: 100%;
+    padding:2%;
+    display: block;
+    line-height: 3em;
+    position:absolute;
+    
 }
+
+ul#top_menu {
+    margin-left: 20%; 
+}
+
+ul#top_menu li {
+    float: left;
+    text-align: center;
+    display: block;
+    margin-right: 30px; 
+}
+    
+div#contenido {
+    margin-top: 0%;
+    float:left;
+    margin-left: 25%;
+    padding:2.5%;
+    width: 72.5%;
+}
+
+
 
 ul.messages  {
     padding: 2%;
@@ -22,4 +77,67 @@ ul.messages  {
     border-right: groove thin;
     border-left: groove thin;
 }
-.button, .button:visited { /* botones genéricos */  background: #222 url(URL_overlay.png) repeat-x;  display: inline-block;  padding: 5px 10px 6px;  color: #FFF;  text-decoration: none;  -moz-border-radius: 6px;  -webkit-border-radius: 6px;  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);  text-shadow: 0 -1px 1px rgba(0,0,0,0.25);  border-bottom: 1px solid rgba(0,0,0,0.25);  position: relative;  cursor:pointer}.button:hover { /* el efecto hover */  background-color: #111  color: #FFF;}.button:active{  /* el efecto click */  top: 1px;} /* botones pequeños */.small.button, .small.button:visited {  font-size: 11px ;} /* botones medianos */.button, .button:visited,.medium.button, .medium.button:visited {  font-size: 13px;  font-weight: bold;  line-height: 1;  text-shadow: 0 -1px 1px rgba(0,0,0,0.25);} /* botones grandes */.large.button, .large.button:visited {  font-size:14px;  padding: 8px 14px 9px;} /* botones extra grandes */.super.button, .super.button:visited {  font-size: 34px;  padding: 8px 14px 9px;}.blue.button, .blue.button:visited { background-color: #2981E4; }.blue.button:hover{ background-color: #2575CF; }
+
+ul.messages li {
+}
+
+.button, .button:visited { /* botones genéricos */
+  background: #222 url(URL_overlay.png) repeat-x;
+  display: inline-block;
+  padding: 5px 10px 6px;
+  color: #FFF;
+  text-decoration: none;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+  position: relative;
+  cursor:pointer
+}
+.button:hover { /* el efecto hover */
+  background-color: #111
+  color: #FFF;
+}
+.button:active{  /* el efecto click */
+  top: 1px;
+}
+
+ /* botones pequeños */
+.small.button, .small.button:visited {
+  font-size: 11px ;
+}
+
+div#submenu a {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+}
+
+ /* botones medianos */
+.button, .button:visited,.medium.button, .medium.button:visited {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+}
+
+ /* botones grandes */
+.large.button, .large.button:visited {
+  font-size:14px;
+  padding: 8px 14px 9px;
+}
+
+ /* botones extra grandes */
+.super.button, .super.button:visited {
+  font-size: 34px;
+  padding: 8px 14px 9px;
+}
+
+.blue.button, .blue.button:visited { background-color: #2981E4; }
+.blue.button:hover{ background-color: #2575CF; }
+
+.black.button, .black.button:visited { background-color: #000000; }
+.black.button:hover{ background-color: #708090; }

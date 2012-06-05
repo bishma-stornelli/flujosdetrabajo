@@ -21,8 +21,8 @@ DATABASES = {
     }
 }
 
-LOGIN_REDIRECT_URL='index'
-
+LOGIN_REDIRECT_URL='/'
+LOGIN_URL = '/usuarios/login/'
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -158,4 +158,4 @@ LOGGING = {
 }
 
 
-
+AUTH_PROFILE_MODULE = 'usuarios.PerfilDeUsuario'

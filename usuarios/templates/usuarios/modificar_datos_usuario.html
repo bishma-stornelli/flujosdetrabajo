@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -5,11 +6,13 @@
     <title>Perfil de Usuario</title>
 </head>
 <body>
+{% block submenu %}
 <h1 class="titulo1">Perfil de Usuario</h1>
+{% endblock %}
 <div class="perfil">
     <div>
-
-	<form action="modificar_datos_de_usuario" method="post">
+       {% block content %}
+	<form action="/usuarios/modificarDatosUsuario/" method="post">
 	{% if reg %}
 		<p> {{ reg }} </p>
 	{% endif %}
@@ -27,7 +30,9 @@
     <input type="submit" value="Guardar cambios">
 	</form>
 	    </div>
+    
 </div>
-<a href="index">Regresar</a>
+<a href="/index">Regresar</a>
+{% endblock %}
 </body>
 </html>

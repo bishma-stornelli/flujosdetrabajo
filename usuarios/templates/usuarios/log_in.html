@@ -1,8 +1,12 @@
+{% extends "base.html" %}
+
+{% block submenu %}
 <h1 class="titulo1">Login</h1>
 <br/>
+{% endblock %}
 
-
-<form action="login" method="post">
+{% block content %}
+<form action="/usuarios/login/" method="post">
 	{% csrf_token %}
 	{% if form.errors %}
 		<p>Error: Username o Password incorrectos<p>
@@ -24,5 +28,6 @@
 	<input type="hidden" name="next" value="{{next}}" />
 </form>
 </br>
-<a href="index">Regresar</a>
+<a href="/index/">Regresar</a>
 
+{% endblock %}

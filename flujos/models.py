@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from unidades.models import Unidad
+from django.utils import encoding
 
 # Create your models here.
 class Alerta(models.Model):
@@ -76,14 +77,6 @@ class Campo(models.Model):
         a.nombre = self.nombre
         a.llenado_por_miembro = self.llenado_por_miembro
         a.llenado_por_solicitante = self.llenado_por_solicitante
-        a.TIPO_TEXT = self.TIPO_TEXT
-        a.TIPO_TEXTAREA = self.TIPO_TEXTAREA
-        a.TIPO_CHECKBOX = self.TIPO_CHECKBOX
-        a.TIPO_FILE = self.TIPO_FILE
-        a.TIPO_NUMBER = self.TIPO_NUMBER
-        a.TIPO_EMAIL = self.TIPO_EMAIL
-        a.TIPO_FECHA = self.TIPO_FECHA
-        a.TIPO_CHOICES = self.TIPO_CHOICES
         a.tipo = self.tipo
         a.esObligatorio = self.esObligatorio
         a.paso = self.paso
@@ -109,7 +102,7 @@ class Paso(models.Model):
     TIPO_INICIAL = 1
     TIPO_FINAL = 2
     TIPO_DIVISION = 3
-    TIPO_UNION = 4
+    TIPO_UNION = 4 
     TIPO_NORMAL = 5
     TIPO_CHOICES = (
                     (TIPO_NORMAL, "Normal"),
@@ -119,6 +112,8 @@ class Paso(models.Model):
                     (TIPO_UNION, "Union"))    
     tipo = models.IntegerField(choices=TIPO_CHOICES, default=TIPO_NORMAL)
     descripcion = models.TextField()
+
+
     flujo = models.ForeignKey('Flujo', related_name='pasos')
     sucesores = models.ManyToManyField('Paso', 
                                        related_name='predecesores', 
@@ -128,19 +123,7 @@ class Paso(models.Model):
                                        through='Criterio')
     fecha_de_creacion = models.DateTimeField(auto_now = True)
    
-    def clone(self):
-        a.nombre = self.nombre
-        a.TIPO_INICIAL = self.TIPO_INICIAL
-        a.TIPO_FINAL = self.TIPO_FINAL
-        a.TIPO_DIVISION = self.TIPO_DIVISION
-        a.TIPO_UNION = self.TIPO_UNION
-        a.TIPO_CHOICES = self.TIPO_CHOICES
-        a.tipo = self.tipo
-        a.descripcion = self.descripcion
-        a.flujo = self.flujo
-        a.sucesores = self.sucesores
-        a.fecha_de_creacion = self.fecha_de_creacion
-        return a
+
 
 class Flujo(models.Model):
     nombre = models.CharField(max_length=30)
@@ -153,7 +136,7 @@ class Flujo(models.Model):
                     (ESTADO_OBSOLETO, "Obsoleto"))
     estado = models.IntegerField(choices=ESTADO_CHOICES, default=ESTADO_BORRADOR)
     unidad = models.ForeignKey(Unidad,related_name='flujos')
-
+    
     def clone(self):
         a.nombre = self.nombre
         a.descripcion = self.descripcion
@@ -164,3 +147,4 @@ class Flujo(models.Model):
         a.estado = self.estado
         a.unidad = self.unidad
         return a
+

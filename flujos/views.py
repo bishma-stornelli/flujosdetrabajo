@@ -1,12 +1,14 @@
 # Create your views here.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm
-from flujos.models import Flujo
+from flujos.forms import CrearFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCampoForm
+from flujos.models import Flujo, Paso, Campo
 from unidades.models import Unidad, SolicitudPrivilegio
+from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 
 @login_required
@@ -41,6 +43,51 @@ def crear_flujo(request, unidad_id):
     return render_to_response("flujos/crear_flujo.html", {'form': form,
                                                           'unidad_id': unidad_id },
                                         context_instance=RequestContext(request))
+                                        
+
+
+@login_required
+def agregar_campo(request, paso_id):
+
+    p = get_object_or_404(Paso, pk=paso_id)
+    
+    if (p.flujo.unidad).permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+      
+        if request.method == 'GET':
+            
+            f = AgregarCampoForm()
+            return render_to_response("flujos/agregar_campo.html", {'form':f, 'paso_id':paso_id}, 
+                                        context_instance=RequestContext(request))
+        else:
+        
+            f=AgregarCampoForm(request.POST)
+            
+            if f.is_valid():
+                try:
+                    c=Campo.objects.get(paso=p, nombre=f.cleaned_data['nombre'])
+                    messages.error(request, "El nombre del campo ya existe para este paso.")
+                    return HttpResponseRedirect("/flujos/consultar_paso/%s/" % paso_id)
+                
+                except Campo.DoesNotExist:
+                
+                    campo = Campo(nombre = f.cleaned_data['nombre'],llenado_por_miembro=True, llenado_por_solicitante=False, tipo = f.cleaned_data['tipo'], esObligatorio = f.cleaned_data['esObligatorio'], paso=p)
+                    campo.paso = p    
+                    campo.save()
+                    messages.success(request, "Campo creado exitosamente.")
+                    
+                    return HttpResponseRedirect("/flujos/consultar_paso/%s/" % paso_id)
+                
+            else:
+                 messages.error(request, "Verifique los campos introducidos e intente de nuevo.")
+                 return render_to_response("flujos/agregar_campo.html", {'form':f}, 
+                                        context_instance=RequestContext(request))
+    else:
+        messages.error(request, "Esta funcionalidad requiere permisos de Responsable de Unidad.")
+        return render_to_response("usuarios/index.html", context_instance=RequestContext(request))
+                
+            
+        
+    
 
 def listar_flujos(request, unidad_id):
   unidad = get_object_or_404(Unidad , pk=unidad_id)
@@ -48,16 +95,20 @@ def listar_flujos(request, unidad_id):
   return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
 
 
-def copiar_flujo(request, flujo_id):
-    #flujo = get_object_or_404(Flujo, pk=flujo_id)
-    #form = CopiarFlujoForm()
-    pass
+#def copiar_flujo(request, flujo_id):
+    # flujo = get_object_or_404(Flujo, pk=flujo_id)
+    #flujo_nuevo = flujo.clone();
+#form = CopiarFlujoForm()
+#pass
 
+@login_required
 def consultar_flujo(request, flujo_id):
     flujo = get_object_or_404(Flujo, pk=flujo_id)
-    # Checkear permisos
-    return render_to_response('flujos/consultar_flujo.html',
-                              {'flujo': flujo})
+    if flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        return render_to_response('flujos/consultar_flujo.html',
+                                  {'flujo': flujo}, context_instance=RequestContext(request))
+    else:
+        raise Http404()
 
 def agregar_paso_flujo(request, flujo_id):
   #  if request.method == 'POST':
@@ -72,11 +123,37 @@ def agregar_paso_flujo(request, flujo_id):
 
     #return render_to_response('agregar_paso.html', {'form': form})
     pass
- 
+    
+def listar_pasos(request, flujo_id):
+  flujo = get_object_or_404(Flujo , pk = flujo_id)
+  pasos = Paso.objects.filter(flujo = flujo)
+  return render_to_response('flujos/listar_pasos.html', {'pasos': pasos})
+    
+def modificar_paso(request, paso_id):
+	paso = get_object_or_404( Paso, pk = paso_id)
+	if request.method == "POST":
+		form = ModificarPasoForm(request.POST, instance=paso)
+		if form.is_valid():
+			form.save()     
+			messages.success( request , "Modificacion exitosa.")
+			return HttpResponseRedirect(reverse("flujo_index"))
+		else:
+			messages.error(request, "Verifique los campos e intente de nuevo")
+	else:
+		form = ModificarPasoForm(instance = paso)
+		return render_to_response("flujos/modificar_paso.html", {'form':form}, context_instance=RequestContext(request))
 
 
-def listar_flujos(request):
-    pass
-
-def copiar_flujo(request, flujo_id):
-    pass
+def modificar_flujo(request, flujo_id):
+	flujo = get_object_or_404( Flujo, pk = flujo_id)
+	if request.method == "POST":
+		form = ModificarFlujoForm(request.POST, instance=flujo)
+		if form.is_valid():
+			form.save()     
+			messages.success( request , "Modificacion exitosa.")
+			return HttpResponseRedirect(reverse("flujo_index"))
+		else:
+			messages.error(request, "Verifique los campos e intente de nuevo")
+	else:
+		form = ModificarFlujoForm(instance = flujo)
+		return render_to_response("flujos/modificar_flujo.html", {'form':form}, context_instance=RequestContext(request))

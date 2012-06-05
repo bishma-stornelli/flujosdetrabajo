@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+
 <h1>Registrar Unidad</h2>
 <form action="/registroUnidad" method="post">
     {% csrf_token %}
@@ -7,8 +9,5 @@
         </tr>
     </table>
 </form>
-{% if msg %}
-<p style="color:red;font-size:250%">{{ msg }}</p>
-{% endif %}
 </br>
 <a href="index">Regresar</a>

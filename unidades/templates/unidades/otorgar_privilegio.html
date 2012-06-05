@@ -1,4 +1,5 @@
-<!-- Esta vista se encarga de mostrarle a los miembros de unidad o responsables
+{% extends "base.html" %}
+{% comment %} Esta vista se encarga de mostrarle a los miembros de unidad o responsables
 	de unidad, las solicitudes de privilegios que se le han pedido, para que
 	estos puedan aceptar o cancelar la solicitud.
 	-Objetos que requiere:
@@ -8,29 +9,25 @@
 	@listaMiembro: QuerySet que tiene la lista de solicitudes de privilegios
 				   para ser miembro de una unidad en la que el usuario
 				   autenticado es responsable de esa unidad.
-	@msg: String que muestra si el privilegio fue aceptado o cancelado con exito.  -->
-<html>
-<head>
-    <title>Otorgar Privilegios</title>
-</head>
-<h1 class="titulo1">Otorgar privilegios</h1>
-{% if msg %}
-<p style="color:red;font-size:250%">{{ msg }}</p>
-{% endif %}
-{% if listaPrivilegios %}
-	<h2>Lista de Solicitudes de Privilegios para ser Solicitante de la unidad</h2>
-	{% for priv in listaPrivilegios %}
-		<form action="/otorgar_privilegio" method="post">
+	@msg: String que muestra si el privilegio fue aceptado o cancelado con exito.  
+{% endcomment %}
+
+{% block content %}
+<h1>Otorgar privilegios</h1>
+{% if solicitudes_responsable %}
+	<h2>Solicitudes de privilegios para ser Responsable de la unidad</h2>
+	{% for priv in solicitudes_responsable %}
+		<form action="/unidades/otorgar_privilegio/" method="post">
 		{% csrf_token %}
 		<table>
-		<input type="hidden" name="id" value={{priv.id}}/>
+		<input type="hidden" name="id" value='{{priv.id}}'/>
+		<tr>
+		  <td> <b>Solicitante</b> </td>
+		  <td> {{ priv.solicitante.lastname }},{{ priv.solicitante.name }}</td>
+		</tr>
         <tr>
         	<td> <b>Unidad:</b>
         	<td>{{ priv.unidad.nombre }}</td>
-        </tr>
-		<tr>
-			<td><b>Privilegio solicitado:</b></td>
-        	<td>{{ priv.privilegio }}</td>
         </tr>
         <tr>
         	<td><b>	Mensaje</b></td>
@@ -38,40 +35,65 @@
         </tr>
         <tr>
         <td></td>
-		<td><input type="submit" name="negar_privilegio" value="Cancelar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
+		<td><input type="submit" name="negar_privilegio" value="Negar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
 		</tr>
 		</table>   
 		</form>
     {% endfor %}
  {%endif%}   
-{% if listaMiembro %}
-	<h2>Lista de Solicitudes de Privilegios para ser Miembros de la unidad</h2>
-	{% for priv in listaMiembro %}
-		<form action="/otorgar_privilegio" method="post">
-		{% csrf_token %}
-		<table>
-		<input type="hidden" name="id" value={{priv.id}}/>
+{% if solicitudes_miembro %}
+    <h2>Solicitudes de privilegios para ser Miembro de la unidad</h2>
+    {% for priv in solicitudes_miembro %}
+        <form action="/unidades/otorgar_privilegio/" method="post">
+        {% csrf_token %}
+        <table>
+        <input type="hidden" name="id" value='{{priv.id}}' />
         <tr>
-        	<td> <b>Unidad:</b>
-        	<td>{{ priv.unidad.nombre }}</td>
-        </tr>
-		<tr>
-			<td><b>Privilegio solicitado:</b></td>
-        	<td>{{ priv.privilegio }}</td>
+          <td> <b>Solicitante</b> </td>
+          <td> {{ priv.solicitante.lastname }},{{ priv.solicitante.name }}</td>
         </tr>
         <tr>
-        	<td><b>	Mensaje</b></td>
-        	<td>{{ priv.mensaje }}</td>
+            <td> <b>Unidad:</b>
+            <td>{{ priv.unidad.nombre }}</td>
+        </tr>
+        <tr>
+            <td><b> Mensaje</b></td>
+            <td>{{ priv.mensaje }}</td>
         </tr>
         <tr>
         <td></td>
-		<td><input type="submit" name="negar_privilegio" value="Cancelar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
-		</tr>
-		</table>    
-		</form>
+        <td><input type="submit" name="negar_privilegio" value="Negar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
+        </tr>
+        </table>   
+        </form>
     {% endfor %}
-
-{%endif%}
-</br>
-<a href="index">Regresar</a>
-</html>   
+ {%endif%}
+ {% if solicitudes_solicitante %}
+    <h2>Solicitudes de privilegios para ser Solicitante de la unidad</h2>
+    {% for priv in solicitudes_solicitante %}
+        <form action="/unidades/otorgar_privilegio/" method="post">
+        {% csrf_token %}
+        <table>
+        <input type="hidden" name="id" value='{{priv.id}}' />
+        <tr>
+          <td> <b>Solicitante</b> </td>
+          <td> {{ priv.solicitante.lastname }},{{ priv.solicitante.name }}</td>
+        </tr>
+        <tr>
+            <td> <b>Unidad:</b>
+            <td>{{ priv.unidad.nombre }}</td>
+        </tr>
+        <tr>
+            <td><b> Mensaje</b></td>
+            <td>{{ priv.mensaje }}</td>
+        </tr>
+        <tr>
+        <td></td>
+        <td><input type="submit" name="negar_privilegio" value="Negar" /> <input type="submit" name="aceptar_privilegio" value="Aceptar" /> </td>
+        </tr>
+        </table>   
+        </form>
+    {% endfor %}
+ {%endif%}
+ 
+ {% endblock %}
