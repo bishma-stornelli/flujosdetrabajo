@@ -116,6 +116,8 @@ class Paso(models.Model):
                     (TIPO_UNION, "Union"))    
     tipo = models.IntegerField(choices=TIPO_CHOICES, default=TIPO_NORMAL)
     descripcion = models.TextField()
+
+
     flujo = models.ForeignKey('Flujo', related_name='pasos')
     sucesores = models.ManyToManyField('Paso', 
                                        related_name='predecesores', 
@@ -143,12 +145,11 @@ class Flujo(models.Model):
         a = Flujo()
         a.nombre = self.nombre
         a.descripcion = self.descripcion
+        a.ESTADO_BORRADOR = self.ESTADO_BORRADOR
+        a.ESTADO_PUBLICO = self.ESTADO_PUBLICO
+        a.ESTADO_OBSOLETO = self.ESTADO_OBSOLETO
+        a.ESTADO_CHOICES = self.ESTADO_CHOICES
         a.estado = self.estado
         a.unidad = self.unidad
-        b = self.flujos.all()
-        for i in range (0,b.length):
-            b[i].flujo = a
-        self.estado = "Obsoleto"
-        a.estado = "Borrador"
         return a
 

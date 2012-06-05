@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+# Template que muestra un formulario para agregar un campo a un paso
+# Requiere dos variables:
+# unidad_id que contiene el id del paso a la que se va a agregar el campo
+# form el formulario de tipo AgregarCampoForm para mostrar al usuario
+
+{% block content %}
+    {% comment %} NO OLVIDEN COLOCAR method="POST" {% endcomment %}
+    <form action="/flujos/agregar_campo/{{ paso_id }}/" method="POST">{% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            <td><input type="submit" value="Agregar" /></td>
+        </table>
+    </form>
+
+{% endblock %}
