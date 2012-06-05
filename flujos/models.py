@@ -135,6 +135,10 @@ class Flujo(models.Model):
     estado = models.IntegerField(choices=ESTADO_CHOICES, default=ESTADO_BORRADOR)
     unidad = models.ForeignKey(Unidad,related_name='flujos')
     
+    def __unicode__ (self):
+        s = self.unidad + " " + self.nombre
+        return s
+    
     def clone(self):
         a.nombre = self.nombre
         a.descripcion = self.descripcion
