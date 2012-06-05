@@ -120,14 +120,7 @@ class Paso(models.Model):
                                        through='Criterio')
     fecha_de_creacion = models.DateTimeField(auto_now = True)
    
-    def clone(self):
-        a.nombre = self.nombre
-        a.tipo = self.tipo
-        a.descripcion = self.descripcion
-        a.flujo = self.flujo
-        a.sucesores = self.sucesores
-        a.fecha_de_creacion = self.fecha_de_creacion
-        return a
+
 
 class Flujo(models.Model):
     nombre = models.CharField(max_length=30)
@@ -144,10 +137,11 @@ class Flujo(models.Model):
     def clone(self):
         a.nombre = self.nombre
         a.descripcion = self.descripcion
-        a.ESTADO_BORRADOR = self.ESTADO_BORRADOR
-        a.ESTADO_PUBLICO = self.ESTADO_PUBLICO
-        a.ESTADO_OBSOLETO = self.ESTADO_OBSOLETO
-        a.ESTADO_CHOICES = self.ESTADO_CHOICES
         a.estado = self.estado
         a.unidad = self.unidad
+        b = self.flujos.all()
+        for i in range (0,b.length):
+            b[i].flujo = a
+        self.estado = "Obsoleto"
+        a.estado = "Borrador"
         return a
