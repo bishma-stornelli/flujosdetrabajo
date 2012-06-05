@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from unidades.models import Unidad
+from django.utils import encoding
 
 # Create your models here.
 class Alerta(models.Model):
@@ -101,7 +102,7 @@ class Paso(models.Model):
     TIPO_INICIAL = 1
     TIPO_FINAL = 2
     TIPO_DIVISION = 3
-    TIPO_UNION = 4
+    TIPO_UNION = 4 
     TIPO_NORMAL = 5
     TIPO_CHOICES = (
                     (TIPO_NORMAL, "Normal"),
@@ -122,14 +123,7 @@ class Paso(models.Model):
                                        through='Criterio')
     fecha_de_creacion = models.DateTimeField(auto_now = True)
    
-    def clone(self):
-        a.nombre = self.nombre
-        a.tipo = self.tipo
-        a.descripcion = self.descripcion
-        a.flujo = self.flujo
-        a.sucesores = self.sucesores
-        a.fecha_de_creacion = self.fecha_de_creacion
-        return a
+
 
 class Flujo(models.Model):
     nombre = models.CharField(max_length=30)
@@ -142,14 +136,16 @@ class Flujo(models.Model):
                     (ESTADO_OBSOLETO, "Obsoleto"))
     estado = models.IntegerField(choices=ESTADO_CHOICES, default=ESTADO_BORRADOR)
     unidad = models.ForeignKey(Unidad,related_name='flujos')
-
+    
     def clone(self):
         a.nombre = self.nombre
         a.descripcion = self.descripcion
-        a.ESTADO_BORRADOR = self.ESTADO_BORRADOR
-        a.ESTADO_PUBLICO = self.ESTADO_PUBLICO
-        a.ESTADO_OBSOLETO = self.ESTADO_OBSOLETO
-        a.ESTADO_CHOICES = self.ESTADO_CHOICES
         a.estado = self.estado
         a.unidad = self.unidad
+        b = self.flujos.all()
+        for i in range (0,b.length):
+            b[i].flujo = a
+        self.estado = "Obsoleto"
+        a.estado = "Borrador"
         return a
+

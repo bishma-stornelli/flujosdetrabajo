@@ -1,12 +1,14 @@
 # Create your views here.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm, AgregarCampoForm
+from flujos.forms import CrearFlujoForm, ModificarPasoForm, ModificarFlujoForm
 from flujos.models import Flujo, Paso
 from unidades.models import Unidad, SolicitudPrivilegio
+from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 
 @login_required
@@ -41,6 +43,8 @@ def crear_flujo(request, unidad_id):
     return render_to_response("flujos/crear_flujo.html", {'form': form,
                                                           'unidad_id': unidad_id },
                                         context_instance=RequestContext(request))
+                                        
+
 
 @login_required
 def agregar_campo(request, paso_id):
@@ -86,26 +90,19 @@ def listar_flujos(request, unidad_id):
 
 
 def copiar_flujo(request, flujo_id):
-    flujo = get_object_or_404(Flujo, pk=flujo_id)
-    flujo_nuevo = flujo.clone(flujo)
-    pasos = flujo.flujos.all()
-    for i in range(0,pasos.length):
-        pasos_nuevos[i]=Paso.clone(pasos[i])
-    criterios_origen = pasos.criterios_origen.all()
-    criterios_destino = pasos.criterios_destino.all()
-    for i in range(0,criterios_origen.length):
-        criterios_origen_nuevo[i]=Criterio.clone(criterios_origen[i])
-    for i in range(0,criterios_destino.length):
-        criterios_destino_nuevo[i]=Criterio.clone(criterios_origen[i])
-    pasos_nuevos.
-    form = CopiarFlujoForm()
-    
+    # flujo = get_object_or_404(Flujo, pk=flujo_id)
+    #flujo_nuevo = flujo.clone();
+#form = CopiarFlujoForm()
+ pass   
 
+@login_required
 def consultar_flujo(request, flujo_id):
     flujo = get_object_or_404(Flujo, pk=flujo_id)
-    # Checkear permisos
-    return render_to_response('flujos/consultar_flujo.html',
-                              {'flujo': flujo})
+    if flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        return render_to_response('flujos/consultar_flujo.html',
+                                  {'flujo': flujo}, context_instance=RequestContext(request))
+    else:
+        raise Http404()
 
 def agregar_paso_flujo(request, flujo_id):
   #  if request.method == 'POST':
@@ -120,11 +117,37 @@ def agregar_paso_flujo(request, flujo_id):
 
     #return render_to_response('agregar_paso.html', {'form': form})
     pass
- 
+    
+def listar_pasos(request, flujo_id):
+  flujo = get_object_or_404(Flujo , pk = flujo_id)
+  pasos = Paso.objects.filter(flujo = flujo)
+  return render_to_response('flujos/listar_pasos.html', {'pasos': pasos})
+    
+def modificar_paso(request, paso_id):
+	paso = get_object_or_404( Paso, pk = paso_id)
+	if request.method == "POST":
+		form = ModificarPasoForm(request.POST, instance=paso)
+		if form.is_valid():
+			form.save()     
+			messages.success( request , "Modificacion exitosa.")
+			return HttpResponseRedirect(reverse("flujo_index"))
+		else:
+			messages.error(request, "Verifique los campos e intente de nuevo")
+	else:
+		form = ModificarPasoForm(instance = paso)
+		return render_to_response("flujos/modificar_paso.html", {'form':form}, context_instance=RequestContext(request))
 
 
-def listar_flujos(request):
-    pass
-
-def copiar_flujo(request, flujo_id):
-    pass
+def modificar_flujo(request, flujo_id):
+	flujo = get_object_or_404( Flujo, pk = flujo_id)
+	if request.method == "POST":
+		form = ModificarFlujoForm(request.POST, instance=flujo)
+		if form.is_valid():
+			form.save()     
+			messages.success( request , "Modificacion exitosa.")
+			return HttpResponseRedirect(reverse("flujo_index"))
+		else:
+			messages.error(request, "Verifique los campos e intente de nuevo")
+	else:
+		form = ModificarFlujoForm(instance = flujo)
+		return render_to_response("flujos/modificar_flujo.html", {'form':form}, context_instance=RequestContext(request))

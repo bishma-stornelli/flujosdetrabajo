@@ -14,9 +14,21 @@ class AgregarCampoForm(forms.Form):
     esObligatorio = forms.BooleanField(label="Obligatorio")
     
     
-    
 
-#<<<<<<< HEAD
+class ModificarPasoForm(ModelForm):
+	class Meta:
+		model = Paso
+		fields= ('nombre', 'tipo', 'descripcion') 
+		
+    
+class ModificarFlujoForm(ModelForm):
+	class Meta:
+		model = Paso
+		fields= ('nombre', 'tipo', 'descripcion')
+		 
+		
+
+
 #class CopiarFlujoForm()
 #=======
 #class AgregarPasoForm(ModelForm):
