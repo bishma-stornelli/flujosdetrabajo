@@ -178,7 +178,6 @@ def marcar_obsoleto(request, flujo_id):
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo marcar como obsoleto.")
     return listar_flujos_publico(request)
-    
 
 def eliminar_paso(request, paso_id):
 	paso = get_object_or_404(Paso, pk = paso_id)
@@ -208,4 +207,39 @@ def publicar_flujo(request, flujo_id):
         messages.success(request, "Flujo (" + flujo + ") publicado.")
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo publicar.")
-    return listar_flujos_por_publicar(request)    
+    return listar_flujos_por_publicar(request)  
+
+    # @alcanzables son todos los nodos alcanzables
+    # @recorrido son los nodos por el cual se ha pasado
+    # @pasos son todos los nodos presentes en el flujo
+    # @pas representa el nodo inicial y se le aplicara un dfs para saber si los nodos alcanzables
+    # Devuelve True si es un grafo conexo de lo contrario devuelve False
+    def es_grafo_conexo(flujo):
+        pasos = Paso.objects.filter(flujo=flujo)
+        for pas in pasos:
+            alcanzables = [pas]
+            recorrido = []
+            if not dfs(alcanzables,recorrido) == list(pasos):
+                return False
+        return True
+    
+    # @alcanzables son todos los nodos alcanzables a partir de un nodo inicial contenido en alcanzable
+    # @recorrido son los nodos por el cual se ha pasado
+    # return alcanzables
+    def dfs(alcanzables,recorrido):
+        while not recorrido == alcanzables:
+            temporal = []
+            for al in alcanzables:
+                if al not in recorrido:
+                    recorrido.append(al)
+                    temporal.extend(list(Paso.objects.get(paso=al).sucesores.all()))
+                    temporal.extend((Paso.objects.filter(sucesores=al)))
+            alcanzables = mezclar(alcanzables,temporal)
+        return alcanzables
+    
+    # Para todos los elementos de temporal, se evalua si ya se encuentra en alcanzables, sino, se agrega
+    def mezclar(alcanzables,temporal):
+        for t in temporal:
+            if t not in alcanzables:
+                alcanzables.append(t)
+        return alcanzables

@@ -169,4 +169,7 @@ class Flujo(models.Model):
             valido=True
         elif pasos_inicial == Paso.objects.none():
             valido=False
-        return valido         
+        return valido
+    
+
+
