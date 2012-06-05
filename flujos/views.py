@@ -178,6 +178,15 @@ def marcar_obsoleto(request, flujo_id):
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo marcar como obsoleto.")
     return listar_flujos_publico(request)
+    
+
+def eliminar_paso(request, paso_id):
+	paso = get_object_or_404(Paso, pk = paso_id)
+	flujo = paso.flujo
+	if request.method == "GET":
+		if(paso):	
+			paso.delete()
+	return HttpResponseRedirect(reverse("flujo_index"))
 
 
 @login_required(redirect_field_name='/')
