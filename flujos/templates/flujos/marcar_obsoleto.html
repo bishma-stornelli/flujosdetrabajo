@@ -17,8 +17,8 @@
 			<tr>
 				<td>{{ flujo.unidad }}</td>
 				<td>{{ flujo.nombre }}</td>
-				<td>{{ flujo.descripcion }}</td>\
-				<td><a href="/flujos/marcar_obsoleto/{{ flujo.id }}/</td>
+				<td>{{ flujo.descripcion }}</td>
+				<td><a onclick="return confirm('¿Esta seguro que desea marcar este flujo como obsoleto?')" href="/flujos/marcar_obsoleto/{{ flujo.id }}/">Marcar</a></td>
 			</tr>
 			{% endfor %}
 		</table>

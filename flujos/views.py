@@ -171,10 +171,10 @@ def listar_flujos_publico(request):
 def marcar_obsoleto(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404( Flujo, pk = flujo_id)
-    if (flujo.unidad in unidades):
+    if (flujo.unidad in unidades and flujo.estado!=Flujo.ESTADO_OBSOLETO):
         flujo.estado = Flujo.ESTADO_OBSOLETO
         flujo.save()
-        messages.success(request, "Flujo (" + flujo + ") marcado como obsoleto.")
+        messages.success(request, "Flujo (" + flujo.nombre + ") marcado como obsoleto.")
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo marcar como obsoleto.")
     return listar_flujos_publico(request)
