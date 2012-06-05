@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from unidades.models import Unidad
+from django.utils import encoding
 
 # Create your models here.
 class Alerta(models.Model):
@@ -101,7 +102,7 @@ class Paso(models.Model):
     TIPO_INICIAL = 1
     TIPO_FINAL = 2
     TIPO_DIVISION = 3
-    TIPO_UNION = 4
+    TIPO_UNION = 4 
     TIPO_NORMAL = 5
     TIPO_CHOICES = (
                     (TIPO_NORMAL, "Normal"),
@@ -133,7 +134,7 @@ class Flujo(models.Model):
                     (ESTADO_OBSOLETO, "Obsoleto"))
     estado = models.IntegerField(choices=ESTADO_CHOICES, default=ESTADO_BORRADOR)
     unidad = models.ForeignKey(Unidad,related_name='flujos')
-
+    
     def clone(self):
         a.nombre = self.nombre
         a.descripcion = self.descripcion
@@ -145,3 +146,4 @@ class Flujo(models.Model):
         self.estado = "Obsoleto"
         a.estado = "Borrador"
         return a
+
