@@ -96,11 +96,11 @@ def listar_flujos(request, unidad_id):
   return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
 
 
-#def copiar_flujo(request, flujo_id):
+def copiar_flujo(request, flujo_id):
     # flujo = get_object_or_404(Flujo, pk=flujo_id)
     #flujo_nuevo = flujo.clone();
 #form = CopiarFlujoForm()
-#pass
+    pass
 
 @login_required
 def consultar_flujo(request, flujo_id):
