@@ -1,14 +1,15 @@
 # Create your views here.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCampoForm
-from flujos.models import Flujo, Paso, Campo
+from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, \
+    ModificarFlujoForm
+from flujos.models import Paso, Campo, Flujo
 from unidades.models import Unidad, SolicitudPrivilegio
-from django.utils import timezone
-from django.core.urlresolvers import reverse
+
 
 
 @login_required
@@ -95,11 +96,11 @@ def listar_flujos(request, unidad_id):
   return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
 
 
-#def copiar_flujo(request, flujo_id):
+def copiar_flujo(request, flujo_id):
     # flujo = get_object_or_404(Flujo, pk=flujo_id)
     #flujo_nuevo = flujo.clone();
 #form = CopiarFlujoForm()
-#pass
+    pass
 
 @login_required
 def consultar_flujo(request, flujo_id):

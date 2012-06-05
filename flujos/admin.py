@@ -1,5 +1,5 @@
-from flujos.models import *
 from django.contrib import admin
+from flujos.models import *
 
 admin.site.register(Alerta)
 admin.site.register(TipoAlerta)

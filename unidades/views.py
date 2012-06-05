@@ -12,7 +12,7 @@ from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm, \
     ConfigurarUnidadForm
 from unidades.models import SolicitudPrivilegio, Unidad
 
-@login_required(redirect_field_name='/')
+@login_required
 def solicitud_privilegio(request):
   if request.method == "GET":
 
@@ -36,7 +36,7 @@ def solicitud_privilegio(request):
 		      context_instance=RequestContext(request))
      #dasdas          
                 
-@login_required(redirect_field_name='/')
+@login_required
 def otorgar_privilegio(request):
     miembro = get_object_or_404(Group, name='Miembro de Unidad')
     solicitante = get_object_or_404(Group, name='Solicitante')
@@ -108,7 +108,7 @@ def otorgar_privilegio(request):
                                               context_instance=RequestContext(request))
 
 
-@login_required(redirect_field_name='/')
+@login_required
 def registrar_unidad(request):
 	if request.method == "POST":
 		form = RegistroUnidadForm(request.POST)

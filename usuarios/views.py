@@ -1,12 +1,12 @@
 # Create your views here.
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import redirect_to_login
-from django.template import  RequestContext
-from django.shortcuts import render_to_response
-from usuarios.forms import RegistroForm, LoginForm,UserForm
-from usuarios.models import PerfilDeUsuario
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from usuarios.forms import RegistroForm, LoginForm, UserForm
+from usuarios.models import PerfilDeUsuario
+
 
 def index(request):
 #Esta vista permite generar una pantalla sencilla de index, es necesario que se retorne el usuario para identificar
