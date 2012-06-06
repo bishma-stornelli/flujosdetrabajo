@@ -209,7 +209,7 @@ def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404( Flujo, pk = flujo_id)
     if (flujo.unidad in unidades):
-        inicial_final= flujo.inicial_final
+        inicial_final= flujo.inicial_final()
         es_conexo= es_grafo_conexo(flujo)
         flujo_igual= flujo.nombre_parecido()
         if (inicial_final == True &  es_conexo == True):
