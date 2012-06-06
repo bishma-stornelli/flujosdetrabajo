@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h1>{{ paso.nombre }}</h1>
+
+<h2>{{ "Descripción" }}</h2>
+
+<p>{{ paso.descripcion }}</p>
+
+<h2>{{ "Fecha de creación" }}</h2>
+
+<p>{{ paso.fecha_de_creacion }}</p>
+
+<p><span class=".negrita">Flujo:</span> {{ paso.flujo.nombre }}</h2>
+
+<h2><span class=".negrita">Unidad:</span> {{ paso.flujo.unidad.nombre }}</h2>
+
+
+<h2>Sucesores</h2>
+	{% if paso.sucesores.all %}
+        <ul>
+            {% for sucesor in paso.sucesores.all %}
+                <li><a href="/flujos/consultar_paso/{{ sucesor.id }}/">{{ sucesor.nombre }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{{ "No tiene sucesores" }} </p>
+    {% endif %}
+	
+{% endblock %}
+
+{% block submenu %}
+    <ul>
+        <li>Modificar</li>
+    </ul>
+{% endblock %}

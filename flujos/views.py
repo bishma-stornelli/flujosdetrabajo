@@ -103,6 +103,14 @@ def consultar_flujo(request, flujo_id):
     else:
         raise Http404()
 
+@login_required
+def consultar_paso(request, paso_id):
+	paso = get_object_or_404(Paso, pk=paso_id)
+	if paso.flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+		return render_to_response('flujos/consultar_paso.html', {'paso': paso}, context_instance=RequestContext(request))
+	else:
+		raise Http404()
+
 def agregar_paso_flujo(request, flujo_id):
   #  if request.method == 'POST':
    #     form = ErrorSaveForm(request)
