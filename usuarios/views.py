@@ -1,13 +1,15 @@
 # Create your views here.
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import redirect_to_login
+from django.template import  RequestContext
 from django.shortcuts import render_to_response
-from django.template import RequestContext
-from usuarios.forms import RegistroForm, LoginForm, UserForm
+from usuarios.forms import RegistroForm, LoginForm,UserForm
 from usuarios.models import PerfilDeUsuario
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
-
+@login_required()
 def index(request):
 #Esta vista permite generar una pantalla sencilla de index, es necesario que se retorne el usuario para identificar
 #si el usuario esta autenticado o no. 
@@ -58,12 +60,13 @@ def registro(request):
                    # p.save()
 					l=LoginForm()
 					messages.success(request,"La clave y la confirmacion no concuerdan")
-					return render_to_response("usuarios/index.html", context_instance = RequestContext(request))
+					return render_to_response("usuarios/index.html")
 						
 		else:	
 			messages.error(request,"Alguno de los datos provistos tienen un formato equivocado")
 			return render_to_response("usuarios/registro.html",
-						   {"registroform":f }, context_instance = RequestContext(request))
+						   {"registroform":f }, 
+					            context_instance = RequestContext(request))
 			
 #IMPORTANTE: Deberiamos mantener esta vista a pesar de que estemos usando la vista de login generica, 
 # es posible que mas adelante nos demos cuenta que necesitamos hacer algo en el login que no se pueda
@@ -95,7 +98,7 @@ def log_out(request):
 	logout(request)			
 	return render_to_response("usuarios/index.html",{"reg":"Sesion cerrada con exito"}, context_instance = RequestContext(request))
 
-
+@login_required()
 def consultar_datos_usuario(request):
     if request.user.is_authenticated():
         u= User.objects.get(username=request.user)
@@ -106,6 +109,7 @@ def consultar_datos_usuario(request):
         f = LoginForm()
         return render_to_response("usuarios/log_in.html",{"loginform":f}, context_instance = RequestContext(request))
 
+@login_required()
 def cambiar_clave(request):
 
     if request.user.is_authenticated():
@@ -137,9 +141,8 @@ def cambiar_clave(request):
         f = LoginForm()
         return render_to_response("usuarios/log_in.html",{"loginform":f}, context_instance = RequestContext(request))
 
-
+@login_required()
 def modificar_datos_usuario(request):
-	
 	if request.method == "GET":
 		user_form = UserForm(instance=request.user)
 		return render_to_response('usuarios/modificar_datos_usuario.html', { 'user_form': user_form }, context_instance=RequestContext(request))	
