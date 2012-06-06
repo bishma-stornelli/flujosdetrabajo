@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if caminos %}
+<table border="1">
+    <tr><td> Paso origen </td>
+    <td> Paso Destino </td>
+    <td> Descripción </td>
+    <td> Expresion </td>
+    <td> Modificar </td>
+    <td> Eliminar </td>
+    {% for camino in caminos %}
+    <tr>
+        <td>{{ camino.paso_origen }}</td>
+        <td>{{ camino.paso_destino }}</td>
+        <td>{{ camino.descripcion }}</td>
+        <td>{{ camino.expresion }}</td>
+        <td><a href="/flujos/modificar_camino/{{flujo_id}}/{{camino.id}}/">Modificar</a></td>
+        <td><a href="/flujos/eliminar_camino/{{flujo_id}}/{{camino.id}}/">Eliminar</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+{% endif %}
+
+{% endblock %}
+{% block submenu %}
+
+<h1> Caminos </h1>
+<a href="/flujos/agregar_camino/{{flujo_id}}/" class="medium button black">Agregar Camino</a>
+<a href="/flujos/listar_caminos/{{flujo_id}}/" class="medium button black">Listar Caminos</a>
+{% endblock %}
