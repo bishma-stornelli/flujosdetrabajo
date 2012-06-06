@@ -1,13 +1,17 @@
 from django.forms.models import ModelForm
 from django import forms
-from flujos.models import Flujo, Paso, Campo
+from flujos.models import Flujo, Paso, Campo, Criterio
+
+class AgregarCaminoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
+    class Meta:
+        model = Criterio
+        #exclude = ('campos')
 
 class CrearFlujoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:
         model = Flujo
         exclude = ('estado',)
 
-        
 class AgregarCampoForm(forms.Form):
     nombre= forms.CharField(max_length=20, label="Nombre")
     tipo = forms.ChoiceField(choices=Campo.TIPO_CHOICES, label="Tipo")
@@ -35,7 +39,7 @@ class CopiarFlujoForm(ModelForm):
         fields = ('nombre')
 
 
-#class AgregarPasoForm(ModelForm):
+    #class AgregarPasoForm(ModelForm):
 #    class Meta:
 #        model = Paso
 # 

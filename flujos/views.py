@@ -5,9 +5,10 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, ModificarFlujoForm
+from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, ModificarFlujoForm,AgregarCaminoForm
 from flujos.models import Paso, Campo, Flujo
 from unidades.models import Unidad, SolicitudPrivilegio
+from django.contrib.auth.decorators import permission_required
 
 @login_required
 def crear_flujo(request):
@@ -262,3 +263,12 @@ def publicar_flujo(request, flujo_id):
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo publicar o porque no tiene nodo inicial o final o porque no es conexo")
     return listar_flujos_por_publicar(request)
+
+@permission_required('flujos.criterio.add_criterio')
+@login_required()
+def agregar_camino(request, flujo_id):
+    flujo = get_object_or_404(Flujo, pk=flujo_id)
+    #if flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+    form = AgregarCaminoForm()
+    return render_to_response('flujos/agregar_camino.html',
+            {'flujo': flujo,'form':form}, context_instance=RequestContext(request))
