@@ -5,7 +5,7 @@ from flujos.models import Flujo, Paso, Campo
 class CrearFlujoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:
         model = Flujo
-        exclude = ('unidad', 'estado')
+        exclude = ('estado',)
 
         
 class AgregarCampoForm(forms.Form):

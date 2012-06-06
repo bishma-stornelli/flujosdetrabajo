@@ -3,11 +3,12 @@ from django.views.generic.base import TemplateView
 urlpatterns = patterns('flujos.views',
     # Examples:
     # url(r'^crear_paso/$', 'crear_paso'),
-    url(r'^crear_flujo/(?P<unidad_id>\d+)/$', 'crear_flujo'),
+    url(r'^crear_flujo/$', 'crear_flujo'),
     url(r'^listar_flujos/(?P<unidad_id>\d+)/$', 'listar_flujos'),
     url(r'^index/$', TemplateView.as_view(template_name = 'flujos/index.html'), name='flujo_index'),
     url(r'^copiar_flujo/(?P<flujo_id>\d+)$', 'copiar_flujo'),
     url(r'^consultar_flujo/(?P<flujo_id>\d+)/$', 'consultar_flujo'),
+	url(r'^consultar_paso/(?P<paso_id>\d+)/$', 'consultar_paso'),
     url(r'^modificar_flujo/(?P<flujo_id>\d+)/$', 'modificar_flujo'),
     url(r'^publicar_flujo/(?P<flujo_id>\d+)/$', 'copiar_flujo'),
     url(r'^marcar_obsoleto/(?P<flujo_id>\d+)/$', 'marcar_obsoleto'),
