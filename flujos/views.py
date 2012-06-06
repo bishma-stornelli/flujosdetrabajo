@@ -204,6 +204,42 @@ def listar_flujos_por_publicar(request):
          listaFlujo = listaFlujo|Flujo.objects.filter(unidad=u,estado=Flujo.ESTADO_BORRADOR)
     return render_to_response("flujos/publicar_flujo.html", {'listaFlujo':listaFlujo}, context_instance=RequestContext(request))
 
+# Para todos los elementos de temporal, se evalua si ya se encuentra en alcanzables, sino, se agrega
+def mezclar(alcanzables,temporal):
+    for t in temporal:
+        if t not in alcanzables:
+            alcanzables.append(t)
+    return alcanzables
+
+# @alcanzables son todos los nodos alcanzables a partir de un nodo inicial contenido en alcanzable
+# @recorrido son los nodos por el cual se ha pasado
+# return alcanzables
+def dfs(alcanzables,recorrido):
+    while not recorrido == alcanzables:
+        temporal = []
+        for al in alcanzables:
+            if al not in recorrido:
+                recorrido.append(al)
+                temporal.extend(list(Paso.objects.get(paso=al).sucesores.all()))
+                temporal.extend(list(Paso.objects.filter(sucesores=al)))
+        alcanzables = mezclar(alcanzables,temporal)
+    return alcanzables
+# @alcanzables son todos los nodos alcanzables
+# @recorrido son los nodos por el cual se ha pasado
+# @pasos son todos los nodos presentes en el flujo
+# @pas representa el nodo inicial y se le aplicara un dfs para saber si los nodos alcanzables
+# Devuelve True si es un grafo conexo de lo contrario devuelve False
+def es_grafo_conexo(flujo):
+    pasos = Paso.objects.filter(flujo=flujo)
+    for pas in pasos:
+        alcanzables = [pas]
+        recorrido = []
+        if not dfs(alcanzables,recorrido) == list(pasos):
+            return False
+    return True
+    
+
+
 @login_required(redirect_field_name='/')
 def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
@@ -225,39 +261,4 @@ def publicar_flujo(request, flujo_id):
             messages.success(request, "Flujo (" + flujo.nombre + ") no pudo ser publicado.")
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo publicar o porque no tiene nodo inicial o final o porque no es conexo")
-    return listar_flujos_por_publicar(request)  
-
-    # @alcanzables son todos los nodos alcanzables
-    # @recorrido son los nodos por el cual se ha pasado
-    # @pasos son todos los nodos presentes en el flujo
-    # @pas representa el nodo inicial y se le aplicara un dfs para saber si los nodos alcanzables
-    # Devuelve True si es un grafo conexo de lo contrario devuelve False
-    def es_grafo_conexo(flujo):
-        pasos = Paso.objects.filter(flujo=flujo)
-        for pas in pasos:
-            alcanzables = [pas]
-            recorrido = []
-            if not dfs(alcanzables,recorrido) == list(pasos):
-                return False
-        return True
-    
-    # @alcanzables son todos los nodos alcanzables a partir de un nodo inicial contenido en alcanzable
-    # @recorrido son los nodos por el cual se ha pasado
-    # return alcanzables
-    def dfs(alcanzables,recorrido):
-        while not recorrido == alcanzables:
-            temporal = []
-            for al in alcanzables:
-                if al not in recorrido:
-                    recorrido.append(al)
-                    temporal.extend(list(Paso.objects.get(paso=al).sucesores.all()))
-                    temporal.extend(list(Paso.objects.filter(sucesores=al)))
-            alcanzables = mezclar(alcanzables,temporal)
-        return alcanzables
-    
-    # Para todos los elementos de temporal, se evalua si ya se encuentra en alcanzables, sino, se agrega
-    def mezclar(alcanzables,temporal):
-        for t in temporal:
-            if t not in alcanzables:
-                alcanzables.append(t)
-        return alcanzables
+    return listar_flujos_por_publicar(request)
