@@ -3,19 +3,19 @@
 {% block content %}
 
 
-<h1>{{ paso.nombre }}</h1>
+<h1>Paso {{ paso.nombre }}</h1>
 
-<h2>{{ "Descripción" }}</h2>
+<h2>Descripcion</h2>
 
 <p>{{ paso.descripcion }}</p>
 
-<h2>{{ "Fecha de creación" }}</h2>
+<p>Fecha de creacion: {{ paso.fecha_de_creacion }}</p>
 
-<p>{{ paso.fecha_de_creacion }}</p>
+<p>Flujo: {{ paso.flujo.nombre }}</p>
 
-<p><span class=".negrita">Flujo:</span> {{ paso.flujo.nombre }}</h2>
+<p>Unidad: {{ paso.flujo.unidad.nombre }}</p>
 
-<h2><span class=".negrita">Unidad:</span> {{ paso.flujo.unidad.nombre }}</h2>
+
 
 
 <h2>Sucesores</h2>
