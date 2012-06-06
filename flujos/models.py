@@ -126,6 +126,33 @@ class Paso(models.Model):
                                        symmetrical=False,
                                        through='Criterio')
     fecha_de_creacion = models.DateTimeField(auto_now = True)
+    
+    def clone(self):
+        a = Paso()
+        a.nombre = self.nombre
+        a.tipo = self.tipo 
+        a.descripcion = self.descripcion
+        a.flujo = self.flujo
+        a.sucesores = self.sucesores
+        a.fecha_de_creacion = self.fecha_de_creacion
+        criterios_origen = a.criterios_origen.all()
+        criterios_destino = a.criterios_destino.all()
+        criterios_origen_nuevo = []
+        criterios_destino_nuevo = []
+        for i in range(0,a.length):
+            criterios_origen_nuevo[i] = criterios_origen[i].clone()
+            criterios_origen_nuevo[i].paso_origen = a 
+        for i in range(0,c.length):
+            criterios_destino_nuevo[i] = criterios_destino[i].clone()
+            criterios_destino_nuevo[i].paso_destino = a 
+        campos = a.campos.all()
+        campos_nuevos = []
+        for i in range(0,campos.length):
+            campos_nuevos[i] = campos[i].clone()
+            campos_nuevos[i].paso = a 
+            
+        return a
+
    
 
 
@@ -149,12 +176,14 @@ class Flujo(models.Model):
         a = Flujo()
         a.nombre = self.nombre
         a.descripcion = self.descripcion
-        a.ESTADO_BORRADOR = self.ESTADO_BORRADOR
-        a.ESTADO_PUBLICO = self.ESTADO_PUBLICO
-        a.ESTADO_OBSOLETO = self.ESTADO_OBSOLETO
-        a.ESTADO_CHOICES = self.ESTADO_CHOICES
         a.estado = self.estado
         a.unidad = self.unidad
+        b = a.pasos.all()
+    
+        for i in range(0,b.length):
+            c[i] = b[i].clone()
+            c[i].flujo = a 
+        
         return a
     
     def inicial_final(self):
