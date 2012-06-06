@@ -1,0 +1,26 @@
+{% extends "unidades/base.html" %}
+
+{% block content %}
+
+    <h1>Unidades</h1>
+    
+    {% for unidad in  object_list %}
+        <table>
+            <tr>
+                <td><b>Nombre</b></td>
+                <td>{{ unidad.nombre }}</td>
+            </tr>
+            <tr>
+                <td><b>Descripci&oacute;n</b></td>
+                <td>{{ unidad.descripcion }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><a href="/flujos/listar_flujos/{{ unidad.id }}/">Ver flujos</a>
+            </tr>            
+        </table>
+        </BR>
+    {% empty %}
+        <p>{{ "Aún no existe ninguna unidad en el sistema." }}</p>
+    {% endfor %}
+
+{% endblock %}

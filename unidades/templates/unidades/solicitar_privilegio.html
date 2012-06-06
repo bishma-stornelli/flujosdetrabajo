@@ -1,6 +1,8 @@
 {% extends "unidades/base.html" %}
 
+
 {% block content %}
+   <h1>Solicitar Privilegios</h1>
     <form action="/unidades/solicitar_privilegio/" method="POST">{% csrf_token %}
       <table>
         {{ form.as_table }}
