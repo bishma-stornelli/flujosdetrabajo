@@ -1,18 +1,14 @@
 {% extends "base.html" %}
-
-{% block title %} {{ "Iniciar sesión" }} {% endblock %}
-
+{% block title %}Login{% endblock %}
 {% block submenu %}
-    <form action="/usuarios/login/" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <p><input type="submit" value="{{ "Iniciar sesión" }}" /></p>
-    <input type="hidden" name="next" value="{{next}}" />
-</form>
+<h1>Login</h1>
 {% endblock %}
-
 {% block content %}
-    <p> {{ "Al iniciar sesión usted podrá hacer tales funcionalidades" }} </p>
-
+<table>
+<form action="/usuarios/login/" method="post">
+	{% csrf_token %}
+	{{form.as_table}}
+    <tr><td></td><td><input type="submit" value="login" /><input type="hidden" name="next" value="{{next}}" /></td></tr>
+</form>
+</table>
 {% endblock %}

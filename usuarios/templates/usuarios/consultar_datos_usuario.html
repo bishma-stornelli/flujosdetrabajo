@@ -1,20 +1,19 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Perfil de Usuario</title>
-</head>
-<body>
-<h1 class="titulo1">Perfil de Usuario</h1>
-<div class="perfil">
-    <div>
-        <p> Username: {{ usr.username }} </p>
-        <p> Nombre: {{ usr.first_name }} </p>
-        <p> Apellido: {{ usr.last_name }} </p>
-        <p> DNI: {{ perfil }} </p>
-        <p> Email: {{ usr.email }} </p>
-    </div>
-</div>
-<a href="/index/">Regresar</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Perfil de Usuario{% endblock %}
+{% block content %}
+<h1>Perfil de Usuario</h1>
+<table>
+    <tr><td>Username:</td><td>{{ usr.username }}</td></tr>
+    <tr><td>Nombre:</td><td>{{ usr.first_name }}</td></tr>
+    <tr><td>Apellido:</td><td>{{ usr.last_name }}</td></tr>
+    <tr><td>DNI:</td><td> {{ perfil }}</td></tr>
+    <tr><td>Email:</td><td>{{ usr.email }}}</td></tr>
+</table>
+{% endblock %}
+{% block submenu %}
+
+<h1> Usuarios </h1>
+<a href="/usuarios/consultar_datos_usuario/" class="medium button black">Consultar Perfil</a>
+<br>
+<a href="/usuarios/modificar_datos_usuario/" class="medium button black">Modificar Perfil</a>
+{% endblock %}
