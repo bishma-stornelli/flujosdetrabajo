@@ -23,7 +23,7 @@
 		<input type="hidden" name="id" value='{{priv.id}}'/>
 		<tr>
 		  <td> <b>Solicitante</b> </td>
-		  <td> {{ priv.solicitante.lastname }},{{ priv.solicitante.name }}</td>
+		  <td> {{ priv.solicitante.last_name }},{{ priv.solicitante.first_name }}</td>
 		</tr>
         <tr>
         	<td> <b>Unidad:</b>
@@ -48,10 +48,10 @@
         {% csrf_token %}
         <table>
         <input type="hidden" name="id" value='{{priv.id}}' />
-        <tr>
-          <td> <b>Solicitante</b> </td>
-          <td> {{ priv.solicitante.lastname }},{{ priv.solicitante.name }}</td>
-        </tr>
+	<tr>
+	  <td> <b>Solicitante</b> </td>
+	  <td> {{ priv.solicitante.last_name }},{{ priv.solicitante.first_name }}</td>
+	</tr>
         <tr>
             <td> <b>Unidad:</b>
             <td>{{ priv.unidad.nombre }}</td>
@@ -75,10 +75,10 @@
         {% csrf_token %}
         <table>
         <input type="hidden" name="id" value='{{priv.id}}' />
-        <tr>
-          <td> <b>Solicitante</b> </td>
-          <td> {{ priv.solicitante.lastname }},{{ priv.solicitante.name }}</td>
-        </tr>
+	<tr>
+	  <td> <b>Solicitante</b> </td>
+	  <td> {{ priv.solicitante.last_name }},{{ priv.solicitante.first_name }}</td>
+	</tr>
         <tr>
             <td> <b>Unidad:</b>
             <td>{{ priv.unidad.nombre }}</td>

@@ -22,12 +22,12 @@ class Unidad(models.Model):
     #     SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE
     def permite(self, usuario, permiso):
         if permiso == SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE:
-            if usuario in self.solicitantes:
+            if self in usuario.unidades_solicitantes.all():
                 return True
             else:
                 return False
         elif permiso == SolicitudPrivilegio.PRIVILEGIO_MIEMBRO:
-            if usuario in self.miembros:
+            if self in usuario.unidades_miembros.all():
                 return True
             else:
                 return False
@@ -40,17 +40,6 @@ class Unidad(models.Model):
 
 #haaa
 class SolicitudPrivilegio(models.Model):
-    #posibles_privilegios = (
-	#		      ("Miembro de Unidad","Miembro de Unidad"),
-	#		      ("Responsable de Unidad","Responsable de Unidad"),
-	#		      ("Solicitante","Solicitante"),
-	#		    )
-    #posibles_estados = (
-    #                        ("En espera","En espera"),
-    #                        ("Aceptado","Aceptado"),
-    #                    )
-    #estado = models.CharField(max_length=30,choices = posibles_estados,default="En espera")
-    #privilegio = models.CharField(max_length=30,choices = posibles_privilegios)
     mensaje= models.TextField()
     solicitante = models.ForeignKey(User)
     unidad = models.ForeignKey(Unidad)
