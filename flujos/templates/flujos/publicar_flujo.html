@@ -2,22 +2,22 @@
 
 # Template que muestra una lista de flujos que pueden ser publicados
 # Requiere dos variables:
-# listaFlujo que contiene la lista de flujos que estan asociados a las unidades a las cuales el actual usuario es responsable
-
+# listaFlujo que contiene la lista de flujos que estan asociados a las unidades a las cuales el actual usuario es responsable y que su estado sea BORRADOR
 {% block content %}
+	<h1 align="center"> Publicar Flujos </h1>
 	{% if listaFlujo %}
 		<table>
 			<tr>
 				<th>Unidad</th>
 				<th>Nombre</th> 
 				<th>Descripcion</th> 
-				<th>Marcar</th>
+				<th>Publicar</th>
 			</tr>
 			{% for flujo in listaFlujo %}
 			<tr>
 				<td>{{ flujo.unidad }}</td>
 				<td>{{ flujo.nombre }}</td>
-				<td>{{ flujo.descripcion }}</td>\
+				<td>{{ flujo.descripcion }}</td>
 				<td><a onclick="return confirm('¿Esta seguro que quiere este flujo como obsoleto?')" href="/flujos/publicar_flujo/{{ flujo.id }}/">Publicar</a></td>
 			</tr>
 			{% endfor %}
