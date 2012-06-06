@@ -201,7 +201,6 @@ def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404( Flujo, pk = flujo_id)
     if (flujo.unidad in unidades):
-        
         flujo.estado = Flujo.ESTADO_PUBLICO
         flujo.save()
         messages.success(request, "Flujo (" + flujo + ") publicado.")
