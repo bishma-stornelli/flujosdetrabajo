@@ -188,19 +188,18 @@ class Flujo(models.Model):
     
     def inicial_final(self):
         valido=False
-        pasos_final = Paso.objects.filter(flujo=self, tipo = 2)
+        pasos_final = Paso.objects.filter(flujo=self, tipo = Paso.TIPO_FINAL)
         if pasos_final != Paso.objects.none():
             valido=True
         elif pasos_final == Paso.objects.none():
             valido=False
-        pasos_inicial= Paso.objects.filter(flujo=self, tipo = 1)
+        pasos_inicial= Paso.objects.filter(flujo=self, tipo = Paso.TIPO_INICIAL)
         if pasos_inicial != Paso.objects.none():
             valido=True
         elif pasos_inicial == Paso.objects.none():
             valido=False
         return valido
     
-    
-    
-
-
+    def nombre_parecido(self):
+        parecidos_nombre = Flujo.objects.filter(nombre=self.nombre,unidad = self.unidad, estado=Flujo.ESTADO_PUBLICO)
+        return parecidos_nombre

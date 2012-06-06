@@ -210,11 +210,28 @@ def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404( Flujo, pk = flujo_id)
     if (flujo.unidad in unidades):
+<<<<<<< HEAD
         flujo.estado = Flujo.ESTADO_PUBLICO
         flujo.save()
         messages.success(request, "Flujo (" + flujo + ") publicado.")
+=======
+        inicial_final= flujo.inicial_final
+        es_conexo= True
+        flujo_igual= flujo.nombre_parecido()
+        if (inicial_final == True &  es_conexo == True):
+            if set(flujo_igual) == set(Flujo.objects.none()):
+                flujo.estado = Flujo.ESTADO_PUBLICO
+                flujo.save()
+                messages.success(request, "Flujo (" + flujo.nombre + ") publicado.")
+            elif set(flujo_igual) != set(Flujo.objects.none()):
+                messages.error(request, "Flujo (" + flujo.nombre + "ya existe con este nombre si quiere puede marcarlo como obsoleto y volver a publicarlo o no se podra publicar ")
+                return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':flujo_igual}, context_instance=RequestContext(request))
+                
+        else :
+            messages.success(request, "Flujo (" + flujo.nombre + ") no pudo ser publicado.")
+>>>>>>> 58ec7fe162906da4c943a134400d73ed8e9f2bf1
     else :
-        messages.error(request, "Error: el flujo seleccionado no se pudo publicar.")
+        messages.error(request, "Error: el flujo seleccionado no se pudo publicar o porque no tiene nodo inicial o final o porque no es conexo")
     return listar_flujos_por_publicar(request)  
 
     # @alcanzables son todos los nodos alcanzables
