@@ -67,12 +67,12 @@ def otorgar_privilegio(request):
                 unidad= Unidad.objects.get(id=priv.unidad.id)
                 if priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_MIEMBRO:
                     unidad.miembros.add(priv.solicitante)
-                    priv.solicitante.groups.add(miembro)
+                    #priv.solicitante.groups.add(miembro)
                 elif priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE:
                     unidad.solicitantes.add(priv.solicitante)
-                    priv.solicitante.groups.add(solicitante)
+                    #priv.solicitante.groups.add(solicitante)
                 elif priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE:
-                    priv.solicitante.groups.add(responsable)
+                    #priv.solicitante.groups.add(responsable)
                     unidad.responsable = priv.solicitante
                     unidad.save()
                 listaMiembro=SolicitudPrivilegio.objects.none()

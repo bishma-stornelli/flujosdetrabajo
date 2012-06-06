@@ -15,16 +15,16 @@ class Alerta(models.Model):
     solicitante_es_receptor = models.BooleanField()
     tipos = models.ManyToManyField('TipoAlerta', related_name='alertas')
 
-def clone(self):
-    a = Alerta()
-    a.descripcion = self.descripcion
-    a.mostar_al_llegar = self.mostar_al_llegar
-    a.paso = self.paso
-    a.plantilla = self.plantilla
-    a.miembro_es_receptor = self.miembro_es_receptor
-    a.solicitante_es_receptor = self.solicitante_es_receptor
-    a.tipos = self.tipos
-    return a
+    def clone(self):
+        a = Alerta()
+        a.descripcion = self.descripcion
+        a.mostar_al_llegar = self.mostar_al_llegar
+        a.paso = self.paso
+        a.plantilla = self.plantilla
+        a.miembro_es_receptor = self.miembro_es_receptor
+        a.solicitante_es_receptor = self.solicitante_es_receptor
+        a.tipos = self.tipos
+        return a
 
 class TipoAlerta(models.Model):
     nombre = models.CharField(max_length=30)
@@ -174,7 +174,3 @@ class Flujo(models.Model):
     def nombre_parecido(self):
         parecidos_nombre = Flujo.objects.filter(nombre=self.nombre,unidad = self.unidad, estado=Flujo.ESTADO_PUBLICO)
         return parecidos_nombre
-        
-        
-        
-                 
