@@ -18,7 +18,7 @@
 				<td>{{ flujo.unidad }}</td>
 				<td>{{ flujo.nombre }}</td>
 				<td>{{ flujo.descripcion }}</td>\
-				<td><a href="/flujos/publicar_flujo/{{ flujo.id }}/</td>
+				<td><a onclick="return confirm('¿Esta seguro que quiere este flujo como obsoleto?')" href="/flujos/publicar_flujo/{{ flujo.id }}/">Publicar</a></td>
 			</tr>
 			{% endfor %}
 		</table>
