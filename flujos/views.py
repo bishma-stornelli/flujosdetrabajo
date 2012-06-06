@@ -210,13 +210,11 @@ def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404( Flujo, pk = flujo_id)
     if (flujo.unidad in unidades):
-<<<<<<< HEAD
         flujo.estado = Flujo.ESTADO_PUBLICO
         flujo.save()
         messages.success(request, "Flujo (" + flujo + ") publicado.")
-=======
         inicial_final= flujo.inicial_final
-        es_conexo= True
+        es_conexo= es_grafo_conexo(flujo)
         flujo_igual= flujo.nombre_parecido()
         if (inicial_final == True &  es_conexo == True):
             if set(flujo_igual) == set(Flujo.objects.none()):
@@ -229,7 +227,6 @@ def publicar_flujo(request, flujo_id):
                 
         else :
             messages.success(request, "Flujo (" + flujo.nombre + ") no pudo ser publicado.")
->>>>>>> 58ec7fe162906da4c943a134400d73ed8e9f2bf1
     else :
         messages.error(request, "Error: el flujo seleccionado no se pudo publicar o porque no tiene nodo inicial o final o porque no es conexo")
     return listar_flujos_por_publicar(request)  
