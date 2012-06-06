@@ -5,7 +5,7 @@ from flujos.models import Flujo, Paso, Campo, Criterio
 class AgregarCaminoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:
         model = Criterio
-        #exclude = ('campos')
+        exclude = ('campos')
 
 class CrearFlujoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:

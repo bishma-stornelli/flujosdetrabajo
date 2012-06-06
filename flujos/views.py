@@ -267,8 +267,6 @@ def publicar_flujo(request, flujo_id):
 @permission_required('flujos.criterio.add_criterio')
 @login_required()
 def agregar_camino(request, flujo_id):
-    flujo = get_object_or_404(Flujo, pk=flujo_id)
-    #if flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
     if request.POST:
         form = AgregarCaminoForm(request.POST)
         if form.is_valid():
