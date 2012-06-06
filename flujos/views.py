@@ -236,7 +236,7 @@ def es_grafo_conexo(flujo):
         recorrido = []
         if not dfs(alcanzables,recorrido) == list(pasos):
             return False
-    return True
+    return True 
     
 
 
