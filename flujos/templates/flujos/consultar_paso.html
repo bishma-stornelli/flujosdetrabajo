@@ -4,6 +4,8 @@
 
 
 <h1>Paso {{ paso.nombre }}</h1>
+<p style="font-size: 0.7em">Tipo: {{ paso.get_tipo_display }}</p>
+<p>Flujo al que pertenece: {{ paso.flujo.nombre }}</p>
 
 <h2>Descripcion</h2>
 
@@ -11,10 +13,19 @@
 
 <p>Fecha de creacion: {{ paso.fecha_de_creacion }}</p>
 
-<p>Flujo: {{ paso.flujo.nombre }}</p>
-
-<p>Unidad: {{ paso.flujo.unidad.nombre }}</p>
-
+<h2>Criterios</h2>
+	
+	{% if paso.criterios_destino.all %}
+		<ul>
+			{% for criterio in paso.criterios_destino.all %}
+				<li>Paso: <a href="/flujos/consultar_paso/{{ criterio.paso_origen.id }}/">{{ criterio.paso_origen.nombre }}</a></li> 
+				<p>Descripcion: {{ criterio.descripcion }}</p>
+				<p>Expresion: {{ criterio.expresion }}</p>
+			{% endfor %}
+		</ul>
+    {% else %}
+        <p>No hay criterios para llegar a {{paso.nombre}} </p>
+    {% endif %}
 
 
 
