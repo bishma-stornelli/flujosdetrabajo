@@ -267,8 +267,21 @@ def publicar_flujo(request, flujo_id):
 @permission_required('flujos.criterio.add_criterio')
 @login_required()
 def agregar_camino(request, flujo_id):
-    flujo = get_object_or_404(Flujo, pk=flujo_id)
+    #flujo = get_object_or_404(Flujo, pk=flujo_id)
     #if flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
-    form = AgregarCaminoForm()
-    return render_to_response('flujos/agregar_camino.html',
-            {'flujo': flujo,'form':form}, context_instance=RequestContext(request))
+    if request.POST:
+        form = AgregarCaminoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = AgregarCaminoForm()
+            messages.success(request, "Camino almacenado exitosamente")
+            return render_to_response('flujos/agregar_camino.html',
+                    {'form':form,'flujo_id':flujo_id}, context_instance=RequestContext(request))
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+            return render_to_response('flujos/agregar_camino.html',
+                {'form':form,'flujo_id':flujo_id}, context_instance=RequestContext(request))
+    else:
+        form = AgregarCaminoForm()
+        return render_to_response('flujos/agregar_camino.html',
+                {'form':form,'flujo_id':flujo_id}, context_instance=RequestContext(request))

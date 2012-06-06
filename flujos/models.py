@@ -85,6 +85,9 @@ class Campo(models.Model):
         a.paso = self.paso
         return a
 
+    def __str__(self):
+        return self.nombre
+
 class Criterio(models.Model):
     paso_origen = models.ForeignKey('Paso', related_name='criterios_origen')
     paso_destino = models.ForeignKey('Paso', related_name='criterios_destino')
@@ -153,6 +156,8 @@ class Paso(models.Model):
             
         return a
 
+    def __str__(self):
+        return self.nombre
    
 
 
