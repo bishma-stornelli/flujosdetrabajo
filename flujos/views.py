@@ -267,7 +267,7 @@ def publicar_flujo(request, flujo_id):
 @permission_required('flujos.criterio.add_criterio')
 @login_required()
 def agregar_camino(request, flujo_id):
-    #flujo = get_object_or_404(Flujo, pk=flujo_id)
+    flujo = get_object_or_404(Flujo, pk=flujo_id)
     #if flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
     if request.POST:
         form = AgregarCaminoForm(request.POST)
@@ -283,5 +283,8 @@ def agregar_camino(request, flujo_id):
                 {'form':form,'flujo_id':flujo_id}, context_instance=RequestContext(request))
     else:
         form = AgregarCaminoForm()
+        form.fields["paso_origen"].queryset = Paso.objects.filter(flujo=flujo_id)
+        form.fields["paso_destino"].queryset = Paso.objects.filter(flujo=flujo_id)
+        #form.fields["campos"].queryset = Paso.objects.filter(flujo=flujo_id)
         return render_to_response('flujos/agregar_camino.html',
                 {'form':form,'flujo_id':flujo_id}, context_instance=RequestContext(request))
