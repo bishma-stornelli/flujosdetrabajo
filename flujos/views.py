@@ -5,8 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, \
-    ModificarFlujoForm
+from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, ModificarFlujoForm
 from flujos.models import Paso, Campo, Flujo
 from unidades.models import Unidad, SolicitudPrivilegio
 
@@ -210,9 +209,6 @@ def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404( Flujo, pk = flujo_id)
     if (flujo.unidad in unidades):
-        flujo.estado = Flujo.ESTADO_PUBLICO
-        flujo.save()
-        messages.success(request, "Flujo (" + flujo + ") publicado.")
         inicial_final= flujo.inicial_final
         es_conexo= es_grafo_conexo(flujo)
         flujo_igual= flujo.nombre_parecido()

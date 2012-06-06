@@ -29,10 +29,10 @@ class ModificarFlujoForm(ModelForm):
 		
 
 
-class CopiarFlujoForm()
-class meta:
-    model = Paso
-    fields = ('nombre')
+class CopiarFlujoForm(ModelForm):
+    class meta:
+        model = Paso
+        fields = ('nombre')
 
 
 #class AgregarPasoForm(ModelForm):
