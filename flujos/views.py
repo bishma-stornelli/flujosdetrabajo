@@ -204,6 +204,7 @@ def publicar_flujo(request, flujo_id):
     if (flujo.unidad in unidades):
         inicial_final= flujo.inicial_final()
         if inicial_final == True :
+            
             flujo.estado = Flujo.ESTADO_PUBLICO
             flujo.save()
             messages.success(request, "Flujo (" + flujo + ") publicado.")

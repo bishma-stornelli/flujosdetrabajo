@@ -172,11 +172,8 @@ class Flujo(models.Model):
         return valido
     
     def nombre_parecido(self):
-        parecidos_nombre = Flujo.objects.filter(nombre__icontains=self.nombre,unidad = self.unidad, estado=Flujo.ESTADO_PUBLICO)
+        parecidos_nombre = Flujo.objects.filter(nombre=self.nombre,unidad = self.unidad, estado=Flujo.ESTADO_PUBLICO)
         return parecidos_nombre
-    
-    def paso_parecido(self):
-        parecido_pasos = Flujo.objects.filter(pasodgfdsg= self.pasos)
         
         
         
