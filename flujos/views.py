@@ -200,10 +200,11 @@ def marcar_obsoleto(request, flujo_id):
 
 def eliminar_paso(request, paso_id):
     paso = get_object_or_404(Paso, pk=paso_id)
-    flujo = paso.flujo
-    if request.method == "GET":
-        if(paso):    
-            paso.delete()
+    if not flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
+        return HttpResponseRedirect(reverse("flujo_index"))
+    paso.delete()
+    messages.success(request, "Paso eliminado exitosamente.")
     return HttpResponseRedirect(reverse("flujo_index"))
 
 
