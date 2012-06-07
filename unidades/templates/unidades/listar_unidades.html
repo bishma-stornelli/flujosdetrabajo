@@ -16,6 +16,10 @@
             </tr>
             <tr>
                 <td colspan="2"><a href="/flujos/listar_flujos/{{ unidad.id }}/">Ver flujos</a>
+                {% if unidad.responsable == user %}
+                <a href="/unidades/configurar_unidad/{{ unidad.id }}/">Configurar Unidad</a>
+                {% endif %}
+                </td>
             </tr>            
         </table>
         </BR>

@@ -110,16 +110,20 @@ def otorgar_privilegio(request):
 
 @login_required
 def registrar_unidad(request):
-	if request.method == "POST":
-		form = RegistroUnidadForm(request.POST)
-		if form.is_valid():
-			form.save()
-			messages.success( request , "Registro de unidad exitoso.")
-			return HttpResponseRedirect(reverse("unidades_index"))
-		else:
-			messages.error(request, "Verifique los datos e intente de nuevo.")
-	else:
-		form = RegistroUnidadForm()
+    if not request.user.is_staff:
+        messages.error( request , "Solo el administrador puede crear unidades")
+        return HttpResponseRedirect(reverse("unidades_index"))
+
+    if request.method == "POST":
+        form = RegistroUnidadForm(request.POST)
+        if form.is_valid():
+		form.save()
+		messages.success( request , "Registro de unidad exitoso.")
+		return HttpResponseRedirect(reverse("unidades_index"))
+        else:
+		messages.error(request, "Verifique los datos e intente de nuevo.")
+    else:
+	form = RegistroUnidadForm()
 	return render_to_response("unidades/registrar_unidad.html", {'form':form}, context_instance=RequestContext(request))
 
 def configurar_unidad(request, unidad_id):
