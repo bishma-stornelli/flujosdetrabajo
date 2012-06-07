@@ -131,8 +131,12 @@ def listar_pasos(request, flujo_id):
     pasos = Paso.objects.filter(flujo=flujo)
     return render_to_response('flujos/listar_pasos.html', {'pasos': pasos})
     
+@login_required
 def modificar_paso(request, paso_id):
     paso = get_object_or_404(Paso, pk=paso_id)
+    if not paso.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
+        return HttpResponseRedirect(reverse("flujo_index"))
     if request.method == "POST":
         form = ModificarPasoForm(request.POST, instance=paso)
         if form.is_valid():
