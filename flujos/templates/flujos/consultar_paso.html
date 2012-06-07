@@ -15,6 +15,19 @@
 
 <h2> Campos </h2>
 
+<table>
+{%for campo in paso.campos.all %}
+    <tr>
+         <td>
+             <a href="/flujos/consultar_campo/{{ campo.id }}/"> campo.nombre </a>
+        </td>
+    </tr>
+{% empty %}
+    No hay campos para el paso
+{% endfor %}
+</table>
+
+
 <p>{{ paso.descripcion }}</p>
 
 <h2>Criterios</h2>
@@ -73,7 +86,7 @@
 
 {% block submenu %}
 
-        <li><a href="flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</li>
-        <li><a href="flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</li>
+        <li><a href="/flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</li>
+        <li><a href="/flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</li>
 
 {% endblock %}
