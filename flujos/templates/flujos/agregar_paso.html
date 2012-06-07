@@ -1,0 +1,12 @@
+{% extends "base.html"%}
+{% block title %} Agregar paso {% enblock %}
+{% block head %} Agregar paso {% endblock %}
+{% content %}
+<form action="." method="post">
+{% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+<input type="submit" value="Submit">
+</form>
+{% endblock %}

@@ -5,8 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, \
-    ModificarFlujoForm, AgregarCaminoForm, CopiarFlujoForm
+from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, CopiarFlujoForm
 from flujos.models import Paso, Campo, Flujo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
 
@@ -127,20 +126,6 @@ def consultar_paso(request, paso_id):
     else:
         raise Http404()
 
-def agregar_paso_flujo(request, flujo_id):
-  #  if request.method == 'POST':
-   #     form = ErrorSaveForm(request)
-    #    if form.is_valid():
-            
-
-
-     #       return HttResponseRedirect('')
-    #else:
-     #   form = ErrorSaveForm()
-
-    #return render_to_response('agregar_paso.html', {'form': form})
-    pass
-    
 def listar_pasos(request, flujo_id):
     flujo = get_object_or_404(Flujo , pk=flujo_id)
     pasos = Paso.objects.filter(flujo=flujo)
