@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm
-from flujos.models import Flujo
+from flujos.forms import CrearFlujoForm, ModificarCampoForm
+from flujos.models import Flujo, Campo
 from unidades.models import Unidad, SolicitudPrivilegio
 
 
@@ -80,3 +80,21 @@ def listar_flujos(request):
 
 def copiar_flujo(request, flujo_id):
     pass
+
+def modificar_campo(request, campo_id):
+    # Si no existe campo con id campo_id envio error 404
+    campo = get_object_or_404(Campo, pk=campo_id)
+    if request.method == 'POST':
+        form = ModificarCampoForm(request.POST,instance = campo)
+        if form.is_valid():   
+            campo = form.save(commit=False)
+            campo.save()
+            messages.success(request, "Campo actualizado exitosamente.")
+            return HttpResponseRedirect("/flujos/modificar_campo/%s/" % campo_id)
+        else:
+            messages.error(request, "Verifique los campos introducidos e intente de nuevo.")
+    else:
+         form = ModificarCampoForm(instance=campo)
+         return render_to_response("flujos/modificar_campo.html", {'form': form,
+                                                          'campo_id': campo_id },
+                                        context_instance=RequestContext(request))

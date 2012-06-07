@@ -1,5 +1,5 @@
 from django.forms.models import ModelForm
-from flujos.models import Flujo, Paso
+from flujos.models import Flujo, Paso, Campo
 
 class CrearFlujoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:
@@ -15,3 +15,8 @@ class AgregarPasoForm(ModelForm):
  
     
 >>>>>>> 27032f4d98f0d01a76cb0f3046b40806a2eb017e
+
+class ModificarCampoForm(ModelForm):
+    class Meta:
+        model = Campo
+ 
