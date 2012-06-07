@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "flujos/base.html" %}
 {% block title %}Agregar Camino a flujo{% endblock %}
 {% block content %}
 <h1>Agregar Camino A Flujo</h1>
@@ -12,8 +12,8 @@
 </table>
 {% endblock %}
 {% block submenu %}
-
-<h1> Caminos </h1>
+{{ block.super }}
+        <li><h2>Opciones<h2></li>
 <a href="/flujos/agregar_camino/{{flujo_id}}/" class="medium button black">Agregar Camino</a>
 <a href="/flujos/listar_caminos/{{flujo_id}}/" class="medium button black">Listar Caminos</a>
 {% endblock %}

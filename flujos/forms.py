@@ -1,5 +1,6 @@
-from django.forms.models import ModelForm
 from django import forms
+from django.forms.models import ModelForm
+from django.forms.util import ErrorList
 from flujos.models import Flujo, Paso, Campo, Criterio
 
 class AgregarCaminoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
@@ -11,6 +12,17 @@ class CrearFlujoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:
         model = Flujo
         exclude = ('estado',)
+    
+    # Sobreescrito el constructor para anadir el parametro usuario para poder limitar las unidades
+    # a las unidades que el usuario es responsable
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None, 
+        initial=None, error_class=ErrorList, label_suffix=':', 
+        empty_permitted=False, instance=None, usuario=None):
+        ModelForm.__init__(self, data=data, files=files, auto_id=auto_id, prefix=prefix, initial=initial, error_class=error_class, label_suffix=label_suffix, empty_permitted=empty_permitted, instance=instance)
+        unidades = [(0, "------------")]
+        for unidad in usuario.unidades_responsable.all():
+            unidades.append( (unidad.id,unidad.nombre) )
+        self.fields['unidad'].choices = unidades
 
 class AgregarCampoForm(forms.Form):
     nombre= forms.CharField(max_length=20, label="Nombre")

@@ -47,7 +47,9 @@ div#submenu {
     position:absolute;
     
 }
-
+div#submenu ul {
+    list-style-type: none;
+}
 ul#top_menu {
     margin-left: 20%; 
 }
@@ -84,24 +86,8 @@ background-color: #DCDCDC;
 color: #FFFFFF;
 }
 
-ul.messages  {
-    padding: 2%;
-    text-align: justify;
-    margin-left: 24%;
-    background-color: #ffffff;
-    border-right: groove thin;
-    border-left: groove thin;
-}
 
-ul.messages li.error {
-    color: #FF0000;
-}
-
-ul.messages li.success {
-    color: #00FF00;
-}
-
-.button, .button:visited { /* botones genéricos */
+div#submenu ul li a, .button, .button:visited { /* botones genéricos */
   background: #222 url(URL_overlay.png) repeat-x;
   display: inline-block;
   padding: 5px 10px 6px;
@@ -116,11 +102,11 @@ ul.messages li.success {
   position: relative;
   cursor:pointer
 }
-.button:hover { /* el efecto hover */
+div#submenu ul li a, .button:hover { /* el efecto hover */
   background-color: #111
   color: #FFF;
 }
-.button:active{  /* el efecto click */
+div#submenu ul li a, .button:active{  /* el efecto click */
   top: 1px;
 }
 
@@ -129,15 +115,9 @@ ul.messages li.success {
   font-size: 11px ;
 }
 
-div#submenu a {
-  font-size: 13px;
-  font-weight: bold;
-  line-height: 1;
-  text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
-}
 
  /* botones medianos */
-.button, .button:visited,.medium.button, .medium.button:visited {
+div#submenu ul li a, div#submenu ul li a:visited, .button, .button:visited,.medium.button, .medium.button:visited {
   font-size: 13px;
   font-weight: bold;
   line-height: 1;
@@ -159,5 +139,24 @@ div#submenu a {
 .blue.button, .blue.button:visited { background-color: #2981E4; }
 .blue.button:hover{ background-color: #2575CF; }
 
-.black.button, .black.button:visited { background-color: #000000; }
-.black.button:hover{ background-color: #708090; }
+div#submenu ul li a:visited, .black.button, .black.button:visited { background-color: #000000; }
+div#submenu ul li a:hover, .black.button:hover{ background-color: #708090; }
+
+.messages {
+    list-style-type: none;    
+    font-weight: bold;
+    text-align: justify;
+}
+
+
+.error {
+    background-color: #CC0000;
+}
+
+.success {
+    background-color: #66FF66;
+}
+
+.info {
+    background-color: #CCFF99;
+}

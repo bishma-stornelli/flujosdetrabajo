@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "flujos/base.html" %}
 
 {% block content %}
 {% if caminos %}
@@ -25,6 +25,8 @@
 
 {% endblock %}
 {% block submenu %}
+{{ block.super }}
+        <li><h2>Opciones<h2></li>
 
 <h1> Caminos </h1>
 <a href="/flujos/agregar_camino/{{flujo_id}}/" class="medium button black">Agregar Camino</a>

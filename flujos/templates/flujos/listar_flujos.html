@@ -1,42 +1,39 @@
-{% extends "base.html" %}
+{% extends "flujos/base.html" %}
 
 {% block content %}
-{% if flujos %}
-<table>
-  <thead> Nombre </thead> 
-  <thead> Descripcion </thead> 
-  <thead> Consultar </thead>
-  <thead> Modificar </thead>
-  <thead> Eliminar </thead> 
-  {% for flujo in flujos %}
-  
-  <tr>
-    
-   <td>
-    {{ flujo.nombre }}
-   </td>
-   <td>
-    {{ flujo.descripcion }}
-   </td>
-   <td>
-    <a href="/flujos/consultar_flujo/{{ flujo.id }}/"> Consultar</a>
-   </td>
-      <td>
-          <a href="/flujos/copiar_flujo/{{ flujo.id }}/"> Copiar</a>
-      </td>
-   <td>
-    <a href="/flujos/modificar_flujo/{{ flujo.id }}/"> Modificar </a>
-   </td>
-   <td>
-    <a href=""> No hay Eliminar </a>
-   </td>
-   <td>
-    
-   </td>
-  </tr>
-  {% endfor %}
-</table>
-{% else %}
-{% endif %}
+    <h1>Flujos</h1>
+    <table>
+    <tr>
+      <th> Nombre </th> 
+      <th> Descripcion </th> 
+      <th> Estado </th> 
+      <th> Consultar </th>
+      <th> Modificar </th>
+    </tr>
+      {% for flujo in flujos %}
+      
+      <tr>
+        
+       <td>
+        {{ flujo.nombre }}
+       </td>
+       <td>
+        {{ flujo.descripcion }}
+       </td>
+       <td>
+        {{ flujo.get_estado_display }}
+       </td>
+       <td>
+        <a href="/flujos/consultar_flujo/{{ flujo.id }}/">Consultar</a>
+       </td>
+       <td>
+        <a href="/flujos/modificar_flujo/{{ flujo.id }}/">Modificar</a>
+       </td>
+      </tr>
+      
+      {% empty %}
+      <tr><td colspan="5">{{ "No se ha creado ningún flujo" }}</td></tr>
+      {% endfor %}
+    </table>
 
 {% endblock %}

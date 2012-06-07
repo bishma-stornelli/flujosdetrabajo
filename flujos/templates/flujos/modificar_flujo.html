@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "flujos/base.html" %}
 
 # Template index de unidades
 # Requiere la variable unidades
@@ -23,7 +23,8 @@
 
 
 {% block submenu %}
-<h1> Caminos </h1>
+{{ block.super }}
+        <li><h2>Opciones<h2></li>
 <a href="/flujos/agregar_camino/{{flujo_id}}/" class="medium button black">Agregar Camino</a>
 <a href="/flujos/listar_caminos/{{flujo_id}}/" class="medium button black">Listar Caminos</a>
 {% endblock %}

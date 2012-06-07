@@ -15,13 +15,14 @@ def crear_flujo(request):
     if request.method == 'POST':
         
         # Creo el form con los datos que llegaron del cliente
-        form = CrearFlujoForm(request.POST)
+        form = CrearFlujoForm(request.POST, usuario=request.user)
         if form.is_valid():   
             # Si no existe unidad con id unidad_id envio error 404
             unidad = form.cleaned_data['unidad']
             # Verifico que el usuario que crea el flujo es responsable de la unidad a la que se asociara
             if not unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
-                return Http404()
+                messages.error(request,"Solo los responsables de unidad pueden crear flujos.")
+                return HttpResponseRedirect(reverse("flujo_index"))
             flujo = form.save() 
             # SI ES EXITOSO REGRESO CON HttpResponseRedirect
             # SINO DEJO QUE AL FINAL SE PONGA CON render_to_response
@@ -31,7 +32,7 @@ def crear_flujo(request):
             messages.error(request, "Verifique los campos introducidos e intente de nuevo.")
     else:
         # Si no es POST creo un form vacio
-        form = CrearFlujoForm(initial={'unidad': request.GET.get('unidad', '')})
+        form = CrearFlujoForm(initial={'unidad': request.GET.get('unidad', '')}, usuario=request.user)
     # independientemente de si es post y el form no es valido o si es otro metodo, tengo que renderizar
     # el template flujos/crear_flujo.html, pasarle los parametros y el context_instance para el csrf_token
     return render_to_response("flujos/crear_flujo.html", {'form': form},
@@ -90,7 +91,7 @@ def listar_flujos(request):
             raise Http404()           
     else:
         flujos = Flujo.objects.all()    
-    return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
+    return render_to_response('flujos/listar_flujos.html', {'flujos': flujos}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -200,7 +201,7 @@ def marcar_obsoleto(request, flujo_id):
 
 def eliminar_paso(request, paso_id):
     paso = get_object_or_404(Paso, pk=paso_id)
-    if not flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+    if not paso.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
         messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
         return HttpResponseRedirect(reverse("flujo_index"))
     paso.delete()
