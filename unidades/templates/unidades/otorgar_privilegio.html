@@ -1,4 +1,4 @@
-{% extends "unidades/base.html" %}
+6{% extends "unidades/base.html" %}
 {% comment %} Esta vista se encarga de mostrarle a los miembros de unidad o responsables
 	de unidad, las solicitudes de privilegios que se le han pedido, para que
 	estos puedan aceptar o cancelar la solicitud.
@@ -96,4 +96,7 @@
     {% endfor %}
  {%endif%}
  
+ {% if not solicitudes_solicitante and not solicitudes_miembro and not solicitudes_responsable %}
+  <p> No hay solicitudes de permisos </p>
+ {% endif %}
  {% endblock %}
