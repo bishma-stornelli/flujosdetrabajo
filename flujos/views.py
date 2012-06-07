@@ -260,5 +260,5 @@ def publicar_flujo(request, flujo_id):
         else :
             messages.success(request, "Flujo (" + flujo.nombre + ") no pudo ser publicado.")
     else :
-        messages.error(request, "Error: el flujo seleccionado no se pudo publicar o porque no tiene nodo inicial o final o porque no es conexo")
+        messages.error(request, "Error: el flujo seleccionado no se pudo publicar o porque no tiene nodo inicial o final o porque tiene pasos que estan aislados")
     return listar_flujos_por_publicar(request)
