@@ -1,4 +1,4 @@
-# Create your views here.
+# -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
@@ -147,7 +147,7 @@ def modificar_paso(request, paso_id):
         if form.is_valid():
             form.save()     
             messages.success(request , "Modificacion exitosa.")
-            return HttpResponseRedirect(reverse("flujo_index"))
+            return HttpResponseRedirect("/flujos/consultar_paso/%s/" % paso.id)
         else:
             messages.error(request, "Verifique los campos e intente de nuevo")
     else:
@@ -155,19 +155,23 @@ def modificar_paso(request, paso_id):
         return render_to_response("flujos/modificar_paso.html", {'form':form}, context_instance=RequestContext(request))
 
 
+@login_required
 def modificar_flujo(request, flujo_id):
     flujo = get_object_or_404(Flujo, pk=flujo_id)
+    if not flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
+        return HttpResponseRedirect(reverse("flujo_index"))
     if request.method == "POST":
         form = ModificarFlujoForm(request.POST, instance=flujo)
         if form.is_valid():
             form.save()     
-            messages.success(request , "Modificacion exitosa.")
-            return HttpResponseRedirect(reverse("flujo_index"))
+            messages.success(request , "Modificación exitosa.")
+            return HttpResponseRedirect("/flujos/consultar_flujo/%s/" % flujo.id)
         else:
             messages.error(request, "Verifique los campos e intente de nuevo")
     else:
         form = ModificarFlujoForm(instance=flujo)
-        return render_to_response("flujos/modificar_flujo.html", {'form':form, 'flujo_id':flujo_id}, context_instance=RequestContext(request))
+    return render_to_response("flujos/modificar_flujo.html", {'form':form, 'flujo_id':flujo_id}, context_instance=RequestContext(request))
         
 @login_required(redirect_field_name='/')
 def listar_flujos_publico(request):
@@ -198,7 +202,7 @@ def eliminar_paso(request, paso_id):
     return HttpResponseRedirect(reverse("flujo_index"))
 
 
-@login_required(redirect_field_name='/')
+@login_required
 def listar_flujos_por_publicar(request):
     unidades = Unidad.objects.filter(responsable=request.user)
     listaFlujo = Flujo.objects.none()
