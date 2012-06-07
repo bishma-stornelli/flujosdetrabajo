@@ -9,7 +9,7 @@ class Alerta(models.Model):
     descripcion = models.TextField()
     mostar_al_llegar = models.BooleanField(help_text="Si se marca, la alerta será "
         + "mostrada al llegar al paso. Sino, será mostrada al salir del paso.")
-    paso = models.ForeignKey("Paso",related_name="alertas")
+    paso = models.ForeignKey("Paso",related_name="alertas_paso")
     plantilla = models.ForeignKey("Plantilla", related_name="plantillas_de_alerta")
     miembro_es_receptor = models.BooleanField()
     solicitante_es_receptor = models.BooleanField()
