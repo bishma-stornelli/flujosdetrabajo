@@ -98,3 +98,10 @@ def modificar_campo(request, campo_id):
          return render_to_response("flujos/modificar_campo.html", {'form': form,
                                                           'campo_id': campo_id },
                                         context_instance=RequestContext(request))
+
+def eliminar_campo(request, campo_id):
+    campo = get_object_or_404(Campo, pk = campo_id)
+	if request.method == "GET":
+		if(campo):	
+			campo.delete()
+	return HttpResponseRedirect("/flujos/eliminar_campo/%s/" % campo_id)
