@@ -8,7 +8,7 @@
 <form action="/usuarios/login/" method="post">
 	{% csrf_token %}
 	{{form.as_table}}
-    <tr><td></td><td><input type="submit" value="login" /><input type="hidden" name="next" value="{{next}}" /></td></tr>
+    <tr><td></td><td><input type="submit" value="Iniciar sesi&oacute;n" /><input type="hidden" name="next" value="{{next}}" /></td></tr>
 </form>
 </table>
 {% endblock %}

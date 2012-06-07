@@ -3,7 +3,7 @@
 {% block content %}
 {% comment %} NO OLVIDEN COLOCAR method="POST" {% endcomment %}
 <h1>Cambiar Clave de Usuario</h1>
-<form action="cambiar_clave" method="post">
+<form action="usuarios/cambiar_clave/" method="post">
     {% csrf_token %}
     <div class="perfil">
         <div >Clave antigua: <input type="password" name="claveAntigua" id="claveAntigua" /></div>
