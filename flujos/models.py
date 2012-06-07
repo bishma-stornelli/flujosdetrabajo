@@ -10,7 +10,7 @@ class Alerta(models.Model):
     mostar_al_llegar = models.BooleanField(help_text="Si se marca, la alerta será "
         + "mostrada al llegar al paso. Sino, será mostrada al salir del paso.")
     paso = models.ForeignKey("Paso",related_name="alertas")
-    plantilla = models.ForeignKey("Plantilla", related_name="plantillas")
+    plantilla = models.ForeignKey("Plantilla", related_name="plantillas_de_alerta")
     miembro_es_receptor = models.BooleanField()
     solicitante_es_receptor = models.BooleanField()
     tipos = models.ManyToManyField('TipoAlerta', related_name='alertas')
@@ -48,7 +48,7 @@ class TipoAlerta(models.Model):
 class Informe(models.Model):
     descripcion = models.TextField()
     paso = models.ForeignKey("Paso", related_name="informes")
-    plantilla = models.ForeignKey("Plantilla", related_name ="plantillas")
+    plantilla = models.ForeignKey("Plantilla", related_name ="plantillas_de_informe")
     miembro_es_receptor = models.BooleanField()
     solicitante_es_receptor = models.BooleanField()
 
@@ -68,12 +68,12 @@ class Plantilla(models.Model):
     def clone(self):
         a = Plantilla()
         a.formato = self.formato
-        informe = a.plantillas.all()
+        informe = a.plantillas_de_informe.all()
         informe_nuevos = []
         for i in range(0,informe.length):
             informe_nuevos[i] = informe[i].clone()
             informe_nuevos[i].plantilla = a 
-        alerta = a.plantillas.all()
+        alerta = a.plantillas_de_alerta.all()
         alertas_nuevas = []
         for i in range(0,informe.length):
             alertas_nuevas[i] = alerta[i].clone()
