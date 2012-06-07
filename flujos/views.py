@@ -81,11 +81,6 @@ def agregar_campo(request, paso_id):
         
     
 
-<<<<<<< HEAD
-def listar_flujos(request, unidad_id):
-    unidad = get_object_or_404(Unidad , pk=unidad_id)
-    flujos = Flujo.objects.filter(unidad=unidad)
-=======
 def listar_flujos(request):
     unidad = request.GET.get('unidad', None)
     if unidad:
@@ -94,7 +89,6 @@ def listar_flujos(request):
             raise Http404()           
     else:
         flujos = Flujo.objects.all()    
->>>>>>> 12e42fa78c43794823cdefe04cf567b71ff5bc2f
     return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
 
 
