@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, ModificarFlujoForm,AgregarCaminoForm
+from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, ModificarFlujoForm,AgregarCaminoForm, AgregarPasoForm
 from flujos.models import Paso, Campo, Flujo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
 from django.contrib.auth.decorators import permission_required
@@ -83,9 +83,9 @@ def agregar_campo(request, paso_id):
     
 
 def listar_flujos(request, unidad_id):
-  unidad = get_object_or_404(Unidad , pk=unidad_id)
-  flujos = Flujo.objects.filter(unidad=unidad)
-  return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
+    unidad = get_object_or_404(Unidad , pk=unidad_id)
+    flujos = Flujo.objects.filter(unidad=unidad)
+    return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
 
 
 @login_required
@@ -121,24 +121,15 @@ def consultar_paso(request, paso_id):
 	else:
 		raise Http404()
 
-def agregar_paso_flujo(request, flujo_id):
-  #  if request.method == 'POST':
-   #     form = ErrorSaveForm(request)
-    #    if form.is_valid():
-            
+def agregar_paso(request, flujo_id): 
+    form = AgregarPasoForm()
 
-
-     #       return HttResponseRedirect('')
-    #else:
-     #   form = ErrorSaveForm()
-
-    #return render_to_response('agregar_paso.html', {'form': form})
-    pass
-    
+    return render_to_response('agregar_paso.html', {'form': form})
+   
 def listar_pasos(request, flujo_id):
-  flujo = get_object_or_404(Flujo , pk = flujo_id)
-  pasos = Paso.objects.filter(flujo = flujo)
-  return render_to_response('flujos/listar_pasos.html', {'pasos': pasos})
+    flujo = get_object_or_404(Flujo , pk = flujo_id)
+    pasos = Paso.objects.filter(flujo = flujo)
+    return render_to_response('flujos/listar_pasos.html', {'pasos': pasos})
     
 def modificar_paso(request, paso_id):
 	paso = get_object_or_404( Paso, pk = paso_id)
