@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Modificar Perfil de Usuario</h1>
 <table>
-<form action="/usuarios/modificarDatosUsuario/" method="post">
+<form action="/usuarios/modificar_datos_usuario/" method="post">
     {% csrf_token %}
     {{ user_form.as_table }}
     <tr>

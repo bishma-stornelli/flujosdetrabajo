@@ -7,8 +7,8 @@ class Unidad(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.TextField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-    miembros = models.ManyToManyField(User, related_name="unidades_miembros")
-    solicitantes = models.ManyToManyField(User, related_name="unidades_solicitantes")
+    miembros = models.ManyToManyField(User, related_name="unidades_miembros", null=True, blank=True)
+    solicitantes = models.ManyToManyField(User, related_name="unidades_solicitantes", null=True, blank=True)
     responsable = models.ForeignKey(User, related_name="unidades_responsable", null=True, blank=True)
     auto_aceptar = models.BooleanField(default=False)
 

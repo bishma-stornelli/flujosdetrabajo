@@ -14,9 +14,47 @@
                 <td><b>Descripci&oacute;n</b></td>
                 <td>{{ unidad.descripcion }}</td>
             </tr>
-            <tr>
-                <td colspan="2"><a href="/flujos/listar_flujos/{{ unidad.id }}/">Ver flujos</a>
-            </tr>            
+ 
+               <tr>
+               <td>
+                Permisos: 
+                </td>
+                {% if user in unidad.miembros %}
+                    <td>
+                    Miembro
+                    </td>
+                 {% endif %}
+                 
+                 {% if user in unidad.solicitantes %}
+                    <td>
+                    Solicitantes
+                    </td>
+                 {% endif %}
+                 
+                 {% if user == unidad.responsable %}
+                    <td>
+                    Responsable
+                    </td>
+                 {% endif %}
+                  {% if not user in unidad.solicitantes and not user in unidad.miembros  and user != unidad.responsable %}
+                   <td>
+                  Ningun Permiso
+                  </td>
+                  {% endif %}
+                </tr>
+                <tr>
+                <td colspan="2">
+                <a href="/unidades/solicitar_privilegio/?unidad={{ unidad.id }}">Solicitar Privilegios</a>
+                </td>
+                </tr>
+                            <tr>
+                <td colspan="2"><a href="/flujos/listar_flujos/?unidad={{ unidad.id }}">Ver flujos</a>
+                {% if unidad.responsable == user %}
+                <a href="/unidades/configurar_unidad/{{ unidad.id }}/">Configurar Unidad</a>
+                {% endif %}
+                </td>
+            </tr>   
+           
         </table>
         </BR>
     {% empty %}

@@ -13,6 +13,10 @@
 
 <p>Fecha de creacion: {{ paso.fecha_de_creacion }}</p>
 
+<h2> Campos </h2>
+
+<p>{{ paso.descripcion }}</p>
+
 <h2>Criterios</h2>
 	
 	{% if paso.criterios_destino.all %}
@@ -65,11 +69,11 @@
     {% else %}
         <p>No hay alertas para {{paso.nombre}} </p>
     {% endif %}	
-	
 {% endblock %}
 
 {% block submenu %}
-    <ul>
-        <li>Modificar</li>
-    </ul>
+
+        <li><a href="flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</li>
+        <li><a href="flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</li>
+
 {% endblock %}

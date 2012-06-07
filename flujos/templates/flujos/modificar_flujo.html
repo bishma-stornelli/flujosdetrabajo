@@ -16,7 +16,7 @@
     <form action="." method= "POST" >{% csrf_token %}
     <table>
         {{ form.as_table }}
-        <td><input type="submit" value="Modificar" /></td>
+        <td colspan="2" style="text-align: right"><input type="submit" value="Modificar" /></td>
     </table>
 </form>
 {% endblock %}

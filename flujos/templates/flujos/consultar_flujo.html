@@ -54,8 +54,12 @@
 
 {% block submenu %}
     <ul>
-        <li>Modificar</li>
-        <li>Publicar</li>
-        <li>Marcar como obsoleto</li>
+        <li><a href="/flujos/modificar_flujo/{{ flujo.id }}/" class="medium button black">Modificar</a></li>
+        {%if flujo.estado == flujo.ESTADO_BORRADOR or flujo.estado == flujo.ESTADO_OBSOLETO %}
+        <li><a onclick="return confirm('¿Esta seguro que quiere publicar este flujo?')"href="/flujos/publicar_flujo/{{ flujo.id }}/" class="medium button black">Publicar</a></li>
+        {%endif%}
+        {%if flujo.estado == 2%}
+        <li><a onclick="return confirm('¿Esta seguro que desea marcar este flujo como obsoleto?')" href="/flujos/marcar_obsoleto/{{ flujo.id }}/" class="medium button black">Marcar como obsoleto</a></li>
+        {%endif%}
     </ul>
 {% endblock %}
