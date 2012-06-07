@@ -329,8 +329,5 @@ def eliminar_camino(request, flujo_id, criterio_id):
         messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
         return HttpResponseRedirect(reverse("flujo_index"))
     criterio = get_object_or_404(Criterio, pk=criterio_id)
-    if request.method == "GET":
-        if(criterio):
-            criterio.delete()
-    caminos = Criterio.objects.all()
-    return render_to_response('flujos/listar_caminos.html', {'caminos': caminos, 'flujo_id':flujo_id})
+    criterio.delete()
+    return HttpResponseRedirect("/flujos/listar_caminos/")
