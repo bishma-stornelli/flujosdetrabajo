@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Agregar Camino a flujo{% endblock %}
+{% block content %}
+<h1>Agregar Camino A Flujo</h1>
+<table>
+    <form action="/flujos/modificar_camino/{{flujo_id}}/{{criterio_id}}/" method="post">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <tr>
+            <td></td><td><input type="submit" value="Modificar Camino"></td></tr>
+    </form>
+</table>
+{% endblock %}
+{% block submenu %}
+
+<h1> Caminos </h1>
+<a href="/flujos/agregar_camino/{{flujo_id}}/" class="medium button black">Agregar Camino</a>
+<a href="/flujos/listar_caminos/{{flujo_id}}/" class="medium button black">Listar Caminos</a>
+{% endblock %}

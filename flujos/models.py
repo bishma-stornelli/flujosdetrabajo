@@ -9,8 +9,8 @@ class Alerta(models.Model):
     descripcion = models.TextField()
     mostar_al_llegar = models.BooleanField(help_text="Si se marca, la alerta será "
         + "mostrada al llegar al paso. Sino, será mostrada al salir del paso.")
-    paso = models.ForeignKey('Paso')
-    plantilla = models.ForeignKey("Plantilla")
+    paso = models.ForeignKey("Paso",related_name="alertas_paso")
+    plantilla = models.ForeignKey("Plantilla", related_name="plantillas_de_alerta")
     miembro_es_receptor = models.BooleanField()
     solicitante_es_receptor = models.BooleanField()
     tipos = models.ManyToManyField('TipoAlerta', related_name='alertas')
@@ -38,19 +38,48 @@ class TipoAlerta(models.Model):
         a = TipoAlerta()
         a.nombre = self.nombre
         a.descripcion = self.descripcion
+        alerta = a.alertas.all()
+        alertas_nuevas = []
+        for i in range(0,alertas.length):
+            alertas_nuevas[i] = alerta[i].clone()
+            alertas_nuevas[i].alertas = a 
         return a
     
 class Informe(models.Model):
     descripcion = models.TextField()
-    paso = models.ForeignKey("Paso")
-    plantilla = models.ForeignKey("Plantilla")
+    paso = models.ForeignKey("Paso", related_name="informes")
+    plantilla = models.ForeignKey("Plantilla", related_name ="plantillas_de_informe")
     miembro_es_receptor = models.BooleanField()
     solicitante_es_receptor = models.BooleanField()
 
+    def clone(self):
+        a = Informe()
+        a.descripcion = self.descripcion
+        a.paso = self.paso
+        a.plantilla = self.plantilla
+        a.miembro_es_receptor = self.miembro_es_receptor
+        a.solicitante_es_receptor = self.solicitante_es_receptor
+        return a 
     
    
 class Plantilla(models.Model):
     formato = models.TextField()
+    
+    def clone(self):
+        a = Plantilla()
+        a.formato = self.formato
+        informe = a.plantillas_de_informe.all()
+        informe_nuevos = []
+        for i in range(0,informe.length):
+            informe_nuevos[i] = informe[i].clone()
+            informe_nuevos[i].plantilla = a 
+        alerta = a.plantillas_de_alerta.all()
+        alertas_nuevas = []
+        for i in range(0,informe.length):
+            alertas_nuevas[i] = alerta[i].clone()
+            alertas_nuevas[i].plantilla = a 
+        return a 
+
 
 class Campo(models.Model):
     nombre = models.CharField(max_length=30)
@@ -84,6 +113,9 @@ class Campo(models.Model):
         a.esObligatorio = self.esObligatorio
         a.paso = self.paso
         return a
+
+    def __str__(self):
+        return self.nombre
 
 class Criterio(models.Model):
     paso_origen = models.ForeignKey('Paso', related_name='criterios_origen')
@@ -145,6 +177,16 @@ class Paso(models.Model):
         for i in range(0,c.length):
             criterios_destino_nuevo[i] = criterios_destino[i].clone()
             criterios_destino_nuevo[i].paso_destino = a 
+        alertas = a.alertas.all()
+        alertas_nuevas = []
+        for i in range(0,alertas.length):
+            alertas_nuevas[i] = alertas[i].clone()
+            alertas_nuevas[i].paso = a 
+        informes = a.informes.all()
+        informe_nuevos = []
+        for i in range(0,informes.length):
+            informe_nuevos[i] = informes[i].clone()
+            informe_nuevos[i].paso = a 
         campos = a.campos.all()
         campos_nuevos = []
         for i in range(0,campos.length):
@@ -153,6 +195,8 @@ class Paso(models.Model):
             
         return a
 
+    def __str__(self):
+        return self.nombre
    
 
 
@@ -183,6 +227,8 @@ class Flujo(models.Model):
         for i in range(0,b.length):
             c[i] = b[i].clone()
             c[i].flujo = a 
+        a.estado = default
+        self.estado = "OBSOLETO"
         
         return a
     
