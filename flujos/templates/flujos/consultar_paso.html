@@ -16,13 +16,27 @@
 <h2>Criterios</h2>
 	
 	{% if paso.criterios_destino.all %}
-		<ul>
+		<table>
+			<thead> Paso   </thead> 
+			<thead> Descripcion  </thead> 
+			<thead> Expresion  </thead>
+			<ul>
+		
 			{% for criterio in paso.criterios_destino.all %}
-				<li>Paso: <a href="/flujos/consultar_paso/{{ criterio.paso_origen.id }}/">{{ criterio.paso_origen.nombre }}</a></li> 
-				<p>Descripcion: {{ criterio.descripcion }}</p>
-				<p>Expresion: {{ criterio.expresion }}</p>
+				<tr>
+				<td>
+					<li> <a href="/flujos/consultar_paso/{{ criterio.paso_origen.id }}/">{{ criterio.paso_origen.nombre }}</a></li> 
+				</td>
+				<td>
+					<p>{{ criterio.descripcion }}</p>
+				</td>	
+				<td>
+					<p>{{ criterio.expresion }}</p>
+				</td>
+				</tr>
 			{% endfor %}
-		</ul>
+			</ul>
+		</table>	
     {% else %}
         <p>No hay criterios para llegar a {{paso.nombre}} </p>
     {% endif %}
@@ -41,11 +55,11 @@
     {% endif %}
 	
 <h2>Alertas</h2>
-	{% if paso.alertas.all %}
+	{% if paso.alertas_paso.all %}
 		<ul>
-			{% for alerta in paso.alertas.all %}
+			{% for alerta in paso.alertas_paso.all %}
 				<p>Descripcion: {{ alerta.descripcion }}</p>
-				<li>Ver Alerta <a href="/flujos/consultar_alerta/{{ alerta.id }}/"></a></li> 
+				<li><a href="/flujos/consultar_alerta/{{ alerta.id }}/">{{ "Ver Alerta" }}</a></li> 
 			{% endfor %}
 		</ul>
     {% else %}
