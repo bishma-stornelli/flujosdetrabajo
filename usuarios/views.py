@@ -37,13 +37,13 @@ def registro(request):
 		if f.is_valid():
 			try:
 				u = User.objects.get(username__exact=f.cleaned_data['username'])
-				messages.error(request,"El Username que inserto ya existe")
+				messages.error(request,"El nombre de usuario que inserto ya existe.")
 				return render_to_response("usuarios/registro.html",
 							  {"registroform": f}, 
 							  context_instance = RequestContext(request))
 			except User.DoesNotExist:
 				if f.cleaned_data['clave'] != f.cleaned_data['confirm']:
-					messages.error(request,"La clave y la confirmacion no concuerdan")
+					messages.error(request,"La clave y la confirmacion no concuerdan.")
 					return render_to_response("usuarios/registro.html",
 								  {"registroform": f}, context_instance = RequestContext(request))
 				else:
@@ -54,16 +54,12 @@ def registro(request):
 					u.last_name = f.cleaned_data['apellido']
 					u.dni = f.cleaned_data['dni']
 					u.save()
-				   # p = PerfilDeUsuario.objects.create(user_id=1)
-                   # p.user=f.cleaned_data['username']
-                   # p.dni=f.cleaned_data['dni']
-                   # p.save()
 					l=LoginForm()
-					messages.success(request,"La clave y la confirmacion no concuerdan")
+					messages.success(request,"Su registro ha sido satisfactorio.")
 					return render_to_response("usuarios/index.html")
 						
 		else:	
-			messages.error(request,"Alguno de los datos provistos tienen un formato equivocado")
+			messages.error(request,"Revise los datos ingresado e intente de nuevo.")
 			return render_to_response("usuarios/registro.html",
 						   {"registroform":f }, 
 					            context_instance = RequestContext(request))
@@ -141,24 +137,23 @@ def cambiar_clave(request):
         f = LoginForm()
         return render_to_response("usuarios/log_in.html",{"loginform":f}, context_instance = RequestContext(request))
 
-@login_required()
+@login_required
 def modificar_datos_usuario(request):
 	if request.method == "GET":
 		user_form = UserForm(instance=request.user)
 		return render_to_response('usuarios/modificar_datos_usuario.html', { 'user_form': user_form }, context_instance=RequestContext(request))	
 
 	else:
-		u= User.objects.get(username=request.user)
+		u= request.user
 		user_form = UserForm(request.POST, instance=request.user)
 		if user_form.is_valid():
 			u.first_name=user_form.cleaned_data['first_name']
 			u.last_name=user_form.cleaned_data['last_name']
 			u.email=user_form.cleaned_data['email']
+			u.dni = user_form.cleaned_data['dni']
 			u.save()
-
 			messages.success(request,"Perfil Actualizado Exitosamente")
-			return render_to_response('usuarios/modificar_datos_usuario.html', { 'user_form': user_form}, context_instance=RequestContext(request))
-
+			return render_to_response('usuarios/modificar_datos_usuario.html', { 'user_form': user_form }, context_instance=RequestContext(request))
 		else:
 			user_form = UserForm(instance=request.user)
 			return render_to_response('usuarios/modificar_datos_usuario.html', { 'user_form': user_form}, context_instance=RequestContext(request))
