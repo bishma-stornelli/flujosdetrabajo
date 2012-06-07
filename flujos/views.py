@@ -88,6 +88,7 @@ def listar_flujos(request, unidad_id):
   return render_to_response('flujos/listar_flujos.html', {'flujos': flujos})
 
 
+@login_required
 def copiar_flujo(request, flujo_id):
     #flujo = get_object_or_404( Flujo, pk = flujo_id)
 	#if request.method == "POST":

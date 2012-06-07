@@ -68,6 +68,21 @@ div#contenido {
 }
 
 
+table thead {
+width: 135px;
+border-color:#FFFFFF;
+border-style: solid;
+background-color: #000000;
+color: #FFFFFF;
+}
+
+table tr {
+width: 135px;
+border-color:#FFFFFF;
+border-style: solid;
+background-color: #DCDCDC;
+color: #FFFFFF;
+}
 
 ul.messages  {
     padding: 2%;
@@ -78,7 +93,12 @@ ul.messages  {
     border-left: groove thin;
 }
 
-ul.messages li {
+ul.messages li.error {
+    color: #FF0000;
+}
+
+ul.messages li.success {
+    color: #00FF00;
 }
 
 .button, .button:visited { /* botones genéricos */
