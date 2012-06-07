@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, ModificarFlujoForm,AgregarCaminoForm
-from flujos.models import Paso, Campo, Flujo
+from flujos.models import Paso, Campo, Flujo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
 from django.contrib.auth.decorators import permission_required
 
@@ -167,7 +167,7 @@ def modificar_flujo(request, flujo_id):
 			messages.error(request, "Verifique los campos e intente de nuevo")
 	else:
 		form = ModificarFlujoForm(instance = flujo)
-		return render_to_response("flujos/modificar_flujo.html", {'form':form}, context_instance=RequestContext(request))
+		return render_to_response("flujos/modificar_flujo.html", {'form':form,'flujo_id':flujo_id}, context_instance=RequestContext(request))
         
 @login_required(redirect_field_name='/')
 def listar_flujos_publico(request):
@@ -274,8 +274,8 @@ def agregar_camino(request, flujo_id):
             form.save()
             form = AgregarCaminoForm()
             messages.success(request, "Camino almacenado exitosamente")
-            return render_to_response('flujos/agregar_camino.html',
-                    {'form':form,'flujo_id':flujo_id}, context_instance=RequestContext(request))
+            caminos = Criterio.objects.all()
+            return render_to_response('flujos/listar_caminos.html', {'caminos': caminos,'flujo_id':flujo_id})
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_camino.html',
@@ -284,6 +284,41 @@ def agregar_camino(request, flujo_id):
         form = AgregarCaminoForm()
         form.fields["paso_origen"].queryset = Paso.objects.filter(flujo=flujo_id)
         form.fields["paso_destino"].queryset = Paso.objects.filter(flujo=flujo_id)
-        #form.fields["campos"].queryset = Paso.objects.filter(flujo=flujo_id)
         return render_to_response('flujos/agregar_camino.html',
                 {'form':form,'flujo_id':flujo_id}, context_instance=RequestContext(request))
+
+@permission_required('flujos.criterio.change_criterio')
+@login_required()
+def modificar_camino(request, flujo_id,criterio_id):
+    if request.POST:
+        criterio=Criterio.objects.get(id=criterio_id)
+        form = AgregarCaminoForm(request.POST,instance=criterio)
+        if form.is_valid():
+            form.save()
+            form = AgregarCaminoForm()
+            messages.success(request, "Camino actualizado exitosamente")
+            caminos = Criterio.objects.all()
+            return render_to_response('flujos/listar_caminos.html', {'caminos': caminos,'flujo_id':flujo_id})
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+            return render_to_response('flujos/modificar_camino.html',
+                    {'form':form,'flujo_id':flujo_id,'criterio_id':criterio_id}, context_instance=RequestContext(request))
+    else:
+        criterio = Criterio.objects.get(id=criterio_id)
+        form = AgregarCaminoForm(instance=criterio)
+        form.fields["paso_origen"].queryset = Paso.objects.filter(flujo=flujo_id)
+        form.fields["paso_destino"].queryset = Paso.objects.filter(flujo=flujo_id)
+        return render_to_response('flujos/modificar_camino.html',
+                {'form':form,'flujo_id':flujo_id,'criterio_id':criterio_id}, context_instance=RequestContext(request))
+
+def listar_caminos(request,flujo_id):
+    caminos = Criterio.objects.all()
+    return render_to_response('flujos/listar_caminos.html', {'caminos': caminos,'flujo_id':flujo_id})
+
+def eliminar_camino(request,flujo_id, criterio_id):
+    criterio = get_object_or_404(Criterio, pk = criterio_id)
+    if request.method == "GET":
+        if(criterio):
+            criterio.delete()
+    caminos = Criterio.objects.all()
+    return render_to_response('flujos/listar_caminos.html', {'caminos': caminos,'flujo_id':flujo_id})

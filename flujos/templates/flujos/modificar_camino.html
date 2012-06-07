@@ -3,11 +3,11 @@
 {% block content %}
 <h1>Agregar Camino A Flujo</h1>
 <table>
-    <form action="/flujos/agregar_camino/{{flujo_id}}/" method="post">
+    <form action="/flujos/modificar_camino/{{flujo_id}}/{{criterio_id}}/" method="post">
         {% csrf_token %}
         {{ form.as_table }}
         <tr>
-            <td></td><td><input type="submit" value="Agregar Camino"></td></tr>
+            <td></td><td><input type="submit" value="Modificar Camino"></td></tr>
     </form>
 </table>
 {% endblock %}
