@@ -90,19 +90,19 @@ def listar_flujos(request, unidad_id):
 
 @login_required
 def copiar_flujo(request, flujo_id):
-    #flujo = get_object_or_404( Flujo, pk = flujo_id)
-	#if request.method == "POST":
-	#	form = CopiarFlujoForm(request.POST, instance=flujo)
-	#	if form.is_valid():
-	#		form.save()     
-	#		messages.success( request , "Copia de Flujo exitosa.")
-	#		return HttpResponseRedirect(reverse("flujo_index"))
-	#	else:
-	#		messages.error(request, "Verifique el campo e intente de nuevo")
-	#else:
-	#	form = CopiaFlujoForm(instance = flujo)
-	#	return render_to_response("flujos/copiar_flujo.html", {'form':form}, context_instance=RequestContext(request))
-    pass
+    flujo = get_object_or_404( Flujo, pk = flujo_id)
+	if request.method == "POST":
+		form = CopiarFlujoForm(request.POST, instance=flujo)
+		if form.is_valid():
+			form.save()     
+			messages.success( request , "Copia de Flujo exitosa.")
+			return HttpResponseRedirect(reverse("flujo_index"))
+		else:
+			messages.error(request, "Verifique el campo e intente de nuevo")
+	else:
+		form = CopiaFlujoForm(instance = flujo)
+		return render_to_response("flujos/copiar_flujo.html", {'form':form}, context_instance=RequestContext(request))
+    
 
 @login_required
 def consultar_flujo(request, flujo_id):

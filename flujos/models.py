@@ -227,6 +227,8 @@ class Flujo(models.Model):
         for i in range(0,b.length):
             c[i] = b[i].clone()
             c[i].flujo = a 
+        a.estado = default
+        self.estado = "OBSOLETO"
         
         return a
     
