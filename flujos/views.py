@@ -256,7 +256,7 @@ def publicar_flujo(request, flujo_id):
                 flujo.save()
                 messages.success(request, "Flujo (" + flujo.nombre + ") publicado.")
             elif set(flujo_igual) != set(Flujo.objects.none()):
-                messages.error(request, "Flujo (" + flujo.nombre + "ya existe con este nombre si quiere puede marcarlo como obsoleto y volver a publicarlo o no se podra publicar ")
+                messages.error(request, "Flujo (" + flujo.nombre + ") ya existe con este nombre si quiere puede marcarlo como obsoleto y volver a publicarlo o no se podra publicar ")
                 return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':flujo_igual}, context_instance=RequestContext(request))
                 
         else :

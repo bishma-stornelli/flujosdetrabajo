@@ -40,6 +40,18 @@
         <p>{{ "No tiene sucesores" }} </p>
     {% endif %}
 	
+<h2>Alertas</h2>
+	{% if paso.alertas.all %}
+		<ul>
+			{% for alerta in paso.alertas.all %}
+				<p>Descripcion: {{ alerta.descripcion }}</p>
+				<li>Ver Alerta <a href="/flujos/consultar_alerta/{{ alerta.id }}/"></a></li> 
+			{% endfor %}
+		</ul>
+    {% else %}
+        <p>No hay alertas para {{paso.nombre}} </p>
+    {% endif %}	
+	
 {% endblock %}
 
 {% block submenu %}
