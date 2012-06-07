@@ -17,7 +17,7 @@ def solicitud_privilegio(request):
   if request.method == "GET":
 
     return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
-		      context_instance=RequestContext(request))
+              context_instance=RequestContext(request))
   elif request.method == "POST":
             form = SolicitudPrivilegioForm(request.POST)
             if form.is_valid():
@@ -33,7 +33,7 @@ def solicitud_privilegio(request):
             else:
                 messages.error(request, 'Error: Campos invalidos.')
                 return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': form},
-		      context_instance=RequestContext(request))
+              context_instance=RequestContext(request))
      #dasdas          
                 
 @login_required
@@ -117,14 +117,14 @@ def registrar_unidad(request):
     if request.method == "POST":
         form = RegistroUnidadForm(request.POST)
         if form.is_valid():
-		form.save()
-		messages.success( request , "Registro de unidad exitoso.")
-		return HttpResponseRedirect(reverse("unidades_index"))
+            form.save()
+            messages.success( request , "Registro de unidad exitoso.")
+            return HttpResponseRedirect(reverse("unidades_index"))
         else:
-		messages.error(request, "Verifique los datos e intente de nuevo.")
+                  messages.error(request, "Verifique los datos e intente de nuevo.")
     else:
-	form = RegistroUnidadForm()
-	return render_to_response("unidades/registrar_unidad.html", {'form':form}, context_instance=RequestContext(request))
+           form = RegistroUnidadForm()
+    return render_to_response("unidades/registrar_unidad.html", {'form':form}, context_instance=RequestContext(request))
 
 def configurar_unidad(request, unidad_id):
   unidad = get_object_or_404( Unidad, pk = unidad_id)

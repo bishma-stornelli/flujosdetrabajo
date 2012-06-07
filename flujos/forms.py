@@ -20,17 +20,17 @@ class AgregarCampoForm(forms.Form):
     
 
 class ModificarPasoForm(ModelForm):
-	class Meta:
-		model = Paso
-		fields= ('nombre', 'tipo', 'descripcion') 
-		
+    class Meta:
+        model = Paso
+        fields= ('nombre', 'tipo', 'descripcion') 
+        
     
 class ModificarFlujoForm(ModelForm):
-	class Meta:
-		model = Paso
-		fields= ('nombre', 'tipo', 'descripcion')
-		 
-		
+    class Meta:
+        model = Flujo
+        fields= ('nombre',  'descripcion')
+         
+        
 
 
 class CopiarFlujoForm(ModelForm):
@@ -45,4 +45,3 @@ class CopiarFlujoForm(ModelForm):
 # 
 #    
 #>>>>>>> 27032f4d98f0d01a76cb0f3046b40806a2eb017e
-
