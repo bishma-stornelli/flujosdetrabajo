@@ -4,21 +4,27 @@
 # Requiere la variable unidades
 
 {% block title %}
- Pagina de Modificación de Pasos
+ Modificar paso
 {% endblock %}
 
 {% block content %}
-    {% comment %} 
-    NO OLVIDEN COLOCAR method="POST"
-    Coloquen aqui sus enlaces de  Unidades
-    {% endcomment %}
-    Contenido del Index de Unidades
+<h1>Modificar Paso</h1>
     <form action="." method= "POST" >{% csrf_token %}
     <table>
         {{ form.as_table }}
-        <td><input type="submit" value="Modificar" /></td>
+        <tr><td colspan="2" style="text-align:right;"><input type="submit" value="Modificar" /></td></tr>
     </table>
 </form>
+{% endblock %}
+
+{% block submenu %}
+{{ block.super }}
+    <li><h2>Opciones</h2></li>
+    
+    <li><a href="/flujos/agregar_campo/{{ paso.id }}/">Agregar campo</a></li>
+    <li><a href="/flujos/agregar_camino/{{ paso.id }}/">Agregar camino</a></li>
+    <li><a href="/flujos/agregar_alerta/{{ paso.id }}/">Agregar alerta</a></li>
+    <li><a href="/flujos/agregar_informe/{{ paso.id }}/">Agregar informe</a></li>
 {% endblock %}
 
 

@@ -5,15 +5,34 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, CopiarFlujoForm
+from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, \
+    ModificarFlujoForm, AgregarCaminoForm, CopiarFlujoForm, AgregarPasoForm
 from flujos.models import Paso, Campo, Flujo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
 
-def agregar_paso(request):
-    pass
+@login_required
+def agregar_paso(request, flujo_id):
+    flujo = get_object_or_404(Flujo, pk=flujo_id)
+    if not flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        messages.error(request,"Solo los responsables de unidad pueden crear flujos.")
+        return HttpResponseRedirect(reverse("flujo_index"))
+    if request.method == 'POST':
+        form = AgregarPasoForm(request.POST, flujo = flujo)
+        if form.is_valid():
+            paso = form.save()
+            messages.success(request, "Paso agregado exitosamente.")
+            return HttpResponseRedirect("/flujos/consultar_paso/%s/" % paso.id)
+        else:
+            messages.error(request, "Verifique los datos introducidos e intente de nuevo.")
+    else:
+        form = AgregarPasoForm(flujo = flujo)
+    return render_to_response('flujos/agregar_paso.html', {'form': form}, context_instance=RequestContext(request))
 
 @login_required
 def crear_flujo(request):
+    if not request.user.unidades_responsable.all():
+        messages.error(request, "Necesita ser responsable de unidad para crear flujos.")
+        return HttpResponseRedirect(reverse("flujo_index"))
     if request.method == 'POST':
         
         # Creo el form con los datos que llegaron del cliente
@@ -23,7 +42,7 @@ def crear_flujo(request):
             unidad = form.cleaned_data['unidad']
             # Verifico que el usuario que crea el flujo es responsable de la unidad a la que se asociara
             if not unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
-                messages.error(request,"Solo los responsables de unidad pueden crear flujos.")
+                messages.error(request,"Usted no es responsable de la unidad donde quiere crear el flujo.")
                 return HttpResponseRedirect(reverse("flujo_index"))
             flujo = form.save() 
             # SI ES EXITOSO REGRESO CON HttpResponseRedirect
@@ -115,11 +134,8 @@ def copiar_flujo(request, flujo_id):
 @login_required
 def consultar_flujo(request, flujo_id):
     flujo = get_object_or_404(Flujo, pk=flujo_id)
-    if flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
-        return render_to_response('flujos/consultar_flujo.html',
+    return render_to_response('flujos/consultar_flujo.html',
                                   {'flujo': flujo}, context_instance=RequestContext(request))
-    else:
-        raise Http404()
 
 @login_required
 def consultar_paso(request, paso_id):
@@ -137,7 +153,7 @@ def listar_pasos(request, flujo_id):
 @login_required
 def modificar_paso(request, paso_id):
     paso = get_object_or_404(Paso, pk=paso_id)
-    if not paso.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+    if not paso.flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
         messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
         return HttpResponseRedirect(reverse("flujo_index"))
     if request.method == "POST":
@@ -150,7 +166,7 @@ def modificar_paso(request, paso_id):
             messages.error(request, "Verifique los campos e intente de nuevo")
     else:
         form = ModificarPasoForm(instance=paso)
-        return render_to_response("flujos/modificar_paso.html", {'form':form}, context_instance=RequestContext(request))
+        return render_to_response("flujos/modificar_paso.html", {'form':form, 'paso': paso}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -171,7 +187,7 @@ def modificar_flujo(request, flujo_id):
         form = ModificarFlujoForm(instance=flujo)
     return render_to_response("flujos/modificar_flujo.html", {'form':form, 'flujo_id':flujo_id}, context_instance=RequestContext(request))
         
-@login_required(redirect_field_name='/')
+@login_required
 def listar_flujos_publico(request):
     unidades = Unidad.objects.filter(responsable=request.user)
     listaFlujo = Flujo.objects.none()
@@ -312,11 +328,9 @@ def modificar_camino(request, flujo_id, criterio_id):
         criterio = Criterio.objects.get(id=criterio_id)
         form = AgregarCaminoForm(request.POST, instance=criterio)
         if form.is_valid():
-            form.save()
-            form = AgregarCaminoForm()
+            camino = form.save()
             messages.success(request, "Camino actualizado exitosamente")
-            caminos = Criterio.objects.all()
-            return render_to_response('flujos/listar_caminos.html', {'caminos': caminos, 'flujo_id':flujo_id})
+            return HttpResponseRedirect("/flujos/consultar_flujo/%s/" % camino.paso_origen.flujo)
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/modificar_camino.html',

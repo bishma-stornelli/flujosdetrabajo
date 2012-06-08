@@ -38,7 +38,7 @@ class TipoAlerta(models.Model):
         a = TipoAlerta()
         a.nombre = self.nombre
         a.descripcion = self.descripcion
-        alerta = a.alertas.all()
+        alertas = a.alertas.all()
         alertas_nuevas = []
         for i in range(0,alertas.length):
             alertas_nuevas[i] = alerta[i].clone()

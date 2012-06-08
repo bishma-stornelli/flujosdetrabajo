@@ -48,7 +48,7 @@ def registro(request):
                     u.save()
                     l=LoginForm()
                     messages.success(request,"Su registro ha sido satisfactorio.")
-                    return render_to_response("usuarios/index.html")
+                    return HttpResponseRedirect(reverse('usuarios_index'))
                         
         else:    
             messages.error(request,"Revise los datos ingresado e intente de nuevo.")
