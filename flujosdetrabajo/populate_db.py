@@ -3,7 +3,12 @@ from flujos.models import Flujo, Paso, Criterio
 from unidades.models import Unidad
 
 
-u1 = User.objects.create(username='u1', password='u1')
+u1 = User.objects.create_user(username='responsable', 
+                              email='andreth@gmail.com', 
+                              password='johnpassword',
+                              first_name='Responsable',
+                              last_name='Apellido de Responsable'
+                              )
 u1.save()
 u2 = User.objects.create(username='u2', password='u2')
 unidad1 = Unidad.objects.create(nombre="unidad1", descripcion="descripcion1", responsable=u1, miembros=(u1))
