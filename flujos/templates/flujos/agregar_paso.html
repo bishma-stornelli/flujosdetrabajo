@@ -1,7 +1,7 @@
 {% extends "base.html"%}
-{% block title %} Agregar paso {% enblock %}
+{% block title %} Agregar paso {% endblock %}
 {% block head %} Agregar paso {% endblock %}
-{% content %}
+{% block content %}
 <form action="." method="post">
 {% csrf_token %}
     <table>

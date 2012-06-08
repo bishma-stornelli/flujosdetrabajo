@@ -18,15 +18,15 @@ urlpatterns = patterns('flujos.views',
     url(r'^marcar_obsoleto/$', 'listar_flujos_publico'),
     url(r'^publicar_flujo/(?P<flujo_id>\d+)/$', 'publicar_flujo'),
     url(r'^publicar_flujo/$', 'listar_flujos_por_publicar'),
-    url(r'^agregar_paso/(?P<flujo_id>\d+)/$', 'agregar_paso'),
-    url(r'^modificar_paso/(?P<paso_id>\d+)/$', 'modificar_paso'),
-    url(r'^eliminar_paso/(?P<paso_id>\d+)/$', 
+    url(r'^agregar_paso/(?P<flujo_id>\d+)/$', 
         CreateView.as_view(
             model = Paso,
             template_name="flujos/agregar_paso.html",
             success_url="flujos/consultar_paso/%(id)s/"
         )
     ),
+    url(r'^modificar_paso/(?P<paso_id>\d+)/$', 'modificar_paso'),
+    url(r'^eliminar_paso/(?P<paso_id>\d+)/$', 'eliminar_paso'), 
     url(r'^agregar_campo/(?P<paso_id>\d+)/$', 'agregar_campo'),
     url(r'^modificar_campo/(?P<campo_id>\d+)/$', 'copiar_flujo'),
     url(r'^eliminar_campo/(?P<campo_id>\d+)/$', 'copiar_flujo'),

@@ -52,3 +52,4 @@ class AgregarPasoForm(ModelForm):
     class Meta:
         model = Paso
         fields=('nombre', 'tipo', 'descripcion') 
+        exclude = ('sucesores')
