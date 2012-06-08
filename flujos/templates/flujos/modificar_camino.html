@@ -1,7 +1,7 @@
 {% extends "flujos/base.html" %}
-{% block title %}Agregar Camino a flujo{% endblock %}
+{% block title %}Modificar Camino a flujo{% endblock %}
 {% block content %}
-<h1>Agregar Camino A Flujo</h1>
+<h1>Modificar Camino A Flujo</h1>
 <table>
     <form action="/flujos/modificar_camino/{{flujo_id}}/{{criterio_id}}/" method="post">
         {% csrf_token %}

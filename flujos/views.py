@@ -296,16 +296,17 @@ def agregar_camino(request, flujo_id):
         if form.is_valid():
             paso_origen = form.cleaned_data['paso_origen']
             paso_destino= form.cleaned_data['paso_destino']
-            camino_igual= Criterio.objects.filter(paso_origen=paso_origen, paso_destino=paso_destino)
-            if set(camino_igual) == set(Criterio.objects.none()):
+            camino_igual= Criterio.objects.all().get(paso_origen=paso_origen, paso_destino=paso_destino)
+            if camino_igual == set(Criterio.objects.none()):
                  form.save()
                  form = AgregarCaminoForm()
                  messages.success(request, "Camino almacenado exitosamente")
-            elif set(camino_igual) != set(Criterio.objects.none()):
+            elif camino_igual != set(Criterio.objects.none()):
                  form = AgregarCaminoForm()
                  messages.error(request, "Error:Este camino ya esta agregado")
+                 return HttpResponseRedirect("/flujos/modificar_camino/{0}/{1}/".format( flujo.id, camino_igual.id) ) 
             #caminos = Criterio.objects.all()
-            return HttpResponseRedirect("/flujos/listar_campos/" )
+            return HttpResponseRedirect("/flujos/consultar_flujo/{0}".format(flujo.id) )
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_camino.html',
