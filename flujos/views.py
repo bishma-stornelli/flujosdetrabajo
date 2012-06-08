@@ -355,3 +355,28 @@ def eliminar_camino(request, flujo_id, criterio_id):
     criterio = get_object_or_404(Criterio, pk=criterio_id)
     criterio.delete()
     return HttpResponseRedirect("/flujos/listar_caminos/")
+
+def modificar_campo(request, campo_id):
+    # Si no existe campo con id campo_id envio error 404
+    campo = get_object_or_404(Campo, pk=campo_id)
+    if request.method == 'POST':
+        form = ModificarCampoForm(request.POST,instance = campo)
+        if form.is_valid():   
+            campo = form.save(commit=False)
+            campo.save()
+            messages.success(request, "Campo actualizado exitosamente.")
+            return HttpResponseRedirect("/flujos/modificar_campo/%s/" % campo_id)
+        else:
+            messages.error(request, "Verifique los campos introducidos e intente de nuevo.")
+    else:
+         form = ModificarCampoForm(instance=campo)
+         return render_to_response("flujos/modificar_campo.html", {'form': form,
+                                                          'campo_id': campo_id },
+                                        context_instance=RequestContext(request))
+
+def eliminar_campo(request, campo_id):
+    campo = get_object_or_404(Campo, pk = campo_id)
+	if request.method == "GET":
+		if(campo):	
+			campo.delete()
+	return HttpResponseRedirect("/flujos/eliminar_campo/%s/" % campo_id)

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h1>{{ campo.nombre }}</h1>
+
+
+<h2><p>Llenado por miembro: </p>{{ campo.llenado_por_miembro }}</h2>
+
+<h2><p>Llenado por solicitante: </p>{{ campo.llenado_por_solicitante }}</h2>
+
+<h2><p>Tipo: </p>{{ campo.tipo }}</h2>
+
+<h2><p>Es Obligatorio: </p>{{ campo.esObligatorio }}</h2>
+
+<h2><p>Paso: </p>{{ campo.paso }}</h2>
+
+{% endblock %}
+
+
