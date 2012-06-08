@@ -55,10 +55,14 @@ class AgregarPasoForm(ModelForm):
         widgets = {
                    'flujo': forms.HiddenInput()
         }
-    
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None, 
         initial=None, error_class=ErrorList, label_suffix=':', 
         empty_permitted=False, instance=None, flujo = None):
         ModelForm.__init__(self, data=data, files=files, auto_id=auto_id, prefix=prefix, initial=initial, error_class=error_class, label_suffix=label_suffix, empty_permitted=empty_permitted, instance=instance)
         self.fields['flujo'].choices = (flujo.id, flujo.nombre,)
         self.fields['flujo'].initial = flujo.id
+
+
+class ModificarCampoForm(ModelForm):
+    class Meta:
+        model = Campo
