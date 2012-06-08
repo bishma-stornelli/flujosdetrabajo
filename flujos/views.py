@@ -9,6 +9,9 @@ from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, Mo
 from flujos.models import Paso, Campo, Flujo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
 
+def agregar_paso(request):
+    pass
+
 @login_required
 def crear_flujo(request):
     if request.method == 'POST':
@@ -275,9 +278,16 @@ def agregar_camino(request, flujo_id):
     if request.POST:
         form = AgregarCaminoForm(request.POST)
         if form.is_valid():
-            form.save()
-            form = AgregarCaminoForm()
-            messages.success(request, "Camino almacenado exitosamente")
+            paso_origen = form.cleaned_data['paso_origen']
+            paso_destino= form.cleaned_data['paso_destino']
+            camino_igual= Criterio.objects.filter(paso_origen=paso_origen, paso_destino=paso_destino)
+            if set(camino_igual) == set(Criterio.objects.none()):
+                 form.save()
+                 form = AgregarCaminoForm()
+                 messages.success(request, "Camino almacenado exitosamente")
+            elif set(camino_igual) != set(Criterio.objects.none()):
+                 form = AgregarCaminoForm()
+                 messages.error(request, "Error:Este camino ya esta agregado")
             #caminos = Criterio.objects.all()
             return HttpResponseRedirect("/flujos/listar_campos/" )
         else:
