@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import encoding
 #from unidades.groups import responsable
+#
+#
 
 class Unidad(models.Model):
     nombre = models.CharField(max_length=50)
