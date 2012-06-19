@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic.base import TemplateView
 
-
+    # Examples:
+    # url(r'^crear_paso/$', 'crear_paso'),
 urlpatterns = patterns('',
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name':'usuarios/log_in.html'}),
     
