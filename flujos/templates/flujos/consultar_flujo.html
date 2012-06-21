@@ -41,6 +41,14 @@
                             <p>{{ "No tiene sucesores" }} </p>
                         {% endif %}
                     </td>
+		    <td>
+                        <p><a href="/flujos/modificar_paso/{{ paso.id}}/"> Modificar </a></p>
+                      
+                    </td>
+		    <td>
+                        <p><a href="/flujos/eliminar_paso/{{ paso.id}}/"> Eliminar </a></p>
+                       
+                    </td>
                 <tr>
             {% endfor %}
         
