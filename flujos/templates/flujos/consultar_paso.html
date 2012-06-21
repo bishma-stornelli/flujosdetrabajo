@@ -5,7 +5,7 @@
 
 <h1>Paso {{ paso.nombre }}</h1>
 <p style="font-size: 0.7em">Tipo: {{ paso.get_tipo_display }}</p>
-<a href= "/flujos/consultar_flujo/{{ paso.flujo.id }}/"> Consultar flujo </a>
+<a href= "/flujos/consultar_flujo/{{ paso.flujo.id }}/"> {{paso.flujo.nombre }} </a>
 
 <h2>Descripcion</h2>
 
@@ -16,24 +16,35 @@
 <h2> Campos </h2>
 
 <table>
-{%for campo in paso.campos.all %}
-    <tr>
-         <td>
-             <a href="/flujos/consultar_campo/{{ campo.id }}/"> campo.nombre </a>
-        </td>
-		<td>
-		 <li> <a href="/flujos/modificar_campo/{{
-		  criterio.paso_origen.id }}/"> Modificar </a></li> 
-				</td>
-		<td>
-					<li> <a
-		  href="/flujos/eliminar_paso/{{
-		  criterio.paso_origen.id }}/"> Eliminar</a></li> 
-				</td>
+    <tr> 
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Responsable</th>
+        <th>Obligatorio</th>
     </tr>
-{% empty %}
-    No hay campos para el paso
-{% endfor %}
+    {%for campo in paso.campos.all %}
+        <td>{{ campo.nombre  }}</td>
+		<td>{{ campo.get_tipo_display }}</td>
+        <td></td>
+        <td> 
+            {% if campo.esObligatorio %}
+                Si
+            {% else %}
+                No
+            {% endif %}
+        </td>
+        <td>
+		    <li><a href="/flujos/modificar_campo/{{
+		        criterio.paso_origen.id }}/"> Modificar </a></li> 
+	    </td>
+		<td>
+		    <li><a href="/flujos/eliminar_campo/{{
+		        criterio.paso_origen.id }}/"> Eliminar</a></li> 
+	    </td>
+    </tr>
+    {% empty %}
+        No hay campos para el paso
+    {% endfor %}
 </table>
 
 <h2>Criterios</h2>
