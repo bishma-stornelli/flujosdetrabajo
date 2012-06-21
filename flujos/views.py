@@ -10,7 +10,7 @@ from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
     ModificarCampoForm
 from flujos.models import Flujo, Paso, Campo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
-
+from django.core.exceptions import ObjectDoesNotExist
 
 @login_required
 def agregar_paso(request, flujo_id):
@@ -300,16 +300,15 @@ def agregar_camino(request, flujo_id):
         if form.is_valid():
             paso_origen = form.cleaned_data['paso_origen']
             paso_destino= form.cleaned_data['paso_destino']
-            camino_igual= Criterio.objects.all().get(paso_origen=paso_origen, paso_destino=paso_destino)
-            if camino_igual == set(Criterio.objects.none()):
-                 form.save()
-                 form = AgregarCaminoForm()
-                 messages.success(request, "Camino almacenado exitosamente")
-            elif camino_igual != set(Criterio.objects.none()):
-                 form = AgregarCaminoForm()
-                 messages.error(request, "Error:Este camino ya esta agregado")
-                 return HttpResponseRedirect("/flujos/modificar_camino/{0}/{1}/".format( flujo.id, camino_igual.id) ) 
-            #caminos = Criterio.objects.all()
+            try:
+                camino_igual= Criterio.objects.get(paso_origen=paso_origen, paso_destino=paso_destino)
+                form = AgregarCaminoForm()
+                messages.error(request, "Error:Este camino ya esta agregado")
+                return HttpResponseRedirect("/flujos/modificar_camino/{0}/{1}/".format( flujo.id, camino_igual.id) ) 
+            except ObjectDoesNotExist:
+                form.save()
+                form = AgregarCaminoForm()
+                messages.success(request, "Camino almacenado exitosamente")       
             return HttpResponseRedirect("/flujos/consultar_flujo/{0}".format(flujo.id) )
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
