@@ -10,7 +10,7 @@
     <form action="/flujos/agregar_campo/{{ paso_id }}/" method="POST">{% csrf_token %}
         <table>
             {{ form.as_table }}
-            <td><input type="submit" value="Agregar" /></td>
+            <td colspan="2" style="text-align: right"><input type="submit" value="Agregar" /></td>
         </table>
     </form>
 
