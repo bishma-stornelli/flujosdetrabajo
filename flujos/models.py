@@ -41,7 +41,7 @@ class TipoAlerta(models.Model):
         alertas = a.alertas.all()
         alertas_nuevas = []
         for i in range(0,alertas.length):
-            alertas_nuevas[i] = alerta[i].clone()
+            #alertas_nuevas[i] = alerta[i].clone()
             alertas_nuevas[i].alertas = a 
         return a
     
@@ -100,7 +100,7 @@ class Campo(models.Model):
                     (TIPO_NUMBER, "Número"),
                     (TIPO_EMAIL, "Correo"),
                     (TIPO_FECHA, "Fecha"))
-    tipo = models.IntegerField(choices=TIPO_CHOICES)
+    tipo = models.IntegerField(choices=TIPO_CHOICES, null=True, blank=True)
     esObligatorio = models.BooleanField()
     paso = models.ForeignKey('Paso', related_name="campos")
 
@@ -174,9 +174,9 @@ class Paso(models.Model):
         for i in range(0,a.length):
             criterios_origen_nuevo[i] = criterios_origen[i].clone()
             criterios_origen_nuevo[i].paso_origen = a 
-        for i in range(0,c.length):
-            criterios_destino_nuevo[i] = criterios_destino[i].clone()
-            criterios_destino_nuevo[i].paso_destino = a 
+        #for i in range(0,c.length):
+        #    criterios_destino_nuevo[i] = criterios_destino[i].clone()
+        #    criterios_destino_nuevo[i].paso_destino = a 
         alertas = a.alertas.all()
         alertas_nuevas = []
         for i in range(0,alertas.length):
@@ -224,10 +224,10 @@ class Flujo(models.Model):
         a.unidad = self.unidad
         b = a.pasos.all()
     
-        for i in range(0,b.length):
-            c[i] = b[i].clone()
-            c[i].flujo = a 
-        a.estado = default
+        #for i in range(0,b.length):
+        #    c[i] = b[i].clone()
+        #    c[i].flujo = a 
+        #a.estado = default
         self.estado = "OBSOLETO"
         
         return a

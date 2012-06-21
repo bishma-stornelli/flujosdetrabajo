@@ -1,8 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
-from flujos.forms import AgregarPasoForm
-from flujos.models import Paso
 
 urlpatterns = patterns('flujos.views',
     # Examples:
@@ -29,8 +28,6 @@ urlpatterns = patterns('flujos.views',
     url(r'^listar_caminos/(?P<flujo_id>\d+)/$', 'listar_caminos'),
     url(r'^modificar_camino/(?P<flujo_id>\d+)/(?P<criterio_id>\d+)/$', 'modificar_camino'),
     url(r'^eliminar_camino/(?P<flujo_id>\d+)/(?P<criterio_id>\d+)/$', 'eliminar_camino'),
-    url(r'^listar_campo    s/$', 'copiar_flujo'),
-    url(r'^consultar_campo/$', 'copiar_flujo'),
     url(r'^listar_pasos/(?P<flujo_id>\d+)/$', 'listar_pasos'),
     url(r'^consultar_paso/$', 'copiar_flujo'),
 

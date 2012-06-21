@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import ModelForm
 from django.forms.util import ErrorList
-from flujos.models import Flujo, Paso, Campo, Criterio
+from flujos.models import Criterio, Flujo, Campo, Paso
 
 class AgregarCaminoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:

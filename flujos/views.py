@@ -5,10 +5,12 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import CrearFlujoForm, AgregarCampoForm, ModificarPasoForm, \
-    ModificarFlujoForm, AgregarCaminoForm, CopiarFlujoForm, AgregarPasoForm
-from flujos.models import Paso, Campo, Flujo, Criterio
+from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
+    CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
+    ModificarCampoForm
+from flujos.models import Flujo, Paso, Campo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
+
 
 @login_required
 def agregar_paso(request, flujo_id):
@@ -209,12 +211,12 @@ def marcar_obsoleto(request, flujo_id):
 
 def eliminar_paso(request, paso_id):
     paso = get_object_or_404(Paso, pk=paso_id)
-    if not paso.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+    if not paso.flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
         messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
         return HttpResponseRedirect(reverse("flujo_index"))
     paso.delete()
     messages.success(request, "Paso eliminado exitosamente.")
-    return HttpResponseRedirect(reverse("flujo_index"))
+    return HttpResponseRedirect("/flujos/consultar_flujo/%s/" % paso.flujo.id)
 
 
 @login_required

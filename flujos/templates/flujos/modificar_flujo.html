@@ -8,11 +8,6 @@
 {% endblock %}
 
 {% block content %}
-    {% comment %} 
-    NO OLVIDEN COLOCAR method="POST"
-    Coloquen aqui sus enlaces de  Unidades
-    {% endcomment %}
-    Contenido del Index de Flujos
     <form action="." method= "POST" >{% csrf_token %}
     <table>
         {{ form.as_table }}
