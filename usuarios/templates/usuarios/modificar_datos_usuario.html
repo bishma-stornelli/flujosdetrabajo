@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "usuarios/base.html" %}
 {% block title %}Modificar Perfil de Usuario{% endblock %}
 {% block content %}
 <h1>Modificar Perfil de Usuario</h1>
@@ -10,14 +10,4 @@
         <td></td><td><input type="submit" value="Guardar cambios"></td></tr>
 </form>
 </table>
-{% endblock %}
-{% block submenu %}
-
-<h1> Usuarios </h1>
-<a href="/usuarios/consultar_datos_usuario/" class="medium button black">Consultar Perfil</a>
-<br>
-<a href="/usuarios/modificar_datos_usuario/" class="medium button black">Modificar Perfil</a>
-<br>
-<li><a href="/usuarios/cambiar_clave/" class="medium button black">Cambiar Clave</a></li>
-
 {% endblock %}
