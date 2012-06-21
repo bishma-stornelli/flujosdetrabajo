@@ -100,9 +100,15 @@ class Campo(models.Model):
                     (TIPO_NUMBER, "Número"),
                     (TIPO_EMAIL, "Correo"),
                     (TIPO_FECHA, "Fecha"))
-    tipo = models.IntegerField(choices=TIPO_CHOICES, null=True, blank=True)
+    tipo = models.IntegerField(choices=TIPO_CHOICES)
     esObligatorio = models.BooleanField()
     paso = models.ForeignKey('Paso', related_name="campos")
+    #TIPO_SOLICITANTE = 1
+    #TIPO_MIEMBRO= 2
+    #TIPO_CHOICES2 = (
+     #               (TIPO_SOLICITANTE, "Solicitante"),
+     #               (TIPO_MIEMBRO, "Miembro de Unidad"))
+    #responsable = models.IntegerField(choices=TIPO_CHOICES2, null=True, blank=True)
 
     def clone(self):
         a = Campo()

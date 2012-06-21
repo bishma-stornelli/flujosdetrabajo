@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
     CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
-    ModificarCampoForm
+     CampoForm
 from flujos.models import Flujo, Paso, Campo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
 
@@ -72,12 +72,12 @@ def agregar_campo(request, paso_id):
       
         if request.method == 'GET':
             
-            f = AgregarCampoForm()
+            f = CampoForm()
             return render_to_response("flujos/agregar_campo.html", {'form':f, 'paso_id':paso_id},
                                         context_instance=RequestContext(request))
         else:
         
-            f = AgregarCampoForm(request.POST)
+            f = CampoForm(request.POST)
             
             if f.is_valid():
                 try:
@@ -87,7 +87,7 @@ def agregar_campo(request, paso_id):
                 
                 except Campo.DoesNotExist:
                 
-                    campo = Campo(nombre=f.cleaned_data['nombre'], llenado_por_miembro=True, llenado_por_solicitante=False, tipo=f.cleaned_data['tipo'], esObligatorio=f.cleaned_data['esObligatorio'], paso=p)
+                    campo = f.save(commit=False)
                     campo.paso = p    
                     campo.save()
                     messages.success(request, "Campo creado exitosamente.")
@@ -96,7 +96,7 @@ def agregar_campo(request, paso_id):
                 
             else:
                  messages.error(request, "Verifique los campos introducidos e intente de nuevo.")
-                 return render_to_response("flujos/agregar_campo.html", {'form':f},
+                 return render_to_response("flujos/agregar_campo.html", {'form':f, 'paso_id':paso_id},
                                         context_instance=RequestContext(request))
     else:
         messages.error(request, "Esta funcionalidad requiere permisos de Responsable de Unidad.")
@@ -365,7 +365,7 @@ def modificar_campo(request, campo_id):
     # Si no existe campo con id campo_id envio error 404
     campo = get_object_or_404(Campo, pk=campo_id)
     if request.method == 'POST':
-        form = ModificarCampoForm(request.POST,instance = campo)
+        form = CampoForm(request.POST,instance = campo)
         if form.is_valid():   
             campo = form.save(commit=False)
             campo.save()
@@ -374,7 +374,7 @@ def modificar_campo(request, campo_id):
         else:
             messages.error(request, "Verifique los campos introducidos e intente de nuevo.")
     else:
-         form = ModificarCampoForm(instance=campo)
+         form = CampoForm(instance=campo)
          return render_to_response("flujos/modificar_campo.html", {'form': form,
                                                           'campo_id': campo_id },
                                         context_instance=RequestContext(request))
