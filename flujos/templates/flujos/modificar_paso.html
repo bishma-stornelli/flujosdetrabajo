@@ -12,7 +12,13 @@
     <form action="." method= "POST" >{% csrf_token %}
     <table>
         {{ form.as_table }}
-        <tr><td colspan="2" style="text-align:right;"><input type="submit" value="Modificar" /></td></tr>
+        <tr>
+	  
+	  <td colspan="2" style="text-align:right;">
+	    <a onclick="return confirm('¿Esta seguro que quiere eliminar este paso?')"href="/flujos/eliminar_paso/{{ paso.id }}/">Eliminar</a>
+	    <input
+	  type="submit" value="Modificar" />
+	  </td>
     </table>
 </form>
 {% endblock %}
