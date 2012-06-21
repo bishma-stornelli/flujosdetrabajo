@@ -381,3 +381,4 @@ def eliminar_campo(request, campo_id):
 	if(campo):	
 	    campo.delete()
 	return HttpResponseRedirect("/flujos/eliminar_campo/%s/" % campo_id)
+

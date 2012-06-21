@@ -11,30 +11,6 @@ from django.template import Context, loader, RequestContext
 from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm, \
     ConfigurarUnidadForm
 from unidades.models import SolicitudPrivilegio, Unidad
-
-@login_required
-def solicitud_privilegio(request):
-  if request.method == "GET":
-
-    return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': SolicitudPrivilegioForm()},
-              context_instance=RequestContext(request))
-  elif request.method == "POST":
-            form = SolicitudPrivilegioForm(request.POST)
-            if form.is_valid():
-                u = request.user
-                e = SolicitudPrivilegio(solicitante=u,
-                        privilegio = form.cleaned_data['privilegio'],
-                        unidad = form.cleaned_data['unidad'],
-                        mensaje= form.cleaned_data['mensaje'])
-                e.save()
-                
-                messages.success(request, "Solicitud aceptada.")
-                return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm':SolicitudPrivilegioForm()},context_instance=RequestContext(request)) 
-            else:
-                messages.error(request, 'Error: Campos invalidos.')
-                return render_to_response("unidades/solicitud_privilegio.html", {'SolicitudPrivilegioForm': form},
-              context_instance=RequestContext(request))
-     #dasdas          
                 
 @login_required
 def otorgar_privilegio(request):
@@ -150,9 +126,9 @@ def solicitar_privilegio(request):
             s.save()
             messages.success(request, "Su solicitud de privilegios ha sido enviada con exito. \
             Por favor espere a que sea aprobada.")
-            return HttpResponseRedirect("/unidades/solicitar_privilegio/")
+            return HttpResponseRedirect(reverse("listar_privilegios"))
     else:
-        form = SolicitudPrivilegioForm()
+        form = SolicitudPrivilegioForm(initial={'unidad': request.GET.get('unidad', '')})
     return render_to_response("unidades/solicitar_privilegio.html",
                               {"form": form},
                               context_instance=RequestContext(request))
