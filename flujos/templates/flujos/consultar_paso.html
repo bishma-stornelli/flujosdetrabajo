@@ -5,7 +5,7 @@
 
 <h1>Paso {{ paso.nombre }}</h1>
 <p style="font-size: 0.7em">Tipo: {{ paso.get_tipo_display }}</p>
-<p>Flujo al que pertenece: {{ paso.flujo.nombre }}</p>
+<a href= "/flujos/consultar_flujo/{{ paso.flujo.id }}/"> Consultar flujo </a>
 
 <h2>Descripcion</h2>
 
@@ -26,9 +26,6 @@
     No hay campos para el paso
 {% endfor %}
 </table>
-
-
-<p>{{ paso.descripcion }}</p>
 
 <h2>Criterios</h2>
 	
