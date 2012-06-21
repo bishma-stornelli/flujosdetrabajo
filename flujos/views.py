@@ -107,6 +107,7 @@ def agregar_campo(request, paso_id):
     
 
 def listar_flujos(request):
+    # OBTENER PARAMETRO POR URL: /?unidad=X
     unidad = request.GET.get('unidad', None)
     if unidad:
         flujos = Flujo.objects.filter(unidad=unidad)

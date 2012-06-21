@@ -23,6 +23,8 @@ class Unidad(models.Model):
     #     SolicitudPrivilegio.PRIVILEGIO_MIEMBRO
     #     SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE
     def permite(self, usuario, permiso):
+        if not usuario or not permiso:
+            return False
         if permiso == SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE:
             if self in usuario.unidades_solicitantes.all():
                 return True
