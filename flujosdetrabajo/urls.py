@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'flujosdetrabajo.views.home', name='home'),
     # url(r'^flujosdetrabajo/', include('flujosdetrabajo.foo.urls')),
-    url(r'^$', TemplateView.as_view(template_name='base.html')),
+    url(r'^$', TemplateView.as_view(template_name='base.html'), name="index"),
     
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

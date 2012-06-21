@@ -1,9 +1,7 @@
 {% extends "usuarios/base.html" %}
 {% block title %}Login{% endblock %}
-{% block submenu %}
-<h1>Login</h1>
-{% endblock %}
 {% block content %}
+<h1>Login</h1>
 <table>
 <form action="/usuarios/login/" method="post">
 	{% csrf_token %}

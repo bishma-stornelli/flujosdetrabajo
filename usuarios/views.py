@@ -83,8 +83,9 @@ def log_in(request):
 
 def log_out(request):
 #Esta vista permite desloguearse de la pagina. Retorna la variable de retorno 'reg' para indicar la salida exitosa del sistema
-    logout(request)            
-    return render_to_response("usuarios/index.html",{"reg":"Sesion cerrada con exito"}, context_instance = RequestContext(request))
+    logout(request)
+    messages.success(request, "Sesión cerrada exitosamente.")
+    return HttpResponseRedirect(reverse("index"))
 
 @login_required()
 def consultar_datos_usuario(request):
