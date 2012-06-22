@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
     CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
-     CampoForm
+     CampoForm,AgregarAlertaForm,AgregarInformeForm
 from flujos.models import Flujo, Paso, Campo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
 from django.core.exceptions import ObjectDoesNotExist
@@ -262,6 +262,7 @@ def es_grafo_conexo(flujo):
 def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404(Flujo, pk=flujo_id)
+<<<<<<< HEAD
     if (flujo.estado == Flujo.ESTADO_BORRADOR):
         if (flujo.unidad in unidades):
             inicial_final = flujo.inicial_final()
@@ -281,6 +282,22 @@ def publicar_flujo(request, flujo_id):
                     messages.error(request, "Flujo (" + flujo.nombre + ") no posee paso inicial o final, o posee mas de un paso inicial, revise el flujo.")
                 if (es_conexo == False):
                     messages.error(request, "Flujo (" + flujo.nombre + ") posee pasos que estan aislados, revise el flujo.")
+=======
+    if (flujo.unidad in unidades):
+        inicial_final = flujo.inicial_final()
+        es_conexo = es_grafo_conexo(flujo)
+        #es_conexo=True
+        flujo_igual = flujo.nombre_parecido()
+        if (inicial_final == True & es_conexo == True):
+            if set(flujo_igual) == set(Flujo.objects.none()):
+                flujo.estado = Flujo.ESTADO_PUBLICO
+                flujo.save()
+                messages.success(request, "Flujo (" + flujo.nombre + ") publicado.")
+            elif set(flujo_igual) != set(Flujo.objects.none()):
+                messages.error(request, "Flujo (" + flujo.nombre + ") ya existe con este nombre si quiere puede marcarlo como obsoleto y volver a publicarlo o no se podra publicar ")
+                return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':flujo_igual}, context_instance=RequestContext(request))
+                
+>>>>>>> da202d66a0a5f9f66ddc5e9b6a17a76acef21766
         else :
             messages.error(request, "Error: el flujo seleccionado no se puedo publicar debido a que usted no es el" 
             + "responsable de la unidad a la cual esta asociado el flujo")
@@ -384,4 +401,36 @@ def eliminar_campo(request, campo_id):
 	if(campo):	
 	    campo.delete()
 	return HttpResponseRedirect("/flujos/eliminar_campo/%s/" % campo_id)
+
+def agregar_alerta(request, paso_id):
+    paso = get_object_or_404(Flujo, pk=paso_id)
+    if request.POST:
+        form = AgregarAlertaForm(request.POST, paso=paso)
+        if form.is_valid():
+            alerta = form.save()
+            messages.success(request, "Alerta agregada exitosamente")
+            return HttpResponseRedirect("/flujos/modificar_paso/%s/" % paso_id)
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+            return render_to_response('flujos/agregar_alerta.html',
+                    {'form':form}, context_instance=RequestContext(request))
+    else:
+        form = AgregarAlertaForm(paso=paso)
+        return render_to_response('flujos/agregar_alerta.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
+
+def agregar_informe(request, paso_id):
+    paso = get_object_or_404(Flujo, pk=paso_id)
+    if request.POST:
+        form = AgregarInformeForm(request.POST, paso=paso)
+        if form.is_valid():
+            informe = form.save()
+            messages.success(request, "Informe agregado exitosamente")
+            return HttpResponseRedirect("/flujos/modificar_paso/%s/" % paso_id)
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+            return render_to_response('flujos/agregar_informe.html',
+                    {'form':form}, context_instance=RequestContext(request))
+    else:
+        form = AgregarAlertaForm(paso=paso)
+        return render_to_response('flujos/agregar_informe.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
 
