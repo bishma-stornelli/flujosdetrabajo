@@ -80,6 +80,9 @@ class Plantilla(models.Model):
             alertas_nuevas[i].plantilla = a 
         return a 
 
+    def __str__(self):
+        return self.formato
+
 
 class Campo(models.Model):
     nombre = models.CharField(max_length=30)
