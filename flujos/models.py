@@ -241,15 +241,9 @@ class Flujo(models.Model):
     def inicial_final(self):
         valido=False
         pasos_final = Paso.objects.filter(flujo=self, tipo = Paso.TIPO_FINAL)
-        if pasos_final != Paso.objects.none():
-            valido=True
-        elif pasos_final == Paso.objects.none():
-            valido=False
         pasos_inicial= Paso.objects.filter(flujo=self, tipo = Paso.TIPO_INICIAL)
-        if pasos_inicial != Paso.objects.none():
+        if len(pasos_inicial)  == 1 and pasos_final:
             valido=True
-        elif pasos_inicial == Paso.objects.none():
-            valido=False
         return valido
     
     def nombre_parecido(self):
