@@ -13,3 +13,9 @@
             </table>
     </form>
 {% endblock %}
+{% block submenu %}
+{{ block.super }}
+        <li><h2>Opciones<h2></li>
+<a href="/flujos/agregar_alerta/{{paso.id}}/" class="medium button black">Agregar alerta</a>
+<a href="/flujos/listar_alerta/{{paso.id}}/" class="medium button black">Listar alertas</a>(no sirve)
+{% endblock %}

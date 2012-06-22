@@ -13,3 +13,9 @@
             </table>
     </form>
 {% endblock %}
+{% block submenu %}
+{{ block.super }}
+        <li><h2>Opciones<h2></li>
+<a href="/flujos/agregar_camino/{{flujo_id}}/" class="medium button black">Agregar Camino</a>
+<a href="/flujos/listar_caminos/{{flujo_id}}/" class="medium button black">Listar Caminos</a>
+{% endblock %}
