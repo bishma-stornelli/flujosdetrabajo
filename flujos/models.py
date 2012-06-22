@@ -46,7 +46,7 @@ class TipoAlerta(models.Model):
         return a
     
     def __str__(self):
-        return self.formato
+        return self.nombre
     
     
 class Informe(models.Model):
