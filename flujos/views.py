@@ -262,7 +262,6 @@ def es_grafo_conexo(flujo):
 def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404(Flujo, pk=flujo_id)
-<<<<<<< HEAD
     if (flujo.estado == Flujo.ESTADO_BORRADOR):
         if (flujo.unidad in unidades):
             inicial_final = flujo.inicial_final()
@@ -282,7 +281,6 @@ def publicar_flujo(request, flujo_id):
                     messages.error(request, "Flujo (" + flujo.nombre + ") no posee paso inicial o final, o posee mas de un paso inicial, revise el flujo.")
                 if (es_conexo == False):
                     messages.error(request, "Flujo (" + flujo.nombre + ") posee pasos que estan aislados, revise el flujo.")
-=======
     if (flujo.unidad in unidades):
         inicial_final = flujo.inicial_final()
         es_conexo = es_grafo_conexo(flujo)
@@ -296,8 +294,6 @@ def publicar_flujo(request, flujo_id):
             elif set(flujo_igual) != set(Flujo.objects.none()):
                 messages.error(request, "Flujo (" + flujo.nombre + ") ya existe con este nombre si quiere puede marcarlo como obsoleto y volver a publicarlo o no se podra publicar ")
                 return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':flujo_igual}, context_instance=RequestContext(request))
-                
->>>>>>> da202d66a0a5f9f66ddc5e9b6a17a76acef21766
         else :
             messages.error(request, "Error: el flujo seleccionado no se puedo publicar debido a que usted no es el" 
             + "responsable de la unidad a la cual esta asociado el flujo")
