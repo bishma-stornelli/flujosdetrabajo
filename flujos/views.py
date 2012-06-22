@@ -280,20 +280,7 @@ def publicar_flujo(request, flujo_id):
                 if (inicial_final == False):
                     messages.error(request, "Flujo (" + flujo.nombre + ") no posee paso inicial o final, o posee mas de un paso inicial, revise el flujo.")
                 if (es_conexo == False):
-                    messages.error(request, "Flujo (" + flujo.nombre + ") posee pasos que estan aislados, revise el flujo.")
-    if (flujo.unidad in unidades):
-        inicial_final = flujo.inicial_final()
-        es_conexo = es_grafo_conexo(flujo)
-        #es_conexo=True
-        flujo_igual = flujo.nombre_parecido()
-        if (inicial_final == True & es_conexo == True):
-            if set(flujo_igual) == set(Flujo.objects.none()):
-                flujo.estado = Flujo.ESTADO_PUBLICO
-                flujo.save()
-                messages.success(request, "Flujo (" + flujo.nombre + ") publicado.")
-            elif set(flujo_igual) != set(Flujo.objects.none()):
-                messages.error(request, "Flujo (" + flujo.nombre + ") ya existe con este nombre si quiere puede marcarlo como obsoleto y volver a publicarlo o no se podra publicar ")
-                return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':flujo_igual}, context_instance=RequestContext(request))
+                    messages.error(request, "Flujo (" + flujo.nombre + ") posee pasos que estan aislados, revise el flujo.")     
         else :
             messages.error(request, "Error: el flujo seleccionado no se puedo publicar debido a que usted no es el" 
             + "responsable de la unidad a la cual esta asociado el flujo")
