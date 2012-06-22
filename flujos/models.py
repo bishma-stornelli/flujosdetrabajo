@@ -45,6 +45,10 @@ class TipoAlerta(models.Model):
             alertas_nuevas[i].alertas = a 
         return a
     
+    def __str__(self):
+        return self.formato
+    
+    
 class Informe(models.Model):
     descripcion = models.TextField()
     paso = models.ForeignKey("Paso", related_name="informes")
