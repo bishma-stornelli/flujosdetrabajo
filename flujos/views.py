@@ -272,6 +272,7 @@ def publicar_flujo(request, flujo_id):
     if (flujo.unidad in unidades):
         inicial_final = flujo.inicial_final()
         es_conexo = es_grafo_conexo(flujo)
+        #es_conexo=True
         flujo_igual = flujo.nombre_parecido()
         if (inicial_final == True & es_conexo == True):
             if set(flujo_igual) == set(Flujo.objects.none()):
