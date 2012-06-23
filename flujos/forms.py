@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import ModelForm
 from django.forms.util import ErrorList
-from flujos.models import Criterio, Flujo, Campo, Paso
+from flujos.models import Criterio, Flujo, Campo, Paso, Alerta, Informe
 
 class AgregarCaminoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:
@@ -67,3 +67,32 @@ class CampoForm(ModelForm):
     class Meta:
         model = Campo
         exclude = ('paso')
+        
+class AgregarAlertaForm(ModelForm):
+    class Meta:
+        model= Alerta
+        fields=('paso','descripcion','mostar_al_llegar','plantilla','miembro_es_receptor','solicitante_es_receptor','tipos')
+        widgets = {
+                   'paso': forms.HiddenInput()
+        }
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None, 
+        initial=None, error_class=ErrorList, label_suffix=':', 
+        empty_permitted=False, instance=None, paso = None):
+        ModelForm.__init__(self, data=data, files=files, auto_id=auto_id, prefix=prefix, initial=initial, error_class=error_class, label_suffix=label_suffix, empty_permitted=empty_permitted, instance=instance)
+        self.fields['paso'].choices = (paso.id, paso.nombre)
+        self.fields['paso'].initial = paso.id
+        
+class AgregarInformeForm(ModelForm):
+    class Meta:
+        model= Informe
+        fields = ('paso','descripcion','plantilla','miembro_es_receptor','solicitante_es_receptor')
+        widgets = {
+                   'paso': forms.HiddenInput()
+        }
+        
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None, 
+        initial=None, error_class=ErrorList, label_suffix=':', 
+        empty_permitted=False, instance=None, paso = None):
+        ModelForm.__init__(self, data=data, files=files, auto_id=auto_id, prefix=prefix, initial=initial, error_class=error_class, label_suffix=label_suffix, empty_permitted=empty_permitted, instance=instance)
+        self.fields['paso'].choices = (paso.id, paso.nombre)
+        self.fields['paso'].initial = paso.id
