@@ -154,6 +154,33 @@
 {% else %}
     <p>No hay alertas para {{paso.nombre}} </p>
 {% endif %} 
+
+<h2>Informes</h2>
+{% if paso.informes.all %}
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Destinatarios</th>
+            <th>Formato</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for informe in paso.informes.all %}
+            <tr>
+                <td><a href="/flujos/consultar_informe/{{ informe.id }}/">{{ informe.nombre }}</a></td>
+                <td>
+                        {% if informe.miembro_es_receptor %}Miembro</br>{% endif %}
+                        {% if informe.solicitante_es_receptor %}Solicitante{% endif %}
+                </td>
+                <td> {{ informe.formato }} </td>                
+                <td> <a href="/flujos/modificar_informe/{{ informe.id}}/">Modificar</a></td>
+                <td> <a href="/flujos/informe_alerta/{{ informe.id}}/">Eliminar</a></td>
+            </tr>
+        {% endfor %}
+    </table>    
+{% else %}
+    <p>No hay informes para {{paso.nombre}} </p>
+{% endif %} 
 {% endblock %}
 
 
