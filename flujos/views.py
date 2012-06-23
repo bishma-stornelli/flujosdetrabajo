@@ -417,3 +417,19 @@ def agregar_informe(request, paso_id):
         form = AlertaForm(paso=paso)
         return render_to_response('flujos/agregar_informe.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
 
+
+@login_required
+def consultar_alerta(request, alerta_id):
+    alerta = get_object_or_404(Alerta, pk = alerta_id)
+    return render_to_response('flujos/consultar_flujo.html', {'alerta': alerta}, 
+    											context_instance=RequestContext(request))
+
+
+
+
+
+
+
+
+
+
