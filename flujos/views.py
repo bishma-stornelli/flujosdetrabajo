@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
-    CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
-     CampoForm,AlertaForm,InformeForm
-from flujos.models import Flujo, Paso, Campo, Criterio, Alerta 
+from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, CampoForm,AlertaForm,InformeForm
+from flujos.models import Flujo, Paso, Campo, Criterio, Alerta, Informe
 from unidades.models import Unidad, SolicitudPrivilegio
-from django.core.exceptions import ObjectDoesNotExist
 
 @login_required
 def agregar_paso(request, flujo_id):
@@ -392,7 +390,7 @@ def agregar_alerta(request, paso_id):
         if form.is_valid():
             alerta = form.save()
             messages.success(request, "Alerta agregada exitosamente")
-            return HttpResponseRedirect("/flujos/modificar_paso/%s/" % paso_id)
+            return HttpResponseRedirect("/flujos/consultar_alerta/%s/" % alerta.id)
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_alerta.html',
@@ -417,7 +415,7 @@ def agregar_informe(request, paso_id):
         if form.is_valid():
             informe = form.save()
             messages.success(request, "Informe agregado exitosamente")
-            return HttpResponseRedirect("/flujos/modificar_paso/%s/" % paso_id)
+            return HttpResponseRedirect("/flujos/consultar_informe/%s/" % informe.id)
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_informe.html',
@@ -427,13 +425,46 @@ def agregar_informe(request, paso_id):
         return render_to_response('flujos/agregar_informe.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
 
 
+
 def eliminar_informe(request,informe_id):
     informe = get_object_or_404(Informe,pk=informe_id)
     if not informe.paso.flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
         messages.error(request, "Solo el responsable de la unidad puede eliminar el informe.")
         return HttpResponseRedirect(reverse("flujo_index"))
-    alerta.delete()
-    messages.success(request,"Informe eliminada exitosamente")
+    informe.delete()
+    messages.success(request,"Informe eliminado exitosamente")
     return HttpResponseRedirect("/flujos/consultar_paso/%s/" % informe.paso.id)
 
+
+def modificar_alerta(request, alerta_id):
+    alerta = get_object_or_404(Alerta, pk=alerta_id)
+    if request.POST:
+        if 'cancelar' in request.POST:
+            return HttpResponseRedirect("/flujos/consultar_alerta/%s/" % alerta.id)
+        form = AlertaForm(request.POST, instance=alerta, paso=alerta.paso)
+        if form.is_valid():
+            alerta = form.save()
+            messages.success(request, "Alerta modificada exitosamente")
+            return HttpResponseRedirect("/flujos/consultar_alerta/%s/" % alerta.id)
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+    else:
+        form = AlertaForm(instance=alerta, paso=alerta.paso)
+    return render_to_response('flujos/modificar_alerta.html',{'form':form , 'paso_id': alerta.paso.id}, context_instance=RequestContext(request))
+
+def modificar_informe(request, informe_id):
+    informe = get_object_or_404(Informe, pk=informe_id)
+    if request.POST:
+        if 'cancelar' in request.POST:
+            return HttpResponseRedirect("/flujos/consultar_informe/%s/" % informe.id)
+        form = InformeForm(request.POST, instance=informe, paso=informe.paso)
+        if form.is_valid():
+            informe = form.save()
+            messages.success(request, "Informe modificada exitosamente")
+            return HttpResponseRedirect("/flujos/consultar_informe/%s/" % informe.id)
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+    else:
+        form = InformeForm(instance=informe, paso=informe.paso)
+    return render_to_response('flujos/modificar_informe.html',{'form':form , 'paso_id': informe.paso.id}, context_instance=RequestContext(request))
 
