@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
     CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
-     CampoForm,AgregarAlertaForm,AgregarInformeForm
+     CampoForm,AlertaForm,InformeForm
 from flujos.models import Flujo, Paso, Campo, Criterio
 from unidades.models import Unidad, SolicitudPrivilegio
 from django.core.exceptions import ObjectDoesNotExist
@@ -388,7 +388,7 @@ def eliminar_campo(request, campo_id):
 def agregar_alerta(request, paso_id):
     paso = get_object_or_404(Flujo, pk=paso_id)
     if request.POST:
-        form = AgregarAlertaForm(request.POST, paso=paso)
+        form = AlertaForm(request.POST, paso=paso)
         if form.is_valid():
             alerta = form.save()
             messages.success(request, "Alerta agregada exitosamente")
@@ -398,13 +398,13 @@ def agregar_alerta(request, paso_id):
             return render_to_response('flujos/agregar_alerta.html',
                     {'form':form}, context_instance=RequestContext(request))
     else:
-        form = AgregarAlertaForm(paso=paso)
+        form = AlertaForm(paso=paso)
         return render_to_response('flujos/agregar_alerta.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
 
 def agregar_informe(request, paso_id):
     paso = get_object_or_404(Flujo, pk=paso_id)
     if request.POST:
-        form = AgregarInformeForm(request.POST, paso=paso)
+        form = InformeForm(request.POST, paso=paso)
         if form.is_valid():
             informe = form.save()
             messages.success(request, "Informe agregado exitosamente")
@@ -414,6 +414,6 @@ def agregar_informe(request, paso_id):
             return render_to_response('flujos/agregar_informe.html',
                     {'form':form}, context_instance=RequestContext(request))
     else:
-        form = AgregarAlertaForm(paso=paso)
+        form = AlertaForm(paso=paso)
         return render_to_response('flujos/agregar_informe.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
 

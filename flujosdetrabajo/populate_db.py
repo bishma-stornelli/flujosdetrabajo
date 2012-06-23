@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
-from flujos.models import Flujo, Paso, Criterio
+from flujos.models import Flujo, Paso, Criterio, Alerta, Informe, TipoAlerta
 from unidades.models import Unidad
 
+TipoAlerta(nombre="SMS").save()
+TipoAlerta(nombre="Email").save()
 
 u1 = User.objects.create_user(username='gersonDex', 
                               email='gerson@gmail.com', 
@@ -48,13 +50,14 @@ u5.save()
 u6.save()
 u7.save()
 u8.save()
-
-unidad1 = Unidad(nombre="DEX", descripcion="Decanato de Extension", responsable=u1)
+admin = User.objects.get(username="admin")
+unidad1 = Unidad(nombre="DEX", descripcion="Decanato de Extension", responsable=admin)
 unidad1.save()
 unidad1.miembros.add(u1)
 unidad1.miembros.add(u2)
 unidad1.miembros.add(u3)
 unidad1.miembros.add(u4)
+unidad1.miembros.add(admin)
 
 
 unidad2 = Unidad(nombre="DS", descripcion="Direccion de Servicios", responsable=u2)
@@ -91,8 +94,7 @@ flujo2.save()
 
 
 
-p1 = Paso(nombre="Inicial"
-, descripcion="Completar la inscripcion en el sitio web del DEX", flujo=flujo1, tipo=Paso.TIPO_INICIAL)
+p1 = Paso(nombre="Inicial", descripcion="Completar la inscripcion en el sitio web del DEX", flujo=flujo1, tipo=Paso.TIPO_INICIAL)
 p1.save()
 p2 = Paso(nombre="PASO 2", descripcion="Paso dummy", flujo=flujo1, tipo=Paso.TIPO_NORMAL)
 p2.save()
@@ -106,8 +108,7 @@ p6 = Paso(nombre="PASO 6", descripcion="Paso dummy", flujo=flujo1, tipo=Paso.TIP
 p6.save()
 p7 = Paso(nombre="PASO 7", descripcion="Paso dummy", flujo=flujo1, tipo=Paso.TIPO_NORMAL)
 p7.save()
-p8 = Paso(nombre="Final"
-, descripcion="Completar la entrega de documentosPaso final", flujo=flujo1, tipo=Paso.TIPO_FINAL)
+p8 = Paso(nombre="Final", descripcion="Completar la entrega de documentosPaso final", flujo=flujo1, tipo=Paso.TIPO_FINAL)
 p8.save()
 
 c1 = Criterio(paso_origen=p1,paso_destino=p2,descripcion="Criterio de inscripcion",expresion="true")
@@ -125,8 +126,13 @@ c6.save()
 c7 = Criterio(paso_origen=p7,paso_destino=p8,descripcion="Criterio final",expresion="true")
 c7.save()
 
-p1 = Paso(nombre="Inicial"
-, descripcion="Completar la inscripcion en el sitio web del DS", flujo=flujo2, tipo=Paso.TIPO_INICIAL)
+a1 = Alerta(nombre="Alerta 1", paso=p1)
+a1.save()
+
+i1 = Informe(nombre="Alerta 1", paso=p1)
+i1.save()
+
+p1 = Paso(nombre="Inicial", descripcion="Completar la inscripcion en el sitio web del DS", flujo=flujo2, tipo=Paso.TIPO_INICIAL)
 p1.save()
 p2 = Paso(nombre="PASO 2", descripcion="Paso dummy", flujo=flujo2, tipo=Paso.TIPO_NORMAL)
 p2.save()
@@ -140,8 +146,7 @@ p6 = Paso(nombre="PASO 6", descripcion="Paso dummy", flujo=flujo2, tipo=Paso.TIP
 p6.save()
 p7 = Paso(nombre="PASO 7", descripcion="Paso dummy", flujo=flujo2, tipo=Paso.TIPO_NORMAL)
 p7.save()
-p8 = Paso(nombre="Final"
-, descripcion="Reportar el beneficio a su inmueble", flujo=flujo1, tipo=Paso.TIPO_FINAL)
+p8 = Paso(nombre="Final", descripcion="Reportar el beneficio a su inmueble", flujo=flujo1, tipo=Paso.TIPO_FINAL)
 p8.save()
 
 c1 = Criterio(paso_origen=p1,paso_destino=p2,descripcion="Criterio de inscripcion",expresion="true")

@@ -5,22 +5,20 @@ from unidades.models import Unidad
 
 # Create your models here.
 class Alerta(models.Model):
-    
-    descripcion = models.TextField()
+    nombre = models.CharField(max_length=30)
     mostar_al_llegar = models.BooleanField(help_text="Si se marca, la alerta será "
         + "mostrada al llegar al paso. Sino, será mostrada al salir del paso.")
     paso = models.ForeignKey("Paso",related_name="alertas_paso")
-    plantilla = models.ForeignKey("Plantilla", related_name="plantillas_de_alerta")
     miembro_es_receptor = models.BooleanField()
     solicitante_es_receptor = models.BooleanField()
-    tipos = models.ManyToManyField('TipoAlerta', related_name='alertas')
+    tipos = models.ManyToManyField('TipoAlerta', related_name='alertas', verbose_name="Tipo de alerta")
+    formato = models.TextField()
 
     def clone(self):
         a = Alerta()
         a.descripcion = self.descripcion
         a.mostar_al_llegar = self.mostar_al_llegar
         a.paso = self.paso
-        a.plantilla = self.plantilla
         a.miembro_es_receptor = self.miembro_es_receptor
         a.solicitante_es_receptor = self.solicitante_es_receptor
         a.tipos = self.tipos
@@ -28,8 +26,6 @@ class Alerta(models.Model):
 
 class TipoAlerta(models.Model):
     nombre = models.CharField(max_length=30)
-    descripcion = models.CharField(max_length=256)
-    
     # Recibe una plantilla renderizada y la envia
     def enviar_alerta(self, plantilla):
         pass
@@ -50,42 +46,41 @@ class TipoAlerta(models.Model):
     
     
 class Informe(models.Model):
-    descripcion = models.TextField()
+    nombre = models.CharField(max_length=30)
     paso = models.ForeignKey("Paso", related_name="informes")
-    plantilla = models.ForeignKey("Plantilla", related_name ="plantillas_de_informe")
     miembro_es_receptor = models.BooleanField()
     solicitante_es_receptor = models.BooleanField()
+    formato = models.TextField()
 
     def clone(self):
         a = Informe()
         a.descripcion = self.descripcion
         a.paso = self.paso
-        a.plantilla = self.plantilla
         a.miembro_es_receptor = self.miembro_es_receptor
         a.solicitante_es_receptor = self.solicitante_es_receptor
         return a 
     
    
-class Plantilla(models.Model):
-    formato = models.TextField()
-    
-    def clone(self):
-        a = Plantilla()
-        a.formato = self.formato
-        informe = a.plantillas_de_informe.all()
-        informe_nuevos = []
-        for i in range(0,informe.length):
-            informe_nuevos[i] = informe[i].clone()
-            informe_nuevos[i].plantilla = a 
-        alerta = a.plantillas_de_alerta.all()
-        alertas_nuevas = []
-        for i in range(0,informe.length):
-            alertas_nuevas[i] = alerta[i].clone()
-            alertas_nuevas[i].plantilla = a 
-        return a 
-
-    def __str__(self):
-        return self.formato
+#class Plantilla(models.Model):
+#    formato = models.TextField()
+#    
+#    def clone(self):
+#        a = Plantilla()
+#        a.formato = self.formato
+#        informe = a.plantillas_de_informe.all()
+#        informe_nuevos = []
+#        for i in range(0,informe.length):
+#            informe_nuevos[i] = informe[i].clone()
+#            informe_nuevos[i].plantilla = a 
+#        alerta = a.plantillas_de_alerta.all()
+#        alertas_nuevas = []
+#        for i in range(0,informe.length):
+#            alertas_nuevas[i] = alerta[i].clone()
+#            alertas_nuevas[i].plantilla = a 
+#        return a 
+#
+#    def __str__(self):
+#        return self.formato
 
 
 class Campo(models.Model):

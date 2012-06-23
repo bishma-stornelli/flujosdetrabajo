@@ -68,10 +68,10 @@ class CampoForm(ModelForm):
         model = Campo
         exclude = ('paso')
         
-class AgregarAlertaForm(ModelForm):
+class AlertaForm(ModelForm):
     class Meta:
         model= Alerta
-        fields=('paso','descripcion','mostar_al_llegar','plantilla','miembro_es_receptor','solicitante_es_receptor','tipos')
+        fields=('paso','nombre','mostar_al_llegar','miembro_es_receptor','solicitante_es_receptor','tipos','formato')
         widgets = {
                    'paso': forms.HiddenInput()
         }
@@ -82,10 +82,10 @@ class AgregarAlertaForm(ModelForm):
         self.fields['paso'].choices = (paso.id, paso.nombre)
         self.fields['paso'].initial = paso.id
         
-class AgregarInformeForm(ModelForm):
+class InformeForm(ModelForm):
     class Meta:
         model= Informe
-        fields = ('paso','descripcion','plantilla','miembro_es_receptor','solicitante_es_receptor')
+        fields = ('paso','nombre','miembro_es_receptor','solicitante_es_receptor','formato')
         widgets = {
                    'paso': forms.HiddenInput()
         }

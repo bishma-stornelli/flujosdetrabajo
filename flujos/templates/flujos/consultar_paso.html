@@ -1,5 +1,17 @@
 {% extends "flujos/base.html" %}
 
+{% block submenu %}
+{{ block.super }}
+        <li><h2>Opciones<h2></li>
+        <li><a href="/flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</a></li>
+        <li><a href="/flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</a></li>
+        <li><a href="/flujos/agregar_alerta/{{ paso.id }}/"/> Agregar Alerta</a></li>
+     <li><a href="/flujos/agregar_campo/{{ paso.id }}/"/> Agregar Campo</a></li>
+      <li><a href="/flujos/agregar_criterio/"/> Agregar Criterio</a></li>
+     <li><a href="/flujos/agregar_informe/{{ paso.id }}/"/> Agregar Informe</a></li
+
+{% endblock %}
+
 {% block content %}
 
 
@@ -21,10 +33,12 @@
         <th>Tipo</th>
         <th>Responsable</th>
         <th>Obligatorio</th>
+        <th></th>
+        <th></th>
     </tr>
     {%for campo in paso.campos.all %}
         <td>{{ campo.nombre  }}</td>
-		<td>{{ campo.get_tipo_display }}</td>
+        <td>{{ campo.get_tipo_display }}</td>
         <td></td>
         <td> 
             {% if campo.esObligatorio %}
@@ -34,13 +48,13 @@
             {% endif %}
         </td>
         <td>
-		    <li><a href="/flujos/modificar_campo/{{
-		        criterio.paso_origen.id }}/"> Modificar </a></li> 
-	    </td>
-		<td>
-		    <li><a href="/flujos/eliminar_campo/{{
-		        criterio.paso_origen.id }}/"> Eliminar</a></li> 
-	    </td>
+            <a href="/flujos/modificar_campo/{{
+                criterio.paso_origen.id }}/"> Modificar </a>
+        </td>
+        <td>
+            <a href="/flujos/eliminar_campo/{{
+                criterio.paso_origen.id }}/"> Eliminar</a>
+        </td>
     </tr>
     {% empty %}
         No hay campos para el paso
@@ -48,36 +62,36 @@
 </table>
 
 <h2>Criterios</h2>
-	
-	{% if paso.criterios_destino.all %}
-		<table>
-			<thead> Paso   </thead> 
-			<thead> Descripcion  </thead> 
-			<thead> Expresion  </thead>
-			<ul>
-		
-			{% for criterio in paso.criterios_destino.all %}
-				<tr>
-				<td>
-					<li> <a href="/flujos/consultar_paso/{{ criterio.paso_origen.id }}/">{{ criterio.paso_origen.nombre }}</a></li> 
-				</td>
-			
-				<td>
-					<p>{{ criterio.descripcion }}</p>
-				</td>	
-				<td>
-					<p>{{ criterio.expresion }}</p>
-				</td>
-				<td>
-					<li> <a href="/flujos/modificar_criterio/{{ criterio.paso_origen.id }}/">Modificar</a></li> 
-				</td>
-				<td>
-					<li> <a href="/flujos/eliminar_criterio/{{ criterio.paso_origen.id }}/">Eliminar</a></li> 
-				</td>
-				</tr>
-			{% endfor %}
-			</ul>
-		</table>	
+    
+    {% if paso.criterios_destino.all %}
+        <table>
+            <thead> Paso   </thead> 
+            <thead> Descripcion  </thead> 
+            <thead> Expresion  </thead>
+            <ul>
+        
+            {% for criterio in paso.criterios_destino.all %}
+                <tr>
+                <td>
+                    <li> <a href="/flujos/consultar_paso/{{ criterio.paso_origen.id }}/">{{ criterio.paso_origen.nombre }}</a></li> 
+                </td>
+            
+                <td>
+                    <p>{{ criterio.descripcion }}</p>
+                </td>   
+                <td>
+                    <p>{{ criterio.expresion }}</p>
+                </td>
+                <td>
+                    <li> <a href="/flujos/modificar_criterio/{{ criterio.paso_origen.id }}/">Modificar</a></li> 
+                </td>
+                <td>
+                    <li> <a href="/flujos/eliminar_criterio/{{ criterio.paso_origen.id }}/">Eliminar</a></li> 
+                </td>
+                </tr>
+            {% endfor %}
+            </ul>
+        </table>    
     {% else %}
         <p>No hay criterios para llegar a {{paso.nombre}} </p>
     {% endif %}
@@ -85,48 +99,35 @@
 
 
 <h2>Sucesores</h2>
-	{% if paso.sucesores.all %}
+    {% if paso.sucesores.all %}
         <table>
             {% for sucesor in paso.sucesores.all %}
-	  <tr>
-                <td><a href="/flujos/consultar_paso/{{ sucesor.id}}/">{{ sucesor.nombre }}</a></td>
-	<td><a href="/flujos/modificar_paso/{{ sucesor.id}}/">Modificar</a></td>
-	<td><a href="/flujos/eliminar_paso/{{ sucesor.id}}/">Eliminar</a></td>
-	</tr>
+                <tr>
+                    <td><a href="/flujos/consultar_paso/{{ sucesor.id}}/">{{ sucesor.nombre }}</a></td>
+                    <td><a href="/flujos/modificar_paso/{{ sucesor.id}}/">Modificar</a></td>
+                    <td><a href="/flujos/eliminar_paso/{{ sucesor.id}}/">Eliminar</a></td>
+                </tr>
             {% endfor %}
-        
+        </table>
     {% else %}
         <p>{{ "No tiene sucesores" }} </p>
     {% endif %}
-	
+    
 <h2>Alertas</h2>
 {% if paso.alertas_paso.all %}
     
-    	{% for alerta in paso.alertas_paso.all %}
-    		<p>Descripcion: {{ alerta.descripcion }}</p>
+        {% for alerta in paso.alertas_paso.all %}
+            <p>Descripcion: {{ alerta.descripcion }}</p>
                 <tr>
-    		<td> <a href="/flujos/consultar_alerta/{{ alerta.id}}/">{{ "Ver Alerta" }}</a></td>
-		<td> <a href="/flujos/consultar_alerta/{{ alerta.id}}/">Modificar</a></td>
-		<td> <a href="/flujos/eliminar_alerta/{{ alerta.id}}/">Eliminar</a></td>
-		</tr>
-    	{% endfor %}
+            <td> <a href="/flujos/consultar_alerta/{{ alerta.id}}/">{{ "Ver Alerta" }}</a></td>
+        <td> <a href="/flujos/consultar_alerta/{{ alerta.id}}/">Modificar</a></td>
+        <td> <a href="/flujos/eliminar_alerta/{{ alerta.id}}/">Eliminar</a></td>
+        </tr>
+        {% endfor %}
     
     {% else %}
         <p>No hay alertas para {{paso.nombre}} </p>
-    {% endif %}	
+    {% endif %} 
 {% endblock %}
 
-{% block submenu %}
-{{ block.super }}
-        <li><h2>Opciones<h2></li>
 
-        <li><a href="/flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</a></li>
-        <li><a href="/flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar
-        Paso</a></li>
-	 <li><a href="/flujos/agregar_alerta/"/> Agregar Alerta</a></li>
-	 <li><a href="/flujos/agregar_campo/"/> Agregar Campo</a></li>
-	  <li><a href="/flujos/agregar_criterio/"/> Agregar
-        Criterio</a></li>
-	 <li><a href="/flujos/agregar_informe/"/> Agregar Informe</a></li
-
-{% endblock %}
