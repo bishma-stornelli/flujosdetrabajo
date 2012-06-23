@@ -17,7 +17,7 @@ def registro(request):
 #un problema con el registro.
     if request.user.is_authenticated():
         messages.error(request, "Usted ha iniciado sesión. Cierre sesión antes de registrarse.")
-        return HttpResponseRedirect(reverse("usuarios_index"))
+        return HttpResponseRedirect("/")
     if request.method == "GET":
         
         f = RegistroForm()
@@ -48,7 +48,7 @@ def registro(request):
                     u.save()
                     l=LoginForm()
                     messages.success(request,"Su registro ha sido satisfactorio.")
-                    return HttpResponseRedirect(reverse('usuarios_index'))
+                    return HttpResponseRedirect("/usuarios/login/")
                         
         else:    
             messages.error(request,"Revise los datos ingresado e intente de nuevo.")

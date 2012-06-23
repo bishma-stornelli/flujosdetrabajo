@@ -392,7 +392,7 @@ def agregar_alerta(request, paso_id):
         if form.is_valid():
             alerta = form.save()
             messages.success(request, "Alerta agregada exitosamente")
-            return HttpResponseRedirect("/flujos/modificar_paso/%s/" % paso_id)
+            return HttpResponseRedirect("/flujos/consultar_alerta/%s/" % alerta.id)
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_alerta.html',
@@ -408,7 +408,7 @@ def agregar_informe(request, paso_id):
         if form.is_valid():
             informe = form.save()
             messages.success(request, "Informe agregado exitosamente")
-            return HttpResponseRedirect("/flujos/modificar_paso/%s/" % paso_id)
+            return HttpResponseRedirect("/flujos/consultar_informe/%s/" % informe.id)
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_informe.html',

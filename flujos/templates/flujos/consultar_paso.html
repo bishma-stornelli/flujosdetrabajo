@@ -3,6 +3,7 @@
 {% block submenu %}
 {{ block.super }}
         <li><h2>Opciones<h2></li>
+                <li><a href="/flujos/consultar_flujo/{{ paso.flujo.id }}/">Volver al flujo</a></li>
         <li><a href="/flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</a></li>
         <li><a href="/flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</a></li>
         <li><a href="/flujos/agregar_alerta/{{ paso.id }}/"/> Agregar Alerta</a></li>
@@ -140,11 +141,9 @@
                     {% endif %}
                 </td>
                 <td>
-                    <ul>
                         {% for tipo in alerta.tipos.all %}
-                            <li>{{ tipo.nombre }}</li>
+                            {{ tipo.nombre }}<br/>
                         {% endfor %}
-                    </ul>
                 </td>
                 <td> {{ alerta.formato }} </td>                
                 <td> <a href="/flujos/modificar_alerta/{{ alerta.id}}/">Modificar</a></td>
