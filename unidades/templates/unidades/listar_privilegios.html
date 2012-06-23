@@ -1,0 +1,80 @@
+{% extends "flujos/base.html" %}
+
+{% block content %}
+    <h1>Solicitudes</h1>
+    <h2>Solicitudes Aceptadas</h2>
+    <table>
+    <tr>
+      <th> Privilegio </th> 
+      <th> Fecha </th> 
+    </tr>
+      {% for sol in aceptadas %}
+      
+      <tr>
+        
+       
+       <td>
+        {{ sol.get_privilegio_display }}
+       </td>
+       <td>
+        {{ sol.fecha }}
+       </td>
+       
+      </tr>
+      
+      {% empty %}
+      <tr><td colspan="5">{{ "No se ha realizado ninguna solicitud de privilegio" }}</td></tr>
+      {% endfor %}
+    </table>
+    
+    
+    <h2>Solicitudes en Espera</h2>
+    <table>
+    <tr>
+      <th> Privilegio </th> 
+      <th> Fecha </th> 
+    </tr>
+      {% for sol in en_espera %}
+      
+      <tr>
+       <td>
+        {{ sol.get_privilegio_display }}
+       </td>
+       <td>
+        {{ sol.fecha }}
+       </td>
+       
+      </tr>
+      
+      {% empty %}
+      <tr><td colspan="5">{{ "No se ha realizado ninguna solicitud de privilegio" }}</td></tr>
+      {% endfor %}
+    </table>
+    
+    
+        <h2>Solicitudes Negadas</h2>
+    <table>
+    <tr>
+      <th> Privilegio </th> 
+      <th> Fecha </th> 
+    </tr>
+      {% for sol in negadas %}
+      
+      <tr>
+        
+       
+       <td>
+        {{ sol.get_privilegio_display }}
+       </td>
+       <td>
+        {{ sol.fecha }}
+       </td>
+       
+      </tr>
+      
+      {% empty %}
+      <tr><td colspan="5">{{ "No se ha realizado ninguna solicitud de privilegio" }}</td></tr>
+      {% endfor %}
+    </table>
+
+{% endblock %}

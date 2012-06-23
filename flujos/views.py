@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
     CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
-     CampoForm
-from flujos.models import Flujo, Paso, Campo, Criterio
+    CampoForm, AlertaForm, InformeForm
+from flujos.models import Flujo, Paso, Campo, Criterio, Alerta, Informe
 from unidades.models import Unidad, SolicitudPrivilegio
-from django.core.exceptions import ObjectDoesNotExist
 
 @login_required
 def agregar_paso(request, flujo_id):
@@ -236,57 +236,57 @@ def mezclar(alcanzables, temporal):
             alcanzables.append(t)
     return alcanzables
 
-# @alcanzables son todos los nodos alcanzables a partir de un nodo inicial contenido en alcanzable
+# @inicial Representa el paso inicial
 # @recorrido son los nodos por el cual se ha pasado
-# return alcanzables
-def dfs(alcanzables, recorrido):
-    while not recorrido == alcanzables:
-        temporal = []
-        for al in alcanzables:
-            if al not in recorrido:
-                recorrido.append(al)
-                temporal.extend(list(Paso.objects.get(paso=al).sucesores.all()))
-                temporal.extend(list(Paso.objects.filter(sucesores=al)))
-        alcanzables = mezclar(alcanzables, temporal)
-    return alcanzables
-# @alcanzables son todos los nodos alcanzables
-# @recorrido son los nodos por el cual se ha pasado
-# @pasos son todos los nodos presentes en el flujo
-# @pas representa el nodo inicial y se le aplicara un dfs para saber si los nodos alcanzables
 # Devuelve True si es un grafo conexo de lo contrario devuelve False
 def es_grafo_conexo(flujo):
-    pasos = Paso.objects.filter(flujo=flujo)
-    for pas in pasos:
-        alcanzables = [pas]
-        recorrido = []
-        if not dfs(alcanzables, recorrido) == list(pasos):
-            return False
-    return True 
+    iniciales = Paso.objects.filter(tipo = Paso.TIPO_INICIAL)
+    inicial = iniciales[0]
+    pasos = list(Paso.objects.filter(flujo=flujo))
+    pasosAbiertos = [inicial]
+    recorrido = []
+    while pasosAbiertos:
+        pas = pasosAbiertos.pop()
+        recorrido.append(pas)
+        p = list(Paso.objects.get(id=pas.id).sucesores.all())
+        for k in p:
+            if k not in pasosAbiertos and k not in recorrido:
+                pasosAbiertos.append(k)
+    #messages.warning(request, str(recorrido) + " " + str(pasos))
+    if len(pasos) == len(recorrido):
+        return True
+    else:
+        return False 
     
-
-
 @login_required(redirect_field_name='/')
 def publicar_flujo(request, flujo_id):
     unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404(Flujo, pk=flujo_id)
-    if (flujo.unidad in unidades):
-        inicial_final = flujo.inicial_final()
-        es_conexo = es_grafo_conexo(flujo)
-        flujo_igual = flujo.nombre_parecido()
-        if (inicial_final == True & es_conexo == True):
-            if set(flujo_igual) == set(Flujo.objects.none()):
-                flujo.estado = Flujo.ESTADO_PUBLICO
-                flujo.save()
-                messages.success(request, "Flujo (" + flujo.nombre + ") publicado.")
-            elif set(flujo_igual) != set(Flujo.objects.none()):
-                messages.error(request, "Flujo (" + flujo.nombre + ") ya existe con este nombre si quiere puede marcarlo como obsoleto y volver a publicarlo o no se podra publicar ")
-                return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':flujo_igual}, context_instance=RequestContext(request))
-                
+    if (flujo.estado == Flujo.ESTADO_BORRADOR):
+        if (flujo.unidad in unidades):
+            inicial_final = flujo.inicial_final()
+            es_conexo = es_grafo_conexo(flujo)
+            flujo_igual = flujo.nombre_parecido()
+            if (inicial_final == True and es_conexo == True):
+                if set(flujo_igual) == set(Flujo.objects.none()):
+                    flujo.estado = Flujo.ESTADO_PUBLICO
+                    flujo.save()
+                    messages.success(request, "Flujo (" + flujo.nombre + ") publicado.")
+                elif set(flujo_igual) != set(Flujo.objects.none()):
+                    messages.error(request, "Ya existe un Flujo publicado con este mismo nombre, si quiere puede marcarlo como obsoleto al que esta publicado o de lo contrario no se podra publicar.")
+                    return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':flujo_igual}, context_instance=RequestContext(request))
+                    
+            else :
+                if (inicial_final == False):
+                    messages.error(request, "Flujo (" + flujo.nombre + ") no posee paso inicial o final, o posee mas de un paso inicial, revise el flujo.")
+                if (es_conexo == False):
+                    messages.error(request, "Flujo (" + flujo.nombre + ") posee pasos que estan aislados, revise el flujo.")     
         else :
-            messages.success(request, "Flujo (" + flujo.nombre + ") no pudo ser publicado.")
-    else :
-        messages.error(request, "Error: el flujo seleccionado no se pudo publicar o porque no tiene nodo inicial o final o porque tiene pasos que estan aislados")
-    return listar_flujos_por_publicar(request)
+            messages.error(request, "Error: el flujo seleccionado no se puedo publicar debido a que usted no es el" 
+            + "responsable de la unidad a la cual esta asociado el flujo")
+    else:
+        messages.error(request, "Los flujos que estan en estado obsoleto no se puede publicar.")
+    return consultar_flujo(request, flujo_id)
 
 #@permission_required('flujos.criterio.add_criterio')
 @login_required()
@@ -385,3 +385,66 @@ def eliminar_campo(request, campo_id, paso_id):
     messages.success(request, "Campo eliminado exitosamente.")
     return HttpResponseRedirect("/flujos/consultar_paso/%s/" % paso_id)
 
+def agregar_alerta(request, paso_id):
+    paso = get_object_or_404(Paso, pk=paso_id)
+    if request.POST:
+        form = AlertaForm(request.POST, paso=paso)
+        if form.is_valid():
+            alerta = form.save()
+            messages.success(request, "Alerta agregada exitosamente")
+            return HttpResponseRedirect("/flujos/consultar_alerta/%s/" % alerta.id)
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+            return render_to_response('flujos/agregar_alerta.html',
+                    {'form':form}, context_instance=RequestContext(request))
+    else:
+        form = AlertaForm(paso=paso)
+        return render_to_response('flujos/agregar_alerta.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
+
+def agregar_informe(request, paso_id):
+    paso = get_object_or_404(Paso, pk=paso_id)
+    if request.POST:
+        form = InformeForm(request.POST, paso=paso)
+        if form.is_valid():
+            informe = form.save()
+            messages.success(request, "Informe agregado exitosamente")
+            return HttpResponseRedirect("/flujos/consultar_informe/%s/" % informe.id)
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+            return render_to_response('flujos/agregar_informe.html',
+                    {'form':form}, context_instance=RequestContext(request))
+    else:
+        form = AlertaForm(paso=paso)
+        return render_to_response('flujos/agregar_informe.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
+
+def modificar_alerta(request, alerta_id):
+    alerta = get_object_or_404(Alerta, pk=alerta_id)
+    if request.POST:
+        if 'cancelar' in request.POST:
+            return HttpResponseRedirect("/flujos/consultar_alerta/%s/" % alerta.id)
+        form = AlertaForm(request.POST, instance=alerta, paso=alerta.paso)
+        if form.is_valid():
+            alerta = form.save()
+            messages.success(request, "Alerta modificada exitosamente")
+            return HttpResponseRedirect("/flujos/consultar_alerta/%s/" % alerta.id)
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+    else:
+        form = AlertaForm(instance=alerta, paso=alerta.paso)
+    return render_to_response('flujos/modificar_alerta.html',{'form':form , 'paso_id': alerta.paso.id}, context_instance=RequestContext(request))
+
+def modificar_informe(request, informe_id):
+    informe = get_object_or_404(Informe, pk=informe_id)
+    if request.POST:
+        if 'cancelar' in request.POST:
+            return HttpResponseRedirect("/flujos/consultar_informe/%s/" % informe.id)
+        form = InformeForm(request.POST, instance=informe, paso=informe.paso)
+        if form.is_valid():
+            informe = form.save()
+            messages.success(request, "Informe modificada exitosamente")
+            return HttpResponseRedirect("/flujos/consultar_informe/%s/" % informe.id)
+        else:
+            messages.error(request, "Error: Alguno de los datos del formulario es invalido")
+    else:
+        form = InformeForm(instance=informe, paso=informe.paso)
+    return render_to_response('flujos/modificar_informe.html',{'form':form , 'paso_id': informe.paso.id}, context_instance=RequestContext(request))

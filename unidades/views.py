@@ -191,5 +191,22 @@ def otorgar_privilegios(request):
                                'solicitudes_miembro': r2,
                                'solicitudes_solicitante': r1},
                               context_instance=RequestContext(request))
+@login_required                              
+def listar_privilegios(request):
+
+    u = request.user
+    print u
+    lista_espera = SolicitudPrivilegio.objects.filter(solicitante = u,estado = 1)
+    lista_aceptado = SolicitudPrivilegio.objects.filter(solicitante = u, estado = 2)
+    lista_negado = SolicitudPrivilegio.objects.filter(solicitante = u, estado = 3)
+          
+    return render_to_response("unidades/listar_privilegios.html",
+                              {'en_espera': lista_espera,
+                               'aceptadas': lista_aceptado,
+                               'negadas': lista_negado},
+                              context_instance=RequestContext(request))
+    
+    
+    
     
     
