@@ -8,7 +8,7 @@ from django.template.context import RequestContext
 from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
     CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
      CampoForm,AlertaForm,InformeForm
-from flujos.models import Flujo, Paso, Campo, Criterio
+from flujos.models import Flujo, Paso, Campo, Criterio, Alerta 
 from unidades.models import Unidad, SolicitudPrivilegio
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -401,6 +401,15 @@ def agregar_alerta(request, paso_id):
         form = AlertaForm(paso=paso)
         return render_to_response('flujos/agregar_alerta.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
 
+def eliminar_alerta(request,alerta_id):
+    alerta = get_object_or_404(Alerta,pk=alerta_id)
+    if not alerta.paso.flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        messages.error(request, "Solo el responsable de la unidad puede eliminar la alerta.")
+        return HttpResponseRedirect(reverse("flujo_index"))
+    alerta.delete()
+    messages.success(request,"Alerta eliminada exitosamente")
+    return HttpResponseRedirect("/flujos/consultar_paso/%s/" % alerta.paso.id)
+
 def agregar_informe(request, paso_id):
     paso = get_object_or_404(Paso, pk=paso_id)
     if request.POST:
@@ -416,4 +425,15 @@ def agregar_informe(request, paso_id):
     else:
         form = AlertaForm(paso=paso)
         return render_to_response('flujos/agregar_informe.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
+
+
+def eliminar_informe(request,informe_id):
+    informe = get_object_or_404(Informe,pk=informe_id)
+    if not informe.paso.flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        messages.error(request, "Solo el responsable de la unidad puede eliminar el informe.")
+        return HttpResponseRedirect(reverse("flujo_index"))
+    alerta.delete()
+    messages.success(request,"Informe eliminada exitosamente")
+    return HttpResponseRedirect("/flujos/consultar_paso/%s/" % informe.paso.id)
+
 

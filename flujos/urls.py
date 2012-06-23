@@ -31,6 +31,7 @@ urlpatterns = patterns('flujos.views',
     url(r'^listar_pasos/(?P<flujo_id>\d+)/$', 'listar_pasos'),
     url(r'^consultar_paso/$', 'copiar_flujo'),
     url(r'^agregar_alerta/(?P<paso_id>\d+)/$', 'agregar_alerta'),
+    url(r'^eliminar_alerta/(?P<alerta_id>\d+)/$', 'eliminar_alerta'), 
     url(r'^agregar_informe/(?P<paso_id>\d+)/$', 'agregar_informe'),
     
     
