@@ -115,19 +115,46 @@
     
 <h2>Alertas</h2>
 {% if paso.alertas_paso.all %}
-    
-        {% for alerta in paso.alertas_paso.all %}
-            <p>Descripcion: {{ alerta.descripcion }}</p>
-                <tr>
-            <td> <a href="/flujos/consultar_alerta/{{ alerta.id}}/">{{ "Ver Alerta" }}</a></td>
-        <td> <a href="/flujos/consultar_alerta/{{ alerta.id}}/">Modificar</a></td>
-        <td> <a href="/flujos/eliminar_alerta/{{ alerta.id}}/">Eliminar</a></td>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Destinatarios</th>
+            <th>Mostrar al</th>
+            <th>Tipo</th>
+            <th>Formato</th>
+            <th></th>
+            <th></th>
         </tr>
+        {% for alerta in paso.alertas_paso.all %}
+            <tr>
+                <td><a href="/flujos/consultar_alerta/{{ alerta.id }}/">{{ alerta.nombre }}</a></td>
+                <td>
+                        {% if alerta.miembro_es_receptor %}Miembro</br>{% endif %}
+                        {% if alerta.solicitante_es_receptor %}Solicitante{% endif %}
+                </td>
+                <td>
+                    {% if alerta.mostrar_al_llegar %}
+                        Llegar
+                    {% else %}
+                        Salir
+                    {% endif %}
+                </td>
+                <td>
+                    <ul>
+                        {% for tipo in alerta.tipos.all %}
+                            <li>{{ tipo.nombre }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td> {{ alerta.formato }} </td>                
+                <td> <a href="/flujos/modificar_alerta/{{ alerta.id}}/">Modificar</a></td>
+                <td> <a href="/flujos/eliminar_alerta/{{ alerta.id}}/">Eliminar</a></td>
+            </tr>
         {% endfor %}
-    
-    {% else %}
-        <p>No hay alertas para {{paso.nombre}} </p>
-    {% endif %} 
+    </table>    
+{% else %}
+    <p>No hay alertas para {{paso.nombre}} </p>
+{% endif %} 
 {% endblock %}
 
 
