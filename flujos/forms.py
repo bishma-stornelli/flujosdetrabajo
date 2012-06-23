@@ -27,8 +27,8 @@ class CrearFlujoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
 class AgregarCampoForm(forms.Form):
     nombre= forms.CharField(max_length=20, label="Nombre")
     tipo = forms.ChoiceField(choices=Campo.TIPO_CHOICES, label="Tipo")
-    esObligatorio = forms.BooleanField(label="Obligatorio")
-    
+    #responsable = forms.ChoiceField(choices=Campo.TIPO_CHOICES2, label="Responsable")
+    esObligatorio = forms.BooleanField(label="Obligatorio", initial=False, required=False)
     
 
 class ModificarPasoForm(ModelForm):
@@ -63,6 +63,7 @@ class AgregarPasoForm(ModelForm):
         self.fields['flujo'].initial = flujo.id
 
 
-class ModificarCampoForm(ModelForm):
+class CampoForm(ModelForm):
     class Meta:
         model = Campo
+        exclude = ('paso')
