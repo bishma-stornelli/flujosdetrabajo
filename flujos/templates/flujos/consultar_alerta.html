@@ -1,0 +1,51 @@
+{% extends "flujos/base.html" %}
+
+{% block submenu %}
+{{ block.super }}
+        <li><h2>Opciones<h2></li>
+         <li><a href="/flujos/consultar_alerta/{{ alerta.id }}/">Volver al flujo</a></li>
+        <li><a href="/flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</a></li>
+        <li><a href="/flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</a></li>
+        <li><a href="/flujos/agregar_alerta/{{ paso.id }}/"/> Agregar Alerta</a></li>
+     <li><a href="/flujos/agregar_campo/{{ paso.id }}/"/> Agregar Campo</a></li>
+      <li><a href="/flujos/agregar_criterio/"/> Agregar Criterio</a></li>
+     <li><a href="/flujos/agregar_informe/{{ paso.id }}/"/> Agregar Informe</a></li>
+     <li><a href="/flujos/modificar_alerta/{{ alerta.id}}/"> Modificar alerta</a></li>
+     
+     <li><a href="/flujos/eliminar_alerta/{{ alerta.id}}/"> Eliminar alerta</a></li>
+     
+
+{% endblock %}
+
+{% block content %}
+<h1> Nombre de la alerta: </h1>
+<h3>{{ alerta.nombre }}</h3>
+        <thead>
+        </thead>
+        <tbody>
+        
+			<td>
+			<h3>La alerta se muestra al:</h3>
+            {% if alerta.mostrar_al_llegar %}
+              Llegar
+            {% else %}
+              Salir
+            {% endif %}
+            </td>
+            <br>
+			<br>
+			<h3>Paso asociado a la alerta:</h3>
+			{{ alerta.paso }}
+			
+			<br>
+			<td>
+			<h3>Receptores de la alerta:</h3>
+            	{% if alerta.miembro_es_receptor %}Miembro</br>{% endif %}
+            	{% if alerta.solicitante_es_receptor %}Solicitante<br>{% endif %}	
+        	</td>
+        	<br>
+        	<h3>Formato:</h3>
+        	<br>
+        	<td> {{ alerta.formato }} </td>                
+        </tbody>
+{% endblock %}
