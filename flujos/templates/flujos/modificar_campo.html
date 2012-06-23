@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% comment %} NO OLVIDEN COLOCAR method="POST" {% endcomment %}
     <form action="/flujos/modificar_campo/{{ campo_id }}/" method="POST">{% csrf_token %}
         <table>
             {{ form.as_table }}
             <td><input type="submit" value="Modificar" /></td>
         </table>
     </form>
-
 {% endblock %}

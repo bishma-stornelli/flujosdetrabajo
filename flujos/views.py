@@ -378,10 +378,10 @@ def modificar_campo(request, campo_id):
                                                           'campo_id': campo_id },
                                         context_instance=RequestContext(request))
 
-def eliminar_campo(request, campo_id):
-    campo = get_object_or_404(Campo, pk = campo_id)
-    if request.method == "GET":
-	if(campo):	
-	    campo.delete()
-	return HttpResponseRedirect("/flujos/eliminar_campo/%s/" % campo_id)
+
+def eliminar_campo(request, campo_id, paso_id):
+    campo = get_object_or_404(Campo, pk=campo_id)
+    campo.delete()
+    messages.success(request, "Campo eliminado exitosamente.")
+    return HttpResponseRedirect("/flujos/consultar_paso/%s/" % paso_id)
 
