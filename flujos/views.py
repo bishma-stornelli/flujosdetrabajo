@@ -6,7 +6,13 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
+<<<<<<< HEAD
+from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
+    CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
+     CampoForm,AlertaForm,InformeForm
+=======
 from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, CampoForm,AlertaForm,InformeForm
+>>>>>>> 45fc54bc67bf7ea97eced8bd03d9ff7bd68698ad
 from flujos.models import Flujo, Paso, Campo, Criterio, Alerta, Informe
 from unidades.models import Unidad, SolicitudPrivilegio
 
@@ -425,6 +431,17 @@ def agregar_informe(request, paso_id):
         return render_to_response('flujos/agregar_informe.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
 
 
+@login_required
+def consultar_alerta(request, alerta_id):
+    alerta = get_object_or_404(Alerta, pk = alerta_id)
+    return render_to_response('flujos/consultar_alerta.html', {'alerta': alerta}, 
+    											context_instance=RequestContext(request))
+    											
+@login_required
+def consultar_informe(request, informe_id):
+    informe = get_object_or_404(Informe, pk = informe_id)
+    return render_to_response('flujos/consultar_informe.html', {'informe': informe}, 
+    											context_instance = RequestContext(request))
 
 def eliminar_informe(request,informe_id):
     informe = get_object_or_404(Informe,pk=informe_id)
