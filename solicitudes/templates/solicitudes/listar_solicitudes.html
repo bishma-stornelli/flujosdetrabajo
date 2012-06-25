@@ -9,8 +9,25 @@
 	      <th> Fecha </th> 
 	      <th> Consultar </th>
 	</tr>
-	<tr>
-		<td colspan="5">{{ "No se ha creado ninguna solicitud" }}</td>
-	</tr>
+      {% for solicitud in solicitudes %}
+      
+      <tr>
+        
+       <td>
+        {{ solicitud.nombre }}
+       </td>
+       <td>
+        {{ solicitud.solicitantes }}
+       </td>
+       <td>
+        {{ solicitud.fecha_de_solicitud }}
+       </td>
+       <td>
+        <a href="/solicitudes/consultar_solicitud/{{ solicitud.id }}/">Consultar</a>
+       </td>
+      </tr>      
+      {% empty %}
+      <tr><td colspan="4">{{ "No se ha creado ninguna solicitud" }}</td></tr>
+      {% endfor %}
     </table>
 {% endblock %}

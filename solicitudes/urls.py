@@ -8,6 +8,7 @@ urlpatterns = patterns('solicitudes.views',
     # url(r'^crear_paso/$', 'crear_paso'),
 	url(r'^listar_solicitudes/$', 'listar_solicitudes'),
     url(r'^index/$', TemplateView.as_view(template_name = 'solicitudes/base.html'), name='solicitudes_index'),
+    url(r'^consultar_solicitud/(?P<solicitud_id>\d+)/$', 'consultar_solicitud'),
     
 )
 
