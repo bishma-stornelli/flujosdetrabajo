@@ -49,13 +49,11 @@
             {% endif %}
         </td>
         <td>
-            <a href="/flujos/modificar_campo/{{
-                criterio.paso_origen.id }}/"> Modificar </a>
-        </td>
-        <td>
-            <a href="/flujos/eliminar_campo/{{
-                criterio.paso_origen.id }}/"> Eliminar</a>
-        </td>
+		    <li><a href="/flujos/modificar_campo/{{ campo.id }}/"> Modificar </a></li> 
+	    </td>
+		<td>
+		    <li><a href="/flujos/eliminar_campo/{{ campo.id }}/"> Eliminar</a></li> 
+	    </td>
     </tr>
     {% empty %}
         No hay campos para el paso

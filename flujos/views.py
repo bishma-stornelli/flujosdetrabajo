@@ -373,7 +373,7 @@ def modificar_campo(request, campo_id):
             campo = form.save(commit=False)
             campo.save()
             messages.success(request, "Campo actualizado exitosamente.")
-            return HttpResponseRedirect("/flujos/modificar_campo/%s/" % campo_id)
+            return HttpResponseRedirect("/flujos/consultar_paso/%s/" % campo.paso.id)
         else:
             messages.error(request, "Verifique los campos introducidos e intente de nuevo.")
     else:
@@ -382,12 +382,12 @@ def modificar_campo(request, campo_id):
                                                           'campo_id': campo_id },
                                         context_instance=RequestContext(request))
 
+
 def eliminar_campo(request, campo_id):
-    campo = get_object_or_404(Campo, pk = campo_id)
-    if request.method == "GET":
-	if(campo):	
-	    campo.delete()
-	return HttpResponseRedirect("/flujos/eliminar_campo/%s/" % campo_id)
+    campo = get_object_or_404(Campo, pk=campo_id)
+    campo.delete()
+    messages.success(request, "Campo eliminado exitosamente.")
+    return HttpResponseRedirect("/flujos/consultar_paso/%s/" % campo.paso.id)
 
 def agregar_alerta(request, paso_id):
     paso = get_object_or_404(Paso, pk=paso_id)
