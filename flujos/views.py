@@ -6,13 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-<<<<<<< HEAD
-from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
-    CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
-     CampoForm,AlertaForm,InformeForm
-=======
-from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, CampoForm,AlertaForm,InformeForm
->>>>>>> 45fc54bc67bf7ea97eced8bd03d9ff7bd68698ad
+from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm,CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm,CampoForm,AlertaForm,InformeForm
 from flujos.models import Flujo, Paso, Campo, Criterio, Alerta, Informe
 from unidades.models import Unidad, SolicitudPrivilegio
 
