@@ -1,0 +1,13 @@
+{% extends "solicitudes/base.html" %}
+
+{% block content %}
+    <h1>Datos</h1>
+{% endblock %}
+
+{% block submenu %}
+{{ block.super }}
+        <li><h2>Opciones<h2></li>
+        <li><a href="/solicitudes/consultar_solicitud/{{ dato.solicitud.id }}/"> Volver
+                a la Solicitud</a></li>
+
+{% endblock %}
