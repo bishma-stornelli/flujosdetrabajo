@@ -11,6 +11,10 @@ class RegistroForm(forms.Form):
 	confirm = forms.CharField(min_length=5,max_length=20, widget=forms.PasswordInput)
 	email = forms.EmailField()
 
+class RecoverForm(forms.Form):
+    username = forms.CharField(max_length=20, label='Favor introduzca el nombre de usuario con el que se registro')
+
+
 class LoginForm(forms.Form):
 	username = forms.CharField(max_length=20)
 	clave = forms.CharField(max_length=20, widget=forms.PasswordInput)

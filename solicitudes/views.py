@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from solicitudes.models import Solicitud
+from solicitudes.models import Solicitud, Registro
 
 @login_required
 def listar_solicitudes(request):
@@ -36,8 +36,17 @@ def avanzar_solicitud(request):
      return render_to_response('solicitudes/avanzar_solicitud.html')
 
 @login_required
-def retirar_solicitud(request):
-     return render_to_response('solicitudes/retirar_solicitud.html')
+def retirar_solicitud(request,solicitud_id):
+    solicitudes = get_object_or_404('Solicitud',pk=solicitud_id)
+    if (solicitudes.solicitantes==request.user):
+        registro = Registro.objects.filter(solicitud = solicitudes)
+        registro.estado = Registro.ESTADO_RETIRADO
+        registro.fecha_salida = datetime.datetime.now()
+        registro.save()
+        messages.success(request, "La Solicitud ha sido retirada")
+    else:
+        messages.error(request,"Error: Solo la persona que realizo la solicitud puede retirarla")
+    return listar_solicitudes(request)
 
 @login_required
 def generar_informe(request):
