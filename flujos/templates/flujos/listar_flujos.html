@@ -9,6 +9,7 @@
       <th> Estado </th> 
       <th> Consultar </th>
       <th> Modificar </th>
+	  <th> Crear Solicitud </th>
     </tr>
       {% for flujo in flujos %}
       
@@ -28,6 +29,9 @@
        </td>
        <td>
         <a href="/flujos/modificar_flujo/{{ flujo.id }}/">Modificar</a>
+       </td>
+	   <td>
+        <a href="/solicitudes/crear_solicitud/{{ flujo.id }}/">Crear Solicitud</a>
        </td>
       </tr>
       
