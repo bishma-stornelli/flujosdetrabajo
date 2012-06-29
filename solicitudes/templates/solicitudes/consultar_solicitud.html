@@ -1,20 +1,105 @@
 {% extends "solicitudes/base.html" %}
 
 {% block content %}
-    <h1>Solicitud</h1>
+    <h1>Detalles de la Solicitud</h1></br>
+    
+    <h2>Unidad</h2>
+    <h5>{{solicitud.flujo.unidad.nombre}}</h5>
+    <h2>Flujo</h2>
+    <a href="/flujos/consultar_flujo/{{ solicitud.flujo.id }}/"><h5>{{solicitud.flujo.nombre}}</h5></a>
+    <h2>Solicitante</h2>
+    <h5>{{solicitud.solicitantes.username}}</h5>
+    <h2>Fecha</h2>
+    <h5>{{solicitud.fecha_de_solicitud}}</h5>
+    <h2>Pasos actuales</h2>
+    
+    <table>
+        <tr>
+            <th>Paso</th>
+            <th>Fecha de inicio</th>
+            <th>Estado</th>
+        </tr>
+        
+    {%for actual in actuales%}
+        <tr>
+            <td><a href="/flujos/consultar_paso/{{ actual.paso.id }}/">{{actual.paso.nombre}}</a></td>
+            <td>{{actual.paso.fecha_de_entrada}}</td>
+            <td>{{actual.get_estado_display}}</td>
+        </tr>
+     {% empty %}
+      <tr><td colspan="4">{{ "No existe ningún paso actual para esta solicitud" }}</td></tr>   
+    
+    {%endfor%}
+    
+    </table>
+    
+     <h2>Pasos completados</h2>
+    
+    <table>
+        <tr>
+            <th>Paso</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha de salida</th>
+            <th>Estado</th>
+        </tr>
+        
+    {%for completos in completados%}
+        <tr>
+            <td><a href="/flujos/consultar_paso/{{ completos.paso.id }}/">{{completos.paso.nombre}}</a></td>
+            <td>{{completos.paso.fecha_de_entrada}}</td>
+            <td>{{completos.paso.fecha_de_salida}}</td>
+            <td>{{completos.get_estado_display}}</td>
+        </tr>
+     {% empty %}
+      <tr><td colspan="4">{{ "No existe ningún paso completado aún" }}</td></tr>   
+    
+    {%endfor%}
+    
+    </table>
+    
+     <h2>Pasos próximos a completar</h2>
+    
+    <table>
+        <tr>
+            <th>Paso</th>
+            <th>Estado</th>
+        </tr>
+        
+    {%for ph in por_hacer%}
+        <tr>
+            <td><a href="/flujos/consultar_paso/{{ ph.paso.id }}/">{{ph.paso.nombre}}</a></td>
+            <td>{{ph.get_estado_display}}</td>
+        </tr>
+     {% empty %}
+      <tr><td colspan="4">{{ "No existe ningún paso por completar" }}</td></tr>   
+    
+    {%endfor%}
+    
+    </table>
+    
+    
+    
 {% endblock %}
 
 {% block submenu %}
 {{ block.super }}
         <li><h2>Opciones<h2></li>
-        <li><a href="/solicitudes/agregar_dato/" class="medium button black">
-               Agregar Dato</a></li>
-        <li><a href="/solicitudes/completar_dato/" class="medium button black">
-               Completar Dato</a></li>
-        <li><a href="/solicitudes/avanzar_solicitud/" class="medium button black">
-               Avanzar Solicitud</a></li>
+        
+
         <li><a href="/solicitudes/retirar_solicitud/" class="medium button black">
                Retirar Solicitud</a></li>
         <li><a href="/solicitudes/generar_informe/" class="medium button black">
                Generar Informe</a></li>
+         <li><a href="/solicitudes/agregar_dato/" class="medium button black">
+               Agregar Dato</a></li>
+        {%if responsable %}
+        
+        <li><a href="/solicitudes/completar_dato/" class="medium button black">
+               Completar Dato</a></li>
+        
+            <li><a href="/solicitudes/avanzar_solicitud/" class="medium button black">
+            Avanzar Solicitud</a></li>
+        
+        {%endif%}
+        
 {% endblock %}

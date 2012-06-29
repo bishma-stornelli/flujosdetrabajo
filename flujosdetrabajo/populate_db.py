@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from flujos.models import Flujo, Paso, Criterio, Alerta, Informe, TipoAlerta
 from unidades.models import Unidad
+from solicitudes.models import Solicitud, Registro
 
 TipoAlerta(nombre="SMS").save()
 TipoAlerta(nombre="Email").save()
@@ -72,6 +73,7 @@ unidad3.save()
 unidad3.miembros.add(u1)
 unidad3.miembros.add(u5)
 unidad3.miembros.add(u4)
+
 
 
 unidad4 = Unidad(nombre="RECTORADO", descripcion="Rectorado", responsable=u4)
@@ -163,3 +165,6 @@ c6 = Criterio(paso_origen=p6,paso_destino=p7,descripcion="Criterio dummy",expres
 c6.save()
 c7 = Criterio(paso_origen=p7,paso_destino=p8,descripcion="Criterio final",expresion="true")
 c7.save()
+
+
+solicitud1 = Solicitud(flujo=flujo2,fecha_de_solicitud=datetime.datetime.now())
