@@ -1,18 +1,50 @@
 {% extends "solicitudes/base.html" %}
 
 {% block content %}
-    <h1>Solicitudes</h1>
+    <h1>Solicitudes realizadas por ti.</h1>
     <table>
 	<tr>
+		  <th> Unidad </th>
+	      <th> Nombre del Flujo </th> 
+	      <th> Fecha </th> 
+	      <th> Consultar </th>
+	</tr>
+      {% for solicitud in solicitudes_solicitante %}
+      
+      <tr>
+       <td>
+        {{ solicitud.flujo.unidad.nombre }}
+       </td>  
+       <td>
+        <a href="/flujos/consultar_flujo/{{ solicitud.flujo.id }}/">{{ solicitud.flujo.nombre }}
+       </td>
+       <td>
+        {{ solicitud.fecha_de_solicitud }}
+       </td>
+       <td>
+        <a href="/solicitudes/consultar_solicitud/{{ solicitud.id }}/">Consultar</a>
+       </td>
+      </tr>      
+      {% empty %}
+      <tr><td colspan="4">{{ "No se ha creado ninguna solicitud" }}</td></tr>
+      {% endfor %}
+    </table>
+    </br>
+    <h1>Solicitudes de unidades donde eres miembro.</h1>
+    <table>
+	<tr>
+		  <th> Unidad </th>
 	      <th> Nombre del Flujo </th> 
 	      <th> Solicitante </th> 
 	      <th> Fecha </th> 
 	      <th> Consultar </th>
 	</tr>
-      {% for solicitud in solicitudes %}
+      {% for solicitud in solicitudes_miembro %}
       
       <tr>
-        
+       <td>
+        {{ solicitud.flujo.unidad.nombre }}
+       </td> 
        <td>
         <a href="/flujos/consultar_flujo/{{ solicitud.flujo.id }}/">{{ solicitud.flujo.nombre }}
        </td>
@@ -30,4 +62,5 @@
       <tr><td colspan="4">{{ "No se ha creado ninguna solicitud" }}</td></tr>
       {% endfor %}
     </table>
+    
 {% endblock %}

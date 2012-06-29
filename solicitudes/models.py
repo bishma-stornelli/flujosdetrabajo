@@ -22,5 +22,6 @@ class Registro(models.Model):
     fecha_de_salida = models.DateTimeField(null=True)
     ESTADO_COMPLETO = 1;
     ESTADO_EN_PROCESO = 2;
+    ESTADO_RETIRADO = 3;
     estado_choices = ((ESTADO_COMPLETO,'Completo'),(ESTADO_EN_PROCESO,'En proceso'))
     estado = models.IntegerField(choices=estado_choices)
