@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from solicitudes.models import Solicitud
+from unidades.models import SolicitudPrivilegio
 
 @login_required
 def listar_solicitudes(request):
@@ -17,7 +18,28 @@ def listar_solicitudes(request):
 
 @login_required
 def consultar_solicitud(request, solicitud_id):
-     return render_to_response('solicitudes/consultar_solicitud.html')
+     solicitud = get_object_or_404(Solicitud, id = solicitud_id, solicitantes=request.user)
+     actuales = solicitud.registros.filter(estado=2)
+     completados = solicitud.registros.filter(estado=1).order_by('fecha_de_salida')
+     por_hacer = set([])
+     pila = list(actuales)
+     
+     
+     while pila !=[]:
+        aux = pila.pop()
+        pila.extend(aux.paso.sucesores.all())
+        por_hacer.add(aux)
+        
+        
+     if solicitud.flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        responsable = True
+     else:
+        responsable = False
+     
+
+
+     
+     return render_to_response('solicitudes/consultar_solicitud.html', {'solicitud':solicitud, 'actuales':actuales, 'completados':completados, 'por_hacer':por_hacer, 'responsable':responsable}, context_instance=RequestContext(request))
 
 @login_required
 def crear_solicitud(request):
