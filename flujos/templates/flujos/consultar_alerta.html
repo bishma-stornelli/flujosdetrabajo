@@ -4,12 +4,12 @@
 {{ block.super }}
         <li><h2>Opciones<h2></li>
          <li><a href="/flujos/consultar_alerta/{{ alerta.id }}/">Volver al flujo</a></li>
-        <li><a href="/flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</a></li>
-        <li><a href="/flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</a></li>
-        <li><a href="/flujos/agregar_alerta/{{ paso.id }}/"/> Agregar Alerta</a></li>
-     <li><a href="/flujos/agregar_campo/{{ paso.id }}/"/> Agregar Campo</a></li>
-      <li><a href="/flujos/agregar_criterio/"/> Agregar Criterio</a></li>
-     <li><a href="/flujos/agregar_informe/{{ paso.id }}/"/> Agregar Informe</a></li>
+        <li><a href="/flujos/modificar_paso/{{ alerta.paso.id }}/"> Modificar Paso</a></li>
+        <li><a href="/flujos/eliminar_paso/{{ alerta.paso.id }}/"> Eliminar Paso</a></li>
+        <li><a href="/flujos/agregar_alerta/{{ alerta.paso.id }}/"> Agregar Alerta</a></li>
+     <li><a href="/flujos/agregar_campo/{{ alerta.paso.id }}/"> Agregar Campo</a></li>
+      <li><a href="/flujos/agregar_criterio/"> Agregar Criterio</a></li>
+     <li><a href="/flujos/agregar_informe/{{ alerta.paso.id }}/"> Agregar Informe</a></li>
      <li><a href="/flujos/modificar_alerta/{{ alerta.id}}/"> Modificar alerta</a></li>
      
      <li><a href="/flujos/eliminar_alerta/{{ alerta.id}}/"> Eliminar alerta</a></li>
