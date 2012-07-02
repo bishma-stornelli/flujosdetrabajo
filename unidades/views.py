@@ -12,77 +12,6 @@ from unidades.forms import RegistroUnidadForm, SolicitudPrivilegioForm, \
     ConfigurarUnidadForm
 from unidades.models import SolicitudPrivilegio, Unidad
                 
-@login_required
-def otorgar_privilegio(request):
-    #miembro = get_object_or_404(Group, name='Miembro de Unidad')
-    #solicitante = get_object_or_404(Group, name='Solicitante')
-    #responsable = get_object_or_404(Group, name='Responsable de Unidad')
-    unidadesMiembro= Unidad.objects.filter(miembros=request.user)
-    unidadesResponsable = Unidad.objects.filter(responsable=request.user)
-        #lista de los privilegios que qieren ser miembros
-    listaMiembro=SolicitudPrivilegio.objects.none()
-        #lista de los privilegios que quieren ser solicitantes
-    listaPrivilegios=SolicitudPrivilegio.objects.none()
-    #lista de los privilegios que quieren ser responsable
-    listaResponsable=SolicitudPrivilegio.objects.none()
-    for b in unidadesResponsable:
-            listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
-    for a in unidadesMiembro:
-            listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
-    if request.user.is_superuser:
-            listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
-    if request.method == "GET":
-
-        return render_to_response("unidades/otorgar_privilegio.html",{'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, context_instance=RequestContext(request))
-    elif request.method =="POST":
-        form = SolicitudPrivilegioForm()
-        if 'aceptar_privilegio' in request.POST:
-                priv= SolicitudPrivilegio.objects.get(id= request.POST['id'])# Este id lo puse porque no se como obtener el de la solicitud por probar
-                priv.estado= 2
-                priv.save()
-                unidad= Unidad.objects.get(id=priv.unidad.id)
-                if priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_MIEMBRO:
-                    unidad.miembros.add(priv.solicitante)
-                    #priv.solicitante.groups.add(miembro)
-                elif priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE:
-                    unidad.solicitantes.add(priv.solicitante)
-                    #priv.solicitante.groups.add(solicitante)
-                elif priv.privilegio == SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE:
-                    #priv.solicitante.groups.add(responsable)
-                    unidad.responsable = priv.solicitante
-                    unidad.save()
-                listaMiembro=SolicitudPrivilegio.objects.none()
-        #lista de los privilegios que quieren ser solicitantes
-                listaPrivilegios=SolicitudPrivilegio.objects.none()
-                listaResponsable=SolicitudPrivilegio.objects.none()
-                for b in unidadesResponsable:
-                    listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
-                for a in unidadesMiembro:
-                    listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
-                if request.user.is_superuser:
-                    listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
-                messages.success(request, "Solicitud aceptada.")
-                return render_to_response("unidades/otorgar_privilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
-                                              context_instance=RequestContext(request))
-                
-        elif 'negar_privilegio' in request.POST:
-                priv= SolicitudPrivilegio.objects.get(id=1)# Este id lo puse porque no se como obtener el de la solicitud
-                priv.estado= 2
-                priv.save()
-                listaMiembro=SolicitudPrivilegio.objects.none()
-        #lista de los privilegios que quieren ser solicitantes
-                listaPrivilegios=SolicitudPrivilegio.objects.none()
-                listaResponsable=SolicitudPrivilegio.objects.none()
-                for b in unidadesResponsable:
-                    listaMiembro = listaMiembro|SolicitudPrivilegio.objects.filter(unidad=b, privilegio=2, estado=1)
-                for a in unidadesMiembro:
-                    listaPrivilegios=listaPrivilegios|SolicitudPrivilegio.objects.filter(unidad=a, privilegio=1, estado=1)
-                if request.user.is_superuser:
-                    listaResponsable=listaResponsable|SolicitudPrivilegio.objects.filter(privilegio=3, estado=1)
-                messages.success(request, "Solicitud cancelada.")
-                return render_to_response("unidades/otorgar_privilegio.html", {'listaPrivilegios':listaPrivilegios, 'listaMiembro':listaMiembro,'listaResponsable':listaResponsable}, 
-                                              context_instance=RequestContext(request))
-
 
 @login_required
 def registrar_unidad(request):
@@ -97,11 +26,12 @@ def registrar_unidad(request):
             messages.success( request , "Registro de unidad exitoso.")
             return HttpResponseRedirect(reverse("unidades_index"))
         else:
-                  messages.error(request, "Verifique los datos e intente de nuevo.")
+            messages.error(request, "Verifique los datos e intente de nuevo.")
     else:
-           form = RegistroUnidadForm()
+        form = RegistroUnidadForm()
     return render_to_response("unidades/registrar_unidad.html", {'form':form}, context_instance=RequestContext(request))
 
+@login_required
 def configurar_unidad(request, unidad_id):
   unidad = get_object_or_404( Unidad, pk = unidad_id)
   if request.method == "POST":
@@ -193,9 +123,7 @@ def otorgar_privilegios(request):
                               context_instance=RequestContext(request))
 @login_required                              
 def listar_privilegios(request):
-
     u = request.user
-    print u
     lista_espera = SolicitudPrivilegio.objects.filter(solicitante = u,estado = 1)
     lista_aceptado = SolicitudPrivilegio.objects.filter(solicitante = u, estado = 2)
     lista_negado = SolicitudPrivilegio.objects.filter(solicitante = u, estado = 3)
@@ -205,8 +133,3 @@ def listar_privilegios(request):
                                'aceptadas': lista_aceptado,
                                'negadas': lista_negado},
                               context_instance=RequestContext(request))
-    
-    
-    
-    
-    

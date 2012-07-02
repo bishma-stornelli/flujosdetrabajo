@@ -13,6 +13,6 @@ urlpatterns = patterns('unidades.views',
     url(r'^otorgar_privilegio/$','otorgar_privilegios'),
     url(r'^solicitar_privilegio/$','solicitar_privilegio'),
     url(r'^listar_privilegios/$','listar_privilegios'),
-    url(r'^listar_unidades/$', ListView.as_view(model=Unidad, template_name='unidades/listar_unidades.html')),
-    url(r'^index/$', TemplateView.as_view(template_name = 'unidades/base.html') , name= "unidades_index"),
-    )
+    url(r'^listar_unidades/$', ListView.as_view(model=Unidad, template_name='unidades/listar_unidades.html'),name= "unidades_index"),
+    url(r'^index/$', TemplateView.as_view(template_name = 'unidades/base.html')),
+)

@@ -16,6 +16,6 @@ urlpatterns = patterns('solicitudes.views',
     url(r'^avanzar_solicitud/$', 'avanzar_solicitud'),
     url(r'^retirar_solicitud/$', 'retirar_solicitud'),
     url(r'^generar_informe/$', 'generar_informe'),
-    url(r'^retirar_solicitud/<?P<solicitud_id>\d+)/$', 'retirar_solicitud'),
+    url(r'^retirar_solicitud/(?P<solicitud_id>\d+)/$', 'retirar_solicitud'),
 )
 
