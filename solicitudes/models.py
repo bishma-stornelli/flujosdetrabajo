@@ -5,8 +5,8 @@ from flujos.models import Paso, Campo, Flujo
 
 class Solicitud(models.Model):
     flujo = models.ForeignKey(Flujo)
-    solicitantes = models.ForeignKey(User)
-    fecha_de_solicitud = models.DateTimeField("Date published")
+    solicitante = models.ForeignKey(User)
+    fecha_de_solicitud = models.DateTimeField(auto_now_add=True)
     pasos = models.ManyToManyField(Paso,through='Registro')
     campos = models.ManyToManyField(Campo, through='Respuesta')
 

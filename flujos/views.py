@@ -394,10 +394,11 @@ def agregar_alerta(request, paso_id):
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_alerta.html',
-                    {'form':form}, context_instance=RequestContext(request))
+                    {'form':form, 'paso':paso}, context_instance=RequestContext(request))
     else:
         form = AlertaForm(paso=paso)
-        return render_to_response('flujos/agregar_alerta.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
+        return render_to_response('flujos/agregar_alerta.html',
+                                {'form':form,'paso':paso}, context_instance=RequestContext(request))
 
 def eliminar_alerta(request,alerta_id):
     alerta = get_object_or_404(Alerta,pk=alerta_id)
@@ -419,10 +420,12 @@ def agregar_informe(request, paso_id):
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_informe.html',
-                    {'form':form}, context_instance=RequestContext(request))
+                    {'form':form, 'paso':paso}, context_instance=RequestContext(request))
     else:
         form = AlertaForm(paso=paso)
-        return render_to_response('flujos/agregar_informe.html',{'form':form,'paso':paso}, context_instance=RequestContext(request))
+        return render_to_response('flujos/agregar_informe.html',
+                    {'form':form,'paso':paso}, context_instance=RequestContext(request))
+
 
 
 @login_required
