@@ -8,6 +8,7 @@
 	      <th> Nombre del Flujo </th> 
 	      <th> Fecha </th> 
 	      <th> Consultar </th>
+	      <th></th>
 	</tr>
       {% for solicitud in solicitudes_solicitante %}
       
@@ -22,7 +23,10 @@
         {{ solicitud.fecha_de_solicitud }}
        </td>
        <td>
-        <a href="/solicitudes/consultar_solicitud/{{ solicitud.id }}/">Consultar</a>
+        <a href="/solicitudes/consultar_solicitud/{{ solicitud.id }}/">Ver detalles</a>
+       </td>
+       <td>
+        <a href="/solicitudes/retirar_solicitud/{{ solicitud.id }}/">Retirar</a>
        </td>
       </tr>      
       {% empty %}

@@ -59,7 +59,7 @@ def retirar_solicitud(request,solicitud_id):
         messages.success(request, "La Solicitud ha sido retirada")
     else:
         messages.error(request,"Error: Solo la persona que realizo la solicitud puede retirarla")
-    return listar_solicitudes(request)
+    return HttpResponseRedirect("/solicitudes/listar_solicitudes/")
 
 @login_required
 def generar_informe(request):

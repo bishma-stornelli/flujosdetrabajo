@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
@@ -14,6 +15,7 @@ urlpatterns = patterns('solicitudes.views',
     url(r'^completar_dato/$', 'completar_dato'),
     url(r'^avanzar_solicitud/$', 'avanzar_solicitud'),
     url(r'^retirar_solicitud/$', 'retirar_solicitud'),
-    url(r'^generar_informe/$', 'generar_informe')
+    url(r'^generar_informe/$', 'generar_informe'),
+    url(r'^retirar_solicitud/<?P<solicitud_id>\d+)/$', 'retirar_solicitud'),
 )
 
