@@ -2,6 +2,10 @@ from django import forms
 from django.forms.models import ModelForm
 from django.forms.util import ErrorList
 from flujos.models import Criterio, Flujo, Campo, Paso, Alerta, Informe
+import re
+from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404
+from array import *
 
 class AgregarCaminoForm(ModelForm): #esto quiere decir que se extiende a ModelForm
     class Meta:
@@ -81,22 +85,16 @@ class AlertaForm(ModelForm):
         ModelForm.__init__(self, data=data, files=files, auto_id=auto_id, prefix=prefix, initial=initial, error_class=error_class, label_suffix=label_suffix, empty_permitted=empty_permitted, instance=instance)
         self.fields['paso'].choices = (paso.id, paso.nombre)
         self.fields['paso'].initial = paso.id
-        
+      
+    def clean_formato(self):
+        data = self.cleaned_data['formato']
+        if (validar_format(data,self)):
+            return data  
+        else:
+            raise forms.ValidationError("Formato ingresado no valido")
+    
     def is_valid(self):
-        if ModelForm.is_valid(self):
-            paso = self.cleaned_data['paso'] #Este es el paso (objeto paso: paso.id, paso.nombre, etc)
-            formato = self.cleaned_data['formato'] # Este es el formato
-            # Lo que hay que hacer ahora es ver si todos los campos que se declaran en el formato
-            # referencian a campos de pasos anteriores o no
-            # Las siguientes lineas sirven de esqueleto para lo que hay que hacer
-            # Como toda la validacion se repite tanto en alerta como informe se puede hacer en otro
-            # metodo como validar_formato (Ver el final del archivo)
-            todos_los_campos_validos = True 
-            if not todos_los_campos_validos:
-                # Agregar mensajes de error
-                pass
-            return todos_los_campos_validos
-        return False
+        return ModelForm.is_valid(self)
         
 class InformeForm(ModelForm):
     class Meta:
@@ -113,8 +111,63 @@ class InformeForm(ModelForm):
         self.fields['paso'].choices = (paso.id, paso.nombre)
         self.fields['paso'].initial = paso.id
     
+    def clean_formato(self):
+        data = self.cleaned_data['formato']
+        if (validar_format(data,self)):
+            return data  
+        else:
+            raise forms.ValidationError("Formato ingresado no valido")
+        
     def is_valid(self):
         return ModelForm.is_valid(self)
 
-def validar_format():
-    pass
+# Dada la lista de campos un paso se busca si esta tiene el campo a buscar
+def existe_campo(campos,campo_buscado):
+    for campo in campos:
+        if(campo.nombre == campo_buscado):
+            return True
+    return False
+
+# Se verifica si todos los campos que se declaran en el formato
+# referencian o no a campos de pasos anteriores
+def validar_format(formato,a):
+    valido=False
+    predecesores=[]
+    campos_formato = re.findall(r'(\${(\w+)(([.](\w+))?)})', formato)
+    print("formato: "+formato)
+    
+    for campo_f in campos_formato:   
+        # en campo[1] esta el atrubuto y en campo[4] lo q va despues del . (solicitante.nombre) 
+        paso = a.cleaned_data['paso']
+        paso = get_object_or_404(Paso, pk=paso.id)
+                               
+        if((campo_f[1]=="solicitante" and (campo_f[4]=="" or campo_f[4]=="email")) or campo_f[1]=="unidad" ):
+            valido=True
+        else:                       
+            valido=existe_campo(paso.campos.all(),campo_f[1])
+            if (valido):
+                break 
+            else:
+                predecesores.append(paso.predecesores.all())               
+            if(not valido):
+                i=0
+                tam=len(predecesores)
+                while(i<tam and not valido):
+                    for pred in predecesores[i]: 
+                        valido=existe_campo(pred.campos.all(),campo_f[1])
+                        if (valido):
+                            break
+                        predecesores.append(pred.predecesores.all())
+                    tam=len(predecesores)
+                    i=i+1
+        if(valido):
+            break  
+    return valido
+    
+    #return re.match("^([^$]*(\${\w+(([.]\w+)?)})*)*$",formato)
+    #return re.match("^([^$]*(\${.*})*)*$",formato)
+    #return re.match("^([\s\w\d]*(\${.*})*)*$",formato)
+    #return re.match("[\s\w\d]*([^(\${.*})])",formato)
+    #return re.match("(\${.*})",formato)
+
+

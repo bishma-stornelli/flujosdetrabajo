@@ -6,7 +6,7 @@ from django.utils import encoding
 #
 
 class Unidad(models.Model):
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.TextField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     miembros = models.ManyToManyField(User, related_name="unidades_miembros", null=True, blank=True)
@@ -65,13 +65,4 @@ class SolicitudPrivilegio(models.Model):
                       (ESTADO_NEGADO, 'Negado'),
                       )
     estado = models.IntegerField(choices=ESTADO_CHOICES,default=ESTADO_ESPERA)
-    class Meta:
-        permissions = (
-            ("aceptar_privilegio_solicitante", "Puede aceptar los privilegios para ser solicitante"),
-            ("aceptar_privilegio_miembro", "Puede aceptar los privilegios para ser miembros de unidad"),
-            ("aceptar_privilegio_responsable", "Puede aceptar los privilegios para ser responsables de unidad"),
-            # TODOS puedenn realizar solicitud de privilegio
-            ("realizar_solicitud", "Puede realizar una solicitud de privilegio"),
-            
-        )
 
