@@ -20,6 +20,7 @@ def listar_solicitudes(request):
     solicitudes_solicitante = Solicitud.objects.filter(solicitante=request.user).order_by('fecha_de_solicitud')
     unidades = Unidad.objects.filter(miembros=request.user)
     solicitudes_miembro=Solicitud.objects.none()
+	#julio quitar
     for u in unidades:
         flujos= Flujo.objects.filter(unidad = u)
         for f in flujos:
