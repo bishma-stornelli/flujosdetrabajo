@@ -66,6 +66,8 @@ unidad2.save()
 unidad2.miembros.add(u5)
 unidad2.miembros.add(u4)
 unidad2.miembros.add(u1)
+unidad2.solicitantes.add(u8)
+unidad2.solicitantes.add(u7)
 
 
 unidad3 = Unidad(nombre="CPYD", descripcion="Comision de Planificacion y Desarrollo", responsable=u3)

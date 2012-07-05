@@ -31,6 +31,7 @@ def listar_solicitudes(request):
 @login_required
 def consultar_solicitud(request, solicitud_id):
      solicitud = get_object_or_404(Solicitud, id = solicitud_id, solicitante=request.user)
+     registro = Registro.objects.filter(solicitud=solicitud)
      actuales = solicitud.registros.filter(estado=2)
      completados = solicitud.registros.filter(estado=1).order_by('fecha_de_salida')
      por_hacer = set([])
@@ -79,15 +80,11 @@ def avanzar_solicitud(request):
 
 @login_required
 def retirar_solicitud(request,solicitud_id):
-    solicitudes = get_object_or_404('Solicitud',pk=solicitud_id)
-    if (solicitudes.solicitantes==request.user):
-        registro = Registro.objects.filter(solicitud = solicitudes)
-        registro.estado = Registro.ESTADO_RETIRADO
-        registro.fecha_salida = datetime.datetime.now()
-        registro.save()
-        messages.success(request, "La Solicitud ha sido retirada")
-    else:
-        messages.error(request,"Error: Solo la persona que realizo la solicitud puede retirarla")
+    solicitudes = get_object_or_404(Solicitud,pk=solicitud_id)
+    registro = Registro.objects.filter(solicitud = solicitudes)
+    registro.estado = Registro.ESTADO_RETIRADO
+    registro.fecha_salida = datetime.datetime.now()
+    messages.success(request, "La Solicitud ha sido retirada")
     return HttpResponseRedirect("/solicitudes/listar_solicitudes/")
 
 @login_required
