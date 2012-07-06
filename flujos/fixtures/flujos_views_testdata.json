@@ -1,0 +1,66 @@
+[
+    {
+        "pk": 1, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "admin", 
+            "first_name": "", 
+            "last_name": "", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true, 
+            "last_login": "2012-07-02T02:01:09.408Z", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "pbkdf2_sha256$10000$A2QszYiAyKtq$7mbz21sBh4OJt27hyOZ4OGmtnWdBZJV0JoqdMvE6IcM=", 
+            "email": "tamerdark@gmail.com", 
+            "date_joined": "2012-07-02T01:51:27.272Z"
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "fake_admin", 
+            "first_name": "", 
+            "last_name": "", 
+            "is_active": true, 
+            "is_superuser": false, 
+            "is_staff": false, 
+            "last_login": "2012-07-02T02:01:09.408Z", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "pbkdf2_sha256$10000$A2QszYiAyKtq$7mbz21sBh4OJt27hyOZ4OGmtnWdBZJV0JoqdMvE6IcM=", 
+            "email": "tamerdark@gmail.com", 
+            "date_joined": "2012-07-02T01:51:27.272Z"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "unidades.unidad", 
+        "fields": {
+            "miembros": [], 
+            "auto_aceptar": false, 
+            "fecha_creacion": "2012-07-05T20:28:37.840Z", 
+            "solicitantes": [], 
+            "responsable": null, 
+            "descripcion": "responsable: user1\r\nmiembros: user1, user2, user3\r\nsolicitantes: user3, user4", 
+            "nombre": "Unidad 1"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "unidades.unidad", 
+        "fields": {
+            "miembros": [
+                1
+            ], 
+            "auto_aceptar": false, 
+            "fecha_creacion": "2012-07-05T20:29:09.825Z", 
+            "solicitantes": [], 
+            "responsable": 1, 
+            "descripcion": "responsable: admin\r\nmiembros: admin\r\nsolicitantes: admin", 
+            "nombre": "Unidad 2"
+        }
+    }
+]

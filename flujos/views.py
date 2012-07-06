@@ -6,7 +6,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm,CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm,CampoForm,AlertaForm,InformeForm
+from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
+    CopiarFlujoForm, ModificarPasoForm, ModificarFlujoForm, AgregarCaminoForm, \
+    CampoForm, AlertaForm, InformeForm
 from flujos.models import Flujo, Paso, Campo, Criterio, Alerta, Informe
 from unidades.models import Unidad, SolicitudPrivilegio
 
@@ -30,9 +32,6 @@ def agregar_paso(request, flujo_id):
 
 @login_required
 def crear_flujo(request):
-    if not request.user.unidades_responsable.all():
-        messages.error(request, "Necesita ser responsable de unidad para crear flujos.")
-        return HttpResponseRedirect(reverse("flujo_index"))
     if request.method == 'POST':
         
         # Creo el form con los datos que llegaron del cliente
@@ -42,8 +41,7 @@ def crear_flujo(request):
             unidad = form.cleaned_data['unidad']
             # Verifico que el usuario que crea el flujo es responsable de la unidad a la que se asociara
             if not unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
-                messages.error(request,"Usted no es responsable de la unidad donde quiere crear el flujo.")
-                return HttpResponseRedirect(reverse("flujo_index"))
+                return HttpResponse(status=403)
             flujo = form.save() 
             # SI ES EXITOSO REGRESO CON HttpResponseRedirect
             # SINO DEJO QUE AL FINAL SE PONGA CON render_to_response
@@ -307,7 +305,7 @@ def agregar_camino(request, flujo_id):
                 form.save()
                 form = AgregarCaminoForm()
                 messages.success(request, "Camino almacenado exitosamente")       
-            return HttpResponseRedirect("/flujos/consultar_flujo/{0}".format(flujo.id) )
+            return HttpResponseRedirect("/flujos/consultar_flujo/{0}/".format(flujo.id) )
         else:
             messages.error(request, "Error: Alguno de los datos del formulario es invalido")
             return render_to_response('flujos/agregar_camino.html',
