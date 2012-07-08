@@ -1,0 +1,27 @@
+
+{% block content %}
+
+
+<h1> Nombre del informe: </h1>
+<h3>{{ informe.nombre }}</h3>
+        <thead>
+        </thead>
+        <tbody>
+ 
+			<h3>Paso asociado al informe:</h3>
+			{{ informe.paso }}
+			
+			<br>
+			<td>
+			<h3>Receptores del informe:</h3>
+            	{% if informe.miembro_es_receptor %}Miembro</br>{% endif %}
+            	{% if informe.solicitante_es_receptor %}Solicitante<br>{% endif %}	
+        	</td>
+        	<br>
+        	<h3>Formato:</h3>
+        	<br>
+        	<td> {{ informe.formato }} </td>                
+        </tbody>
+
+{% endblock %}
+

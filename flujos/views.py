@@ -11,6 +11,15 @@ from flujos.forms import AgregarPasoForm, CrearFlujoForm, AgregarCampoForm, \
     CampoForm, AlertaForm, InformeForm
 from flujos.models import Flujo, Paso, Campo, Criterio, Alerta, Informe
 from unidades.models import Unidad, SolicitudPrivilegio
+# Librerias para generacion de pdf
+import ho.pisa as pisa
+import cStringIO as StringIO
+import cgi
+from django.template import RequestContext
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+
+
 
 @login_required
 def agregar_paso(request, flujo_id):
@@ -430,13 +439,13 @@ def agregar_informe(request, paso_id):
 def consultar_alerta(request, alerta_id):
     alerta = get_object_or_404(Alerta, pk = alerta_id)
     return render_to_response('flujos/consultar_alerta.html', {'alerta': alerta}, 
-    											context_instance=RequestContext(request))
-    											
+                                                context_instance=RequestContext(request))
+                                                
 @login_required
 def consultar_informe(request, informe_id):
     informe = get_object_or_404(Informe, pk = informe_id)
     return render_to_response('flujos/consultar_informe.html', {'informe': informe}, 
-    											context_instance = RequestContext(request))
+                                                context_instance = RequestContext(request))
 
 def eliminar_informe(request,informe_id):
     informe = get_object_or_404(Informe,pk=informe_id)
@@ -479,4 +488,20 @@ def modificar_informe(request, informe_id):
     else:
         form = InformeForm(instance=informe, paso=informe.paso)
     return render_to_response('flujos/modificar_informe.html',{'form':form , 'paso_id': informe.paso.id}, context_instance=RequestContext(request))
+
+
+def generar_pdf(html):
+    # Función para generar el archivo PDF y devolverlo mediante HttpResponse
+    result = StringIO.StringIO()
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), mimetype='application/pdf')
+    return HttpResponse('Error al generar el PDF: %s' % cgi.escape(html))
+
+@login_required
+def generar_informe(request, informe_id):
+    informe = get_object_or_404(Informe, pk=informe_id)
+    html = render_to_string('flujos/generar_informe.html', {'pagesize':'A4', 'informe':informe}, context_instance=RequestContext(request))
+    return generar_pdf(html)
+
 
