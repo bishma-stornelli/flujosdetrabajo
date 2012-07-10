@@ -3,18 +3,10 @@
 {% block submenu %}
 {{ block.super }}
      <li><h2>Opciones<h2></li>
-     <li><a href="/flujos/consultar_alerta/{{ alerta.id }}/">Volver al flujo</a></li>
-     <li><a href="/flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</a></li>
-     <li><a href="/flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</a></li>
-     <li><a href="/flujos/agregar_alerta/{{ paso.id }}/"/> Agregar Alerta</a></li>
-     <li><a href="/flujos/agregar_campo/{{ paso.id }}/"/> Agregar Campo</a></li>
-     <li><a href="/flujos/agregar_criterio/"/> Agregar Criterio</a></li>
-     <li><a href="/flujos/agregar_informe/{{ paso.id }}/"/> Agregar Informe</a></li>
-     <li><a href="/flujos/modificar_alerta/{{ alerta.id}}/"> Modificar alerta</a></li>     
-     <li><a href="/flujos/eliminar_alerta/{{ alerta.id}}/"> Eliminar alerta</a></li>     
-     <li><a href="/flujos/modificar_informe/{{ informe.id}}/"> Modificar informe</a></li>
-     <li><a href="/flujos/eliminar_informe/{{ informe.id}}/"> Eliminar informe</a></li>
-     <li><a href="/flujos/consultar_informe/{{ informe.id}}/"> Consultar informe</a></li>
+     <li><a href="/flujos/consultar_flujo/{{ informe.paso.flujo.id }}/">Volver al flujo</a></li>
+     <li><a href="/flujos/consultar_paso/{{ informe.paso.id }}/">Volver al paso</a></li>
+     <li><a href="/flujos/modificar_informe/{{ informe.id}}/">Modificar informe</a></li>
+     <li><a onclick="return confirm('¿Esta seguro que quiere eliminar este informe?')" href="/flujos/eliminar_informe/{{ informe.id}}/" >Eliminar informe</a></li>
 
      
 

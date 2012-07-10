@@ -65,7 +65,17 @@ class AgregarPasoForm(ModelForm):
         ModelForm.__init__(self, data=data, files=files, auto_id=auto_id, prefix=prefix, initial=initial, error_class=error_class, label_suffix=label_suffix, empty_permitted=empty_permitted, instance=instance)
         self.fields['flujo'].choices = (flujo.id, flujo.nombre,)
         self.fields['flujo'].initial = flujo.id
-
+        
+    def clean(self):
+        cleaned_data = super(AgregarPasoForm, self).clean()
+        data = self.cleaned_data['nombre']
+        flujo = self.cleaned_data['flujo']
+        for p in flujo.pasos.all():
+            if p.nombre == data:
+                self._errors['nombre'] = self.error_class([u'Ya existe un paso con el mismo nombre en este flujo.'])
+                del cleaned_data['nombre']
+                break
+        return cleaned_data
 
 class CampoForm(ModelForm):
     class Meta:
@@ -131,7 +141,7 @@ def existe_campo(campos,campo_buscado):
 # Se verifica si todos los campos que se declaran en el formato
 # referencian o no a campos de pasos anteriores
 def validar_format(formato,a):
-    valido=False
+    valido=True
     predecesores=[]
     campos_formato = re.findall(r'(\${(\w+)(([.](\w+))?)})', formato)
     print("formato: "+formato)
@@ -142,9 +152,9 @@ def validar_format(formato,a):
         paso = get_object_or_404(Paso, pk=paso.id)
                                
         if((campo_f[1]=="solicitante" and (campo_f[4]=="" or campo_f[4]=="email")) or campo_f[1]=="unidad" ):
-            valido=True
+            valido=valido and True
         else:                       
-            valido=existe_campo(paso.campos.all(),campo_f[1])
+            valido=valido and existe_campo(paso.campos.all(),campo_f[1])
             if (valido):
                 break 
             else:
