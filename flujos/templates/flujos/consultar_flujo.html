@@ -63,7 +63,9 @@
 
 {% block submenu %}
 {{ block.super }}
+		{%if flujo.unidad.responsable.id == user.id %}
         <li><h2>Opciones<h2></li>
+
         {%if flujo.estado == flujo.ESTADO_BORRADOR or flujo.estado == flujo.ESTADO_OBSOLETO %}
         <li><a onclick="return confirm('¿Esta seguro que quiere publicar este flujo?')"href="/flujos/publicar_flujo/{{ flujo.id }}/" class="medium button black">Publicar</a></li>
         
@@ -72,5 +74,6 @@
         <li><a href="/flujos/agregar_camino/{{flujo.id}}/" >Agregar Camino</a></li>
         {% else %}
         <li><a onclick="return confirm('¿Esta seguro que desea marcar este flujo como obsoleto?')" href="/flujos/marcar_obsoleto/{{ flujo.id }}/" class="medium button black">Marcar como obsoleto</a></li>
+        {%endif%}
         {%endif%}
 {% endblock %}

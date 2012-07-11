@@ -81,10 +81,9 @@ def avanzar_solicitud(request):
 
 @login_required
 def retirar_solicitud(request,solicitud_id):
-    solicitudes = get_object_or_404(Solicitud,pk=solicitud_id)
-    registro = Registro.objects.filter(solicitud = solicitudes)
-    registro.estado = Registro.ESTADO_RETIRADO
-    registro.fecha_salida = datetime.datetime.now()
+    solicitud = get_object_or_404(Solicitud,pk=solicitud_id)
+    solicitud.estado= Solicitud.ESTADO_RETIRADO
+    solicitud.save()
     messages.success(request, "La Solicitud ha sido retirada")
     return HttpResponseRedirect("/solicitudes/listar_solicitudes/")
 
