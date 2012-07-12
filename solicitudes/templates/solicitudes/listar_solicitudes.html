@@ -64,7 +64,7 @@
         <a href="/flujos/consultar_flujo/{{ solicitud.flujo.id }}/">{{ solicitud.flujo.nombre }}
        </td>
        <td>
-        {{ solicitud.solicitantes }}
+        {{ solicitud.solicitante.first_name}} {{ solicitud.solicitante.last_name}}
        </td>
        <td>
         {{ solicitud.fecha_de_solicitud }}

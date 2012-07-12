@@ -31,9 +31,9 @@ def listar_solicitudes(request):
 
 @login_required
 def consultar_solicitud(request, solicitud_id):
-     solicitud = get_object_or_404(Solicitud, id = solicitud_id, solicitante=request.user)
+     solicitud = get_object_or_404(Solicitud, id = solicitud_id)
      registro = Registro.objects.filter(solicitud=solicitud)
-     actuales = solicitud.registros.filter(estado=2)
+     actuales = solicitud.registros.filter(estado=2).order_by('fecha_de_entrada')
      completados = solicitud.registros.filter(estado=1).order_by('fecha_de_salida')
      por_hacer = set([])
      pila = list(actuales)
