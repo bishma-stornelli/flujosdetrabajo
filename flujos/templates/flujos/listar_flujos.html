@@ -46,7 +46,7 @@
                 {% endif %}
                 {% if user in unidad.solicitantes.all %}
                     <td>
-                        {% if flujo.estado == Flujo.ESTADO_PUBLICO %}
+                        {% if flujo.estado == 2 %}
 	            
                             <a href="/solicitudes/crear_solicitud/{{ flujo.id }}/">Crear Solicitud</a>
                 
