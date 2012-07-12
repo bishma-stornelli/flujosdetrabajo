@@ -1,13 +1,16 @@
-{% extends "flujos/base.html" %}
+{% extends "unidades/base.html" %}
 
 {% block content %}
     <h1>Solicitudes</h1>
     <h2>Solicitudes Aceptadas</h2>
+    {% if aceptadas  %}
     <table>
     <tr>
-      <th> Privilegio </th> 
-      <th> Fecha </th> 
+      <th style="width:20%;"> Privilegio </th> 
+      <th style="width:60%;"> Mensaje </th> 
+      <th style="width:20%;"> Fecha </th> 
     </tr>
+        {% endif %}
       {% for sol in aceptadas %}
       
       <tr>
@@ -17,23 +20,29 @@
         {{ sol.get_privilegio_display }}
        </td>
        <td>
+            {{ sol.mensaje }}
+       </td>
+       <td>
         {{ sol.fecha }}
        </td>
        
       </tr>
       
       {% empty %}
-      <tr><td colspan="5">{{ "No se ha realizado ninguna solicitud de privilegio" }}</td></tr>
+      <tr><td colspan="5">{{ "No se ha aceptado ningúna solicitud de privilegio" }}</td></tr>
       {% endfor %}
     </table>
     
     
     <h2>Solicitudes en Espera</h2>
+    {% if en_espera %}
     <table>
-    <tr>
-      <th> Privilegio </th> 
-      <th> Fecha </th> 
+   <tr>
+      <th style="width:20%;"> Privilegio </th> 
+      <th style="width:60%;"> Mensaje </th> 
+      <th style="width:20%;"> Fecha </th> 
     </tr>
+        {% endif %}
       {% for sol in en_espera %}
       
       <tr>
@@ -41,23 +50,29 @@
         {{ sol.get_privilegio_display }}
        </td>
        <td>
+            {{ sol.mensaje }}
+       </td>
+       <td>
         {{ sol.fecha }}
        </td>
        
       </tr>
       
       {% empty %}
-      <tr><td colspan="5">{{ "No se ha realizado ninguna solicitud de privilegio" }}</td></tr>
+      <tr><td colspan="5">{{ "No tiene ningúna solicitud de privilegio en espera." }}</td></tr>
       {% endfor %}
     </table>
     
     
         <h2>Solicitudes Negadas</h2>
+        {% if negadas %}
     <table>
     <tr>
-      <th> Privilegio </th> 
-      <th> Fecha </th> 
+      <th style="width:20%;"> Privilegio </th> 
+      <th style="width:60%;"> Mensaje </th> 
+      <th style="width:20%;"> Fecha </th> 
     </tr>
+        {% endif %}
       {% for sol in negadas %}
       
       <tr>
@@ -67,13 +82,16 @@
         {{ sol.get_privilegio_display }}
        </td>
        <td>
+            {{ sol.mensaje }}
+       </td>
+       <td>
         {{ sol.fecha }}
        </td>
        
       </tr>
       
       {% empty %}
-      <tr><td colspan="5">{{ "No se ha realizado ninguna solicitud de privilegio" }}</td></tr>
+      <tr><td colspan="5">{{ "No se le ha negado ningúna solicitud de privilegio." }}</td></tr>
       {% endfor %}
     </table>
 

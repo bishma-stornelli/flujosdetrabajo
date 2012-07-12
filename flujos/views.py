@@ -115,12 +115,10 @@ def listar_flujos(request):
     # OBTENER PARAMETRO POR URL: /?unidad=X
     unidad = request.GET.get('unidad', None)
     if unidad:
-        flujos = Flujo.objects.filter(unidad=unidad)
-        if not flujos:
-            raise Http404()           
+        unidades = Unidad.objects.filter(pk=unidad)  
     else:
-        flujos = Flujo.objects.all()    
-    return render_to_response('flujos/listar_flujos.html', {'flujos': flujos}, context_instance=RequestContext(request))
+        unidades = Unidad.objects.all()
+    return render_to_response('flujos/listar_flujos.html', {'unidades': unidades}, context_instance=RequestContext(request))
 
 
 @login_required

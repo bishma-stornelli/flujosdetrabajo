@@ -14,5 +14,4 @@ urlpatterns = patterns('unidades.views',
     url(r'^solicitar_privilegio/$','solicitar_privilegio'),
     url(r'^listar_privilegios/$','listar_privilegios', name="listar_privilegios"),
     url(r'^listar_unidades/$', ListView.as_view(model=Unidad, template_name='unidades/listar_unidades.html'),name= "unidades_index"),
-    url(r'^index/$', TemplateView.as_view(template_name = 'unidades/base.html')),
 )

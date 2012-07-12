@@ -1,43 +1,60 @@
 {% extends "flujos/base.html" %}
 
 {% block content %}
-    <h1>Flujos</h1>
-    <table>
-    <tr>
-      <th> Nombre </th> 
-      <th> Descripcion </th> 
-      <th> Estado </th> 
-      <th> Consultar </th>
-      <th> Modificar </th>
-	  <th> Crear Solicitud </th>
-    </tr>
-      {% for flujo in flujos %}
-      
-      <tr>
-        
-       <td>
-        {{ flujo.nombre }}
-       </td>
-       <td>
-        {{ flujo.descripcion }}
-       </td>
-       <td>
-        {{ flujo.get_estado_display }}
-       </td>
-       <td>
-        <a href="/flujos/consultar_flujo/{{ flujo.id }}/">Consultar</a>
-       </td>
-       <td>
-        <a href="/flujos/modificar_flujo/{{ flujo.id }}/">Modificar</a>
-       </td>
-	   <td>
-        <a href="/solicitudes/crear_solicitud/{{ flujo.id }}/">Crear Solicitud</a>
-       </td>
-      </tr>
-      
-      {% empty %}
-      <tr><td colspan="5">{{ "No se ha creado ningún flujo" }}</td></tr>
-      {% endfor %}
-    </table>
+    {% for unidad in unidades %}
+        <h1>Unidad: {{unidad.nombre}}</h1>
+        {% if unidad.flujos.all %}
+            <table>
+                <tr>
+                    <th> Nombre </th> 
+                    <th> Descripcion </th> 
+                    <th> Estado </th> 
+                    <th> Ver más </th>
+                    {% if user == unidad.responsable %}
+                    <th> Modificar </th>
+                    {% endif %}
+                    {% if user in unidad.solicitantes.all %}
+                        <th> Crear Solicitud </th>
+                    {% endif %}
+                </tr>
+        {% else %}
+            Esta unidad no tiene flujos creados.
+        {% endif %}
+        {% for flujo in unidad.flujos.all %}
 
+            <tr>        
+                <td>
+                    {{ flujo.nombre }}
+                </td>
+                <td>
+                    {{ flujo.descripcion }}
+                </td>
+                <td>
+                    {{ flujo.get_estado_display }}
+                </td>
+                <td>
+                    <a href="/flujos/consultar_flujo/{{ flujo.id }}/">Consultar</a>
+                </td>
+                {% if user == unidad.responsable %}
+                    <td>          
+                        {% if flujo.estado == Flujo.ESTADO_BORRADOR %}          
+                            <a href="/flujos/modificar_flujo/{{ flujo.id }}/">Modificar</a>
+                        {% else %}
+                            Prohibido (estado es {{ flujo.get_estado_display }}
+                        {% endif %}
+                    </td>
+                {% endif %}
+                {% if user in unidad.solicitantes.all %}
+                    <td>
+                        {% if flujo.estado == Flujo.ESTADO_PUBLICO %}
+	            
+                            <a href="/solicitudes/crear_solicitud/{{ flujo.id }}/">Crear Solicitud</a>
+                
+                        {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        {% if unidad.flujos.all %} </table> {% endif %}
+    {% endfor %}
 {% endblock %}
