@@ -37,7 +37,7 @@
                 </td>
                 {% if user == unidad.responsable %}
                     <td>          
-                        {% if flujo.estado == Flujo.ESTADO_BORRADOR %}          
+                        {% if flujo.estado == 1 %}          
                             <a href="/flujos/modificar_flujo/{{ flujo.id }}/">Modificar</a>
                         {% else %}
                             Prohibido (estado es {{ flujo.get_estado_display }}
