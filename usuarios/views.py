@@ -11,7 +11,7 @@ from django.template import RequestContext
 from usuarios.forms import RegistroForm, LoginForm, UserForm
 from usuarios.models import PerfilDeUsuario
 
-def registro(request):
+def Registro(request):
 #Esta vista permite generar(metodo GET) un formulario de registro y procesar el registro del usuario
 #(metodo POST). Debe retornar 'reg' un mensaje que indica un registro exitoso o 'msj' que indica
 #un problema con el registro.

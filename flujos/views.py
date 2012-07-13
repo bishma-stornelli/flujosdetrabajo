@@ -390,6 +390,15 @@ def eliminar_campo(request, campo_id):
     messages.success(request, "Campo eliminado exitosamente.")
     return HttpResponseRedirect("/flujos/consultar_paso/%s/" % campo.paso.id)
 
+def eliminar_criterio(request,criterio_id):
+    criterio = get_object_or_404(Criterio,pk=criterio_id)
+    if not criterio.paso.flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        messages.error(request,"Solo el responsable de la unidad puede eliminar la alerta")
+        return HttpResponseRedirect(reverse("flujo_index"))
+    criterio.delete()
+    messages.success(request,"Criterio eliminado exitosamente")
+    return HttpResponseRedirect("/flujos/consultar_paso/%s/" %criterio.paso_origen.id)
+
 def agregar_alerta(request, paso_id):
     paso = get_object_or_404(Paso, pk=paso_id)
     if request.POST:
