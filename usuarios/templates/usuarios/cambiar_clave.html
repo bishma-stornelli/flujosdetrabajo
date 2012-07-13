@@ -3,15 +3,17 @@
 {% block content %}
 {% comment %} NO OLVIDEN COLOCAR method="POST" {% endcomment %}
 <h1>Cambiar Clave de Usuario</h1>
+<table>
 <form action="usuarios/cambiar_clave/" method="post">
     {% csrf_token %}
     <div class="perfil">
-        <div >Clave antigua: <input type="password" name="claveAntigua" id="claveAntigua" /></div>
-        <div >Clave nueva:<input type="password" name="claveNueva" id="claveNueva" /></div>
-        <div >Confirme clave nueva:<input type="password" name="claveConfirmacion" id="cpass2" /></div>
-        <input type="submit" value="Aceptar" />
+        <tr><td>Clave antigua:</td> <td><input type="password" name="claveAntigua" id="claveAntigua" /></td></tr>
+        <tr><td>Clave nueva:</td><td><input type="password" name="claveNueva" id="claveNueva" /></td></tr>
+        <tr><td>Confirme clave nueva:</td> <td><input type="password" name="claveConfirmacion" id="cpass2" /></td></tr>
+        <tr><td></td><td><input type="submit" value="Aceptar" /></td></tr>
 
     </div>
 </form>
+</table>
 {% endblock %}
 {
