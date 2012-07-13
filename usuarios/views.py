@@ -103,7 +103,6 @@ def consultar_datos_usuario(request):
 
 @login_required()
 def cambiar_clave(request):
-
     if request.user.is_authenticated():
         if request.method == 'POST': # If the form has been submitted...
             #form =
@@ -117,7 +116,7 @@ def cambiar_clave(request):
                     user.set_password(password)
                     user.save()
                     messages.success(request, "Cambio de clave exitosa")
-                    return render_to_response("usuarios/index.html",{"usr":user}, context_instance = RequestContext(request))
+                    return render_to_response("usuarios/consultar_datos_usuario.html",{"usr":user}, context_instance = RequestContext(request))
                 else:
                     messages.error(request,"Las claves no coinciden")
                     return render_to_response("usuarios/cambiar_clave.html", context_instance = RequestContext(request))
@@ -126,7 +125,7 @@ def cambiar_clave(request):
                 messages.error(request,"Cambio de clave fallida")
                 return render_to_response("usuarios/cambiar_clave.html", context_instance = RequestContext(request))
         else:
-            return render_to_response("/")
+            return render_to_response("usuarios/cambiar_clave.html", context_instance = RequestContext(request))
 
     else:
         f = LoginForm()
