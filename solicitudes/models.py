@@ -28,4 +28,4 @@ class Registro(models.Model):
     ESTADO_COMPLETO = 1;
     ESTADO_EN_PROCESO = 2;
     estado_choices = ((ESTADO_COMPLETO,'Completo'),(ESTADO_EN_PROCESO,'En proceso'))
-    estado = models.IntegerField(choices=estado_choices)
+    estado = models.IntegerField(choices=estado_choices, default=ESTADO_EN_PROCESO)

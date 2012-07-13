@@ -115,12 +115,10 @@ def listar_flujos(request):
     # OBTENER PARAMETRO POR URL: /?unidad=X
     unidad = request.GET.get('unidad', None)
     if unidad:
-        flujos = Flujo.objects.filter(unidad=unidad)
-        if not flujos:
-            raise Http404()           
+        unidades = Unidad.objects.filter(pk=unidad)  
     else:
-        flujos = Flujo.objects.all()    
-    return render_to_response('flujos/listar_flujos.html', {'flujos': flujos}, context_instance=RequestContext(request))
+        unidades = Unidad.objects.all()
+    return render_to_response('flujos/listar_flujos.html', {'unidades': unidades}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -241,57 +239,27 @@ def mezclar(alcanzables, temporal):
             alcanzables.append(t)
     return alcanzables
 
-# @inicial Representa el paso inicial
-# @recorrido son los nodos por el cual se ha pasado
-# Devuelve True si es un grafo conexo de lo contrario devuelve False
-def es_grafo_conexo(flujo):
-    iniciales = Paso.objects.filter(tipo = Paso.TIPO_INICIAL)
-    inicial = iniciales[0]
-    pasos = list(Paso.objects.filter(flujo=flujo))
-    pasosAbiertos = [inicial]
-    recorrido = []
-    while pasosAbiertos:
-        pas = pasosAbiertos.pop()
-        recorrido.append(pas)
-        p = list(Paso.objects.get(id=pas.id).sucesores.all())
-        for k in p:
-            if k not in pasosAbiertos and k not in recorrido:
-                pasosAbiertos.append(k)
-    #messages.warning(request, str(recorrido) + " " + str(pasos))
-    if len(pasos) == len(recorrido):
-        return True
-    else:
-        return False 
+
     
 @login_required(redirect_field_name='/')
 def publicar_flujo(request, flujo_id):
-    unidades = Unidad.objects.filter(responsable=request.user)
     flujo = get_object_or_404(Flujo, pk=flujo_id)
+    if not flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
+        messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
+        return HttpResponseRedirect(reverse("flujo_index"))
+    
     if (flujo.estado == Flujo.ESTADO_BORRADOR):
-        if (flujo.unidad in unidades):
-            inicial_final = flujo.inicial_final()
-            es_conexo = es_grafo_conexo(flujo)
-            flujo_igual = flujo.nombre_parecido()
-            if (inicial_final == True and es_conexo == True):
-                if set(flujo_igual) == set(Flujo.objects.none()):
-                    flujo.estado = Flujo.ESTADO_PUBLICO
-                    flujo.save()
-                    messages.success(request, "Flujo (" + flujo.nombre + ") publicado.")
-                elif set(flujo_igual) != set(Flujo.objects.none()):
-                    messages.error(request, "Ya existe un Flujo publicado con este mismo nombre, si quiere puede marcarlo como obsoleto al que esta publicado o de lo contrario no se podra publicar.")
-                    return render_to_response("flujos/marcar_obsoleto.html", {'listaFlujo':flujo_igual}, context_instance=RequestContext(request))
-                    
-            else :
-                if (inicial_final == False):
-                    messages.error(request, "Flujo (" + flujo.nombre + ") no posee paso inicial o final, o posee mas de un paso inicial, revise el flujo.")
-                if (es_conexo == False):
-                    messages.error(request, "Flujo (" + flujo.nombre + ") posee pasos que estan aislados, revise el flujo.")     
-        else :
-            messages.error(request, "Error: el flujo seleccionado no se puedo publicar debido a que usted no es el" 
-            + "responsable de la unidad a la cual esta asociado el flujo")
+            errores = flujo.is_valid()
+            if len(errores) == 0:
+                flujo.estado = Flujo.ESTADO_PUBLICO
+                flujo.save()
+                messages.success(request, "El flujo se ha publicado satisfactoriamente.")
+            else:
+                for m in errores:
+                    messages.error(request, m)
     else:
-        messages.error(request, "Los flujos que estan en estado obsoleto no se puede publicar.")
-    return consultar_flujo(request, flujo_id)
+        messages.error(request, "Los flujos que estan en estado %s no se puede publicar." % flujo.get_estado_display)
+    return HttpResponseRedirect('/flujos/consultar_flujo/%s/' % flujo.id)
 
 #@permission_required('flujos.criterio.add_criterio')
 @login_required()

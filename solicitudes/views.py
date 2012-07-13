@@ -6,10 +6,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from unidades.models import SolicitudPrivilegio
+from flujos.models import Flujo, Paso
 from solicitudes.models import Solicitud, Registro
-from unidades.models import Unidad
-from flujos.models import Flujo
+from unidades.models import SolicitudPrivilegio, Unidad
 import datetime
 
 @login_required
@@ -20,7 +19,7 @@ def listar_solicitudes(request):
     solicitudes_solicitante = Solicitud.objects.filter(solicitante=request.user).order_by('fecha_de_solicitud')
     unidades = Unidad.objects.filter(miembros=request.user)
     solicitudes_miembro=Solicitud.objects.none()
-	#julio quitar
+    #julio quitar
     for u in unidades:
         flujos= Flujo.objects.filter(unidad = u)
         for f in flujos:
@@ -31,9 +30,9 @@ def listar_solicitudes(request):
 
 @login_required
 def consultar_solicitud(request, solicitud_id):
-     solicitud = get_object_or_404(Solicitud, id = solicitud_id, solicitante=request.user)
+     solicitud = get_object_or_404(Solicitud, id = solicitud_id)
      registro = Registro.objects.filter(solicitud=solicitud)
-     actuales = solicitud.registros.filter(estado=2)
+     actuales = solicitud.registros.filter(estado=2).order_by('fecha_de_entrada')
      completados = solicitud.registros.filter(estado=1).order_by('fecha_de_salida')
      por_hacer = set([])
      pila = list(actuales)
@@ -57,15 +56,17 @@ def consultar_solicitud(request, solicitud_id):
 
 @login_required
 def crear_solicitud(request, flujo_id):
-	flujo = get_object_or_404(Flujo, pk=flujo_id)
-	if not flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE):
-		messages.error(request,"Solo los solicitantes de unidad pueden crear una solicitud.")
-		return HttpResponseRedirect(reverse("flujo_index"))
+    flujo = get_object_or_404(Flujo, pk=flujo_id)
+    if not flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_SOLICITANTE):
+        messages.error(request,"Solo los solicitantes de unidad pueden crear una solicitud.")
+        return HttpResponseRedirect(reverse("flujo_index"))
 
-	solicitud = Solicitud(flujo=flujo, solicitante=request.user)
-	solicitud.save()
-	messages.success( request , "Registro de solicitud exitoso.")
-	return HttpResponseRedirect(reverse("flujo_index"))
+    solicitud = Solicitud(flujo=flujo, solicitante=request.user)
+    solicitud.save()
+    p = flujo.pasos.get(tipo=Paso.TIPO_INICIAL)
+    Registro(paso=p,solicitud=solicitud).save()
+    messages.success( request , "Registro de solicitud exitoso.")
+    return HttpResponseRedirect("/solicitudes/consultar_solicitud/%s/" % solicitud.id )
 
 @login_required
 def agregar_dato(request):

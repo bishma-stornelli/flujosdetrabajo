@@ -239,15 +239,30 @@ class Flujo(models.Model):
         self.estado = "OBSOLETO"
         
         return a
-    
-    def inicial_final(self):
-        valido=False
-        pasos_final = Paso.objects.filter(flujo=self, tipo = Paso.TIPO_FINAL)
-        pasos_inicial= Paso.objects.filter(flujo=self, tipo = Paso.TIPO_INICIAL)
-        if len(pasos_inicial)  == 1 and pasos_final:
-            valido=True
-        return valido
-    
-    def nombre_parecido(self):
-        parecidos_nombre = Flujo.objects.filter(nombre=self.nombre,unidad = self.unidad, estado=Flujo.ESTADO_PUBLICO)
-        return parecidos_nombre
+
+    def is_valid(self):
+        errores = []
+        if len(Paso.objects.filter(flujo=self, tipo = Paso.TIPO_INICIAL)) != 1:
+            errores.append("El flujo no tiene paso inicial.")
+        if len(Paso.objects.filter(flujo=self, tipo = Paso.TIPO_FINAL)) == 0:
+            errores.append("El flujo no tiene paso final.")
+        if len(errores) == 0:
+            inicial = Paso.objects.get(tipo = Paso.TIPO_INICIAL)
+            pasosAbiertos = [inicial]
+            recorrido = []
+            while pasosAbiertos:
+                pas = pasosAbiertos.pop()
+                if not pas in recorrido:
+                    recorrido.append(pas)
+                p = list(pas.sucesores.all())
+                if len(p) == 0 and pas.tipo != Paso.TIPO_FINAL:
+                    errores.append("El paso '%s' no tiene sucesores y no es de tipo final" % pas.nombre)
+                for k in p:
+                    if k not in pasosAbiertos and k not in recorrido:
+                        pasosAbiertos.append(k)
+            for p in self.pasos.all():
+                if not p in recorrido:
+                    errores.append("El paso '%s' no es alcanzable desde el paso inicial." % p.nombre)
+        if len(Flujo.objects.filter(nombre=self.nombre,unidad = self.unidad, estado=Flujo.ESTADO_PUBLICO)) > 0:
+            errores.append("Ya existe un flujo público con el mismo nombre. Marque el otro como obsoleto primero.")
+        return errores
