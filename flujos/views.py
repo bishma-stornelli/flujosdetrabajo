@@ -245,9 +245,8 @@ def mezclar(alcanzables, temporal):
 def publicar_flujo(request, flujo_id):
     flujo = get_object_or_404(Flujo, pk=flujo_id)
     if not flujo.unidad.permite(usuario=request.user, permiso=SolicitudPrivilegio.PRIVILEGIO_RESPONSABLE):
-        messages.error(request, "Solo el responsable de la unidad puede modificar el flujo.")
+        messages.error(request, "Solo el responsable de la unidad puede publicar el flujo.")
         return HttpResponseRedirect(reverse("flujo_index"))
-    
     if (flujo.estado == Flujo.ESTADO_BORRADOR):
             errores = flujo.is_valid()
             if len(errores) == 0:
