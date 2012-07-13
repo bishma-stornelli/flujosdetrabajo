@@ -91,7 +91,10 @@ def log_out(request):
 def consultar_datos_usuario(request):
     if request.user.is_authenticated():
         u= User.objects.get(username=request.user)
-        perfil= PerfilDeUsuario.objects.all()
+        try:
+            perfil= u.get_profile().dni #PerfilDeUsuario.objects.all()
+        except:
+            perfil='DNI no almacenado'
         return render_to_response("usuarios/consultar_datos_usuario.html",{"usr":u, "perfil":perfil}, context_instance = RequestContext(request))
 
     else:
