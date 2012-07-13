@@ -7,7 +7,7 @@
         <li><a href="/flujos/modificar_paso/{{ paso.id }}/"/> Modificar Paso</a></li>
         <li><a href="/flujos/agregar_alerta/{{ paso.id }}/"/> Agregar Alerta</a></li>
      <li><a href="/flujos/agregar_campo/{{ paso.id }}/"/> Agregar Campo</a></li>
-      <li><a href="/flujos/agregar_criterio/"/> Agregar Criterio</a></li>
+      <li><a href="/flujos/agregar_camino/{{ paso.flujo.id}}"/> Agregar Camino</a></li>
      <li><a href="/flujos/agregar_informe/{{ paso.id }}/"/> Agregar Informe</a></li>
         <li><a href="/flujos/eliminar_paso/{{ paso.id }}/"/> Eliminar Paso</a></li>
 
@@ -57,13 +57,14 @@
     {% endfor %}
 </table>
 
-<h2>Criterios</h2>
+<h2>Caminos</h2>
     
     {% if paso.criterios_destino.all %}
         <table>
             <thead> Paso   </thead> 
             <thead> Descripcion  </thead> 
             <thead> Expresion  </thead>
+            <thead> Sucesor </thead>
             <ul>
         
             {% for criterio in paso.criterios_destino.all %}
@@ -79,35 +80,24 @@
                     <p>{{ criterio.expresion }}</p>
                 </td>
                 <td>
-                    <li> <a href="/flujos/modificar_criterio/{{ criterio.paso_origen.id }}/">Modificar</a></li> 
+                     <a href="/flujos/consultar_paso/{{ criterio.paso_destino.id}}/">{{criterio.paso_destino.nombre}} </a> 
                 </td>
                 <td>
-                    <li> <a href="/flujos/eliminar_criterio/{{ criterio.paso_origen.id }}/">Eliminar</a></li> 
+                    <li> <a href="/flujos/modificar_camino/{{criterio.paso_origen.flujo.id}}/{{ criterio.paso_origen.id }}/">Modificar</a></li> 
+                </td>
+                <td>
+                    <li> <a href="/flujos/eliminar_camino/{{criterio.paso_origen.flujo.id}}/{{ criterio.paso_origen.id }}/">Eliminar</a></li> 
                 </td>
                 </tr>
             {% endfor %}
             </ul>
         </table>    
     {% else %}
-        <p>No hay criterios para llegar a {{paso.nombre}} </p>
+        <p>No hay caminos para llegar a {{paso.nombre}} </p>
     {% endif %}
 
 
 
-<h2>Sucesores</h2>
-    {% if paso.sucesores.all %}
-        <table>
-            {% for sucesor in paso.sucesores.all %}
-                <tr>
-                    <td><a href="/flujos/consultar_paso/{{ sucesor.id}}/">{{ sucesor.nombre }}</a></td>
-                    <td><a href="/flujos/modificar_paso/{{ sucesor.id}}/">Modificar</a></td>
-                    <td><a href="/flujos/eliminar_paso/{{ sucesor.id}}/">Eliminar</a></td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>{{ "No tiene sucesores" }} </p>
-    {% endif %}
     
 <h2>Alertas</h2>
 {% if paso.alertas_paso.all %}
