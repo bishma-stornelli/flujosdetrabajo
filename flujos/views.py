@@ -331,7 +331,8 @@ def eliminar_camino(request, flujo_id, criterio_id):
         return HttpResponseRedirect(reverse("flujo_index"))
     criterio = get_object_or_404(Criterio, pk=criterio_id)
     criterio.delete()
-    return HttpResponseRedirect("/flujos/listar_caminos/")
+    messages.success(request,"El camino fue eliminado exitosamente")
+    return HttpResponseRedirect("/flujos/consultar_paso/%s/" %criterio.paso_destino.id)
 
 def modificar_campo(request, campo_id):
     # Si no existe campo con id campo_id envio error 404

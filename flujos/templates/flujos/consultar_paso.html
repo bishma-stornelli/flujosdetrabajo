@@ -83,10 +83,10 @@
                      <a href="/flujos/consultar_paso/{{ criterio.paso_destino.id}}/">{{criterio.paso_destino.nombre}} </a> 
                 </td>
                 <td>
-                    <li> <a href="/flujos/modificar_camino/{{criterio.paso_origen.flujo.id}}/{{ criterio.paso_origen.id }}/">Modificar</a></li> 
+                    <li> <a href="/flujos/modificar_camino/{{paso.flujo.id}}/{{ criterio.id }}/">Modificar</a></li> 
                 </td>
                 <td>
-                    <li> <a href="/flujos/eliminar_camino/{{criterio.paso_origen.flujo.id}}/{{ criterio.paso_origen.id }}/">Eliminar</a></li> 
+                    <li> <a href="/flujos/eliminar_camino/{{paso.flujo.id}}/{{ criterio.id }}/">Eliminar</a></li> 
                 </td>
                 </tr>
             {% endfor %}
