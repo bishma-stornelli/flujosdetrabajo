@@ -39,6 +39,7 @@ def consultar_solicitud(request, solicitud_id):
      
      
      while pila !=[]:
+        aux = Registro() 
         aux = pila.pop()
         pila.extend(aux.paso.sucesores.all())
         por_hacer.add(aux)
@@ -66,7 +67,7 @@ def crear_solicitud(request, flujo_id):
     p = flujo.pasos.get(tipo=Paso.TIPO_INICIAL)
     Registro(paso=p,solicitud=solicitud).save()
     messages.success( request , "Registro de solicitud exitoso.")
-    return HttpResponseRedirect("/solicitudes/consultar_solicitud/%s/" % solicitud.id )
+    return HttpResponseRedirect("/flujos/listar_flujos/" )
 
 @login_required
 def agregar_dato(request):
@@ -83,6 +84,10 @@ def avanzar_solicitud(request):
 @login_required
 def retirar_solicitud(request,solicitud_id):
     solicitud = get_object_or_404(Solicitud,pk=solicitud_id)
+    if not (solicitud.solicitante==request.user):
+        messages.error(request,"Solo la persona que creo la solicitud la puede retirar")
+        return HttpResponseRedirect(reverse("flujo_index"))
+
     solicitud.estado= Solicitud.ESTADO_RETIRADO
     solicitud.save()
     messages.success(request, "La Solicitud ha sido retirada")

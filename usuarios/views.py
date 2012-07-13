@@ -123,8 +123,7 @@ def cambiar_clave(request):
                 messages.error(request,"Cambio de clave fallida")
                 return render_to_response("usuarios/cambiar_clave.html", context_instance = RequestContext(request))
         else:
-            return render_to_response('usuarios/cambiar_clave.html',
-                context_instance = RequestContext(request))
+            return render_to_response("/")
 
     else:
         f = LoginForm()

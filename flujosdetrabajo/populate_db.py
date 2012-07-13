@@ -169,4 +169,4 @@ c7 = Criterio(paso_origen=p7,paso_destino=p8,descripcion="Criterio final",expres
 c7.save()
 
 
-solicitud1 = Solicitud(flujo=flujo2,fecha_de_solicitud=datetime.datetime.now())
+solicitud1 = Solicitud(flujo=flujo2,fecha_de_solicitud=datetime.datetime.now(),)
